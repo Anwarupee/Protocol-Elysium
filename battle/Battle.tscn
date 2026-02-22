@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c8674h8t2523w"]
+
+[ext_resource type="Script" uid="uid://ch22xirjyohye" path="res://battle/Battle.gd" id="1_pjid2"]
+[ext_resource type="Script" uid="uid://b4r5dhfm28uop" path="res://battle/BattleManager.gd" id="2_5r4g4"]
+
+[node name="Battle" type="Node2D" unique_id=1903894832]
+script = ExtResource("1_pjid2")
+
+[node name="BattleManager" type="Node" parent="." unique_id=1744800659]
+script = ExtResource("2_5r4g4")

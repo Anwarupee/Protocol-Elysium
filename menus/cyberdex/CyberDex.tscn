@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c8ee4f1bm87vr"]
+
+[ext_resource type="Script" uid="uid://bosdrla8wsub" path="res://menus/cyberdex/CyberDex.gd" id="1_enco7"]
+
+[node name="CyberDex" type="Node2D" unique_id=244050929]
+script = ExtResource("1_enco7")

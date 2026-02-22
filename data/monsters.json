@@ -1,0 +1,251 @@
+{
+  "monsters": [
+	{
+	  "id": "encryp_pup",
+	  "name": "Encryp-Pup",
+	  "type": "Data",
+	  "hp": 120,
+	  "speed": 60,
+	  "passive": {
+		"name": "Hardened Shell",
+		"description": "Defense naik setiap kali menerima serangan"
+	  },
+	  "moves": [
+		{
+		  "name": "Encrypt",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Enkripsi mengubah data menjadi ciphertext yang tidak bisa dibaca tanpa kunci."
+		},
+		{
+		  "name": "Firewall Bark",
+		  "power": 40,
+		  "effect": "block_move",
+		  "cooldown": 0,
+		  "edu_log": "Firewall memfilter traffic berbahaya sebelum masuk ke sistem."
+		},
+		{
+		  "name": "Backup Howl",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 2,
+		  "edu_log": "Backup rutin memastikan data bisa dipulihkan saat terjadi insiden."
+		},
+		{
+		  "name": "SSL Handshake",
+		  "power": 45,
+		  "effect": "ssl_handshake",
+		  "cooldown": 0,
+		  "edu_log": "SSL/TLS Handshake membangun koneksi terenkripsi antara client dan server secara aman."
+		}
+	  ]
+	},
+	{
+	  "id": "ping_go",
+	  "name": "Ping-Go",
+	  "type": "Connection",
+	  "hp": 90,
+	  "speed": 100,
+	  "passive": {
+		"name": "Low Latency",
+		"description": "Selalu menyerang duluan kecuali lawan punya pasif serupa"
+	  },
+	  "moves": [
+		{
+		  "name": "Packet Dash",
+		  "power": 25,
+		  "effect": "double_hit",
+		  "cooldown": 0,
+		  "edu_log": "Data dikirim dalam bentuk paket-paket kecil melalui jaringan."
+		},
+		{
+		  "name": "Traceroute",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Traceroute memetakan jalur data untuk menemukan titik lemah jaringan."
+		},
+		{
+		  "name": "DDoS Feathers",
+		  "power": 50,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "DDoS membanjiri server dengan request sampai tidak bisa merespons."
+		},
+		{
+		  "name": "Ping Flood",
+		  "power": 55,
+		  "effect": "ping_flood",
+		  "cooldown": 0,
+		  "edu_log": "Ping Flood mengirim ICMP request terus-menerus untuk menghabiskan bandwidth target."
+		}
+	  ]
+	},
+	{
+	  "id": "biti",
+	  "name": "Biti",
+	  "type": "Malware",
+	  "hp": 95,
+	  "speed": 80,
+	  "passive": {
+		"name": "Polymorphic",
+		"description": "30% chance serangan lawan miss"
+	  },
+	  "moves": [
+		{
+		  "name": "Mimic Byte",
+		  "power": 0,
+		  "effect": "copy_move",
+		  "cooldown": 0,
+		  "edu_log": "Malware canggih bisa meniru perilaku software legitimate untuk menghindari deteksi."
+		},
+		{
+		  "name": "Inject",
+		  "power": 70,
+		  "effect": "requires_debuff",
+		  "cooldown": 0,
+		  "edu_log": "SQL Injection menyisipkan kode berbahaya ke dalam input yang tidak divalidasi."
+		},
+		{
+		  "name": "Trojan Gift",
+		  "power": 80,
+		  "effect": "delayed_damage",
+		  "duration": 2,
+		  "cooldown": 2,
+		  "edu_log": "Trojan Horse menyamar sebagai software berguna sebelum mengaktifkan payload berbahaya."
+		},
+		{
+		  "name": "Rootkit Hide",
+		  "power": 0,
+		  "effect": "rootkit_hide",
+		  "cooldown": 3,
+		  "edu_log": "Rootkit menyembunyikan keberadaannya di level kernel, membuat deteksi hampir mustahil."
+		}
+	  ]
+	},
+	{
+	  "id": "senti_shell",
+	  "name": "Senti-Shell",
+	  "type": "Defensive",
+	  "hp": 150,
+	  "speed": 40,
+	  "passive": {
+		"name": "Redundancy",
+		"description": "Saat HP menyentuh 0 pertama kali, bertahan dengan 1 HP"
+	  },
+	  "moves": [
+		{
+		  "name": "Diamond Layer",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Data integrity memastikan informasi tidak berubah saat transit atau penyimpanan."
+		},
+		{
+		  "name": "Shell Slam",
+		  "power": 20,
+		  "effect": "shell_slam",
+		  "cooldown": 0,
+		  "edu_log": "Defense in Depth menggunakan lapisan pertahanan berlapis untuk memaksimalkan perlindungan."
+		},
+		{
+		  "name": "Immutable Lock",
+		  "power": 0,
+		  "effect": "super_defense",
+		  "cooldown": 0,
+		  "edu_log": "Immutable backup adalah backup yang tidak bisa dimodifikasi atau dihapus bahkan oleh ransomware."
+		},
+		{
+		  "name": "Restore Point",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 2,
+		  "edu_log": "System restore point memungkinkan pemulihan sistem ke kondisi sebelum serangan terjadi."
+		}
+	  ]
+	},
+	{
+	  "id": "octo_core",
+	  "name": "Octo-Core",
+	  "type": "System",
+	  "hp": 110,
+	  "speed": 70,
+	  "passive": {
+		"name": "Kernel Panic",
+		"description": "Saat dikalahkan, mengirim damage flat 25 ke lawan"
+	  },
+	  "moves": [
+		{
+		  "name": "Memory Overflow",
+		  "power": 60,
+		  "effect": "overflow",
+		  "cooldown": 0,
+		  "edu_log": "Buffer overflow terjadi saat program menulis data melebihi batas memori yang dialokasikan."
+		},
+		{
+		  "name": "Process Kill",
+		  "power": 45,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Menghentikan proses kritis bisa melumpuhkan sistem operasi secara keseluruhan."
+		},
+		{
+		  "name": "System Hijack",
+		  "power": 0,
+		  "effect": "steal_buff",
+		  "cooldown": 0,
+		  "edu_log": "Privilege escalation memungkinkan attacker mengambil alih kontrol sistem dengan hak akses tertinggi."
+		},
+		{
+		  "name": "Fork Bomb",
+		  "power": 18,
+		  "effect": "fork_bomb",
+		  "cooldown": 1,
+		  "edu_log": "Fork Bomb membuat proses yang terus menggandakan diri hingga sistem kehabisan resource."
+		}
+	  ]
+	},
+	{
+	  "id": "chamele_auth",
+	  "name": "Chamele-Auth",
+	  "type": "Social Engineering",
+	  "hp": 95,
+	  "speed": 85,
+	  "passive": {
+		"name": "Identity Theft",
+		"description": "20% chance mengubah tipe sendiri menjadi tipe lawan saat menyerang"
+	  },
+	  "moves": [
+		{
+		  "name": "Phishing Cast",
+		  "power": 50,
+		  "effect": "confuse",
+		  "cooldown": 0,
+		  "edu_log": "Phishing menipu korban agar menyerahkan kredensial dengan menyamar sebagai entitas terpercaya."
+		},
+		{
+		  "name": "Spoofed Token",
+		  "power": 0,
+		  "effect": "type_steal",
+		  "cooldown": 2,
+		  "edu_log": "Token spoofing memalsukan access token untuk mendapatkan akses tidak sah ke sistem."
+		},
+		{
+		  "name": "Social Override",
+		  "power": 70,
+		  "effect": "bypass_defense",
+		  "cooldown": 0,
+		  "edu_log": "Social engineering mengeksploitasi psikologi manusia, bukan celah teknis — pertahanan terkuat adalah edukasi."
+		},
+		{
+		  "name": "Pretexting",
+		  "power": 0,
+		  "effect": "pretexting",
+		  "cooldown": 2,
+		  "edu_log": "Pretexting membuat skenario palsu yang meyakinkan untuk memanipulasi korban memberikan akses."
+		}
+	  ]
+	}
+  ]
+}
