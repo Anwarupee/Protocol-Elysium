@@ -13,6 +13,8 @@ var edu_log_label: Label
 var move_buttons: Array = []
 var battle_active: bool = true
 var player_monster_moves: Array = []
+var edu_scroll: ScrollContainer
+var edu_vbox: VBoxContainer
 
 func _ready():
 	var player_choice = "encryp_pup"
@@ -202,24 +204,26 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 	battle_log_label.custom_minimum_size = Vector2(585, 95)
 	add_child(battle_log_label)
 
-	# ── EDU LOG ──
-	var edu_bg = ColorRect.new()
-	edu_bg.color = Color(0.03, 0.12, 0.07)
-	edu_bg.size = Vector2(1152, 70)
-	edu_bg.position = Vector2(0, 578)
-	add_child(edu_bg)
+	# EDU-LOG panel dengan scroll
+	var edu_panel = create_panel_styled(Vector2(50, 530), Vector2(450, 135), Color(0.3, 0.5, 0.3))
+	add_child(edu_panel)
 
-	var edu_border = ColorRect.new()
-	edu_border.color = Color(0.2, 0.7, 0.3, 0.6)
-	edu_border.size = Vector2(1152, 2)
-	edu_border.position = Vector2(0, 578)
-	add_child(edu_border)
+	var edu_title = create_label("EDU-LOG", Vector2(65, 538), 12, Color(0.5, 1, 0.5))
+	add_child(edu_title)
 
-	add_child(create_label("[ EDU-LOG ]", Vector2(20, 586), 12, Color(0.3, 1, 0.4)))
-	edu_log_label = create_label("Pilih serangan untuk melihat penjelasan...", Vector2(110, 586), 12, Color(0.7, 1, 0.7))
-	edu_log_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	edu_log_label.custom_minimum_size = Vector2(1020, 55)
-	add_child(edu_log_label)
+	# ScrollContainer
+	var scroll = ScrollContainer.new()
+	scroll.position = Vector2(55, 555)
+	scroll.size = Vector2(438, 105)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(scroll)
+	edu_scroll = scroll
+
+	# VBox di dalam scroll
+	var vbox = VBoxContainer.new()
+	vbox.custom_minimum_size = Vector2(430, 0)
+	scroll.add_child(vbox)
+	edu_vbox = vbox
 
 	# Move buttons — 2 baris, 2 kolom
 	var moves = player_data["moves"]
@@ -348,7 +352,23 @@ func on_battle_log(message: String):
 	battle_log_label.text = message
 
 func on_edu_log(message: String):
-	edu_log_label.text = message
+	var entry = Label.new()
+	entry.text = "▸ " + message
+	entry.autowrap_mode = TextServer.AUTOWRAP_WORD
+	entry.custom_minimum_size = Vector2(425, 0)
+	entry.add_theme_font_size_override("font_size", 11)
+	entry.add_theme_color_override("font_color", Color(0.6, 1, 0.6))
+	edu_vbox.add_child(entry)
+
+	# Separator tipis antar entry
+	var sep = ColorRect.new()
+	sep.color = Color(0.3, 0.5, 0.3, 0.4)
+	sep.custom_minimum_size = Vector2(425, 1)
+	edu_vbox.add_child(sep)
+
+	# Auto scroll ke bawah
+	await get_tree().process_frame
+	edu_scroll.scroll_vertical = edu_scroll.get_v_scroll_bar().max_value
 
 func on_hp_updated(p_hp: int, p_max: int, e_hp: int, e_max: int):
 	player_hp_bar.value = (float(p_hp) / p_max) * 100
