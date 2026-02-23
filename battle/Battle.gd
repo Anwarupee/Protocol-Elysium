@@ -19,7 +19,11 @@ func _ready():
 	if has_meta("player_monster"):
 		player_choice = get_meta("player_monster")
 	
-	var all_monsters = ["encryp_pup", "ping_go", "biti", "senti_shell", "octo_core", "chamele_auth"]
+	var all_monsters = [
+	"encryp_pup", "ping_go", "biti", "senti_shell", "octo_core", "chamele_auth",
+	"vaultex", "cipher_ray", "routerex", "latencia", "ransom_rex", "worm_ling",
+	"patchwork", "bastion", "daemon_x", "bios_wraith", "vish_ara", "bait_eel"
+]
 	all_monsters.erase(player_choice)
 	var enemy_choice = all_monsters[randi() % all_monsters.size()]
 	
@@ -27,7 +31,10 @@ func _ready():
 	
 	var player_data = battle_manager.get_monster_data(player_choice)
 	var enemy_data = battle_manager.get_monster_data(enemy_choice)
-	
+	print("Player choice: ", player_choice)
+	print("Enemy choice: ", enemy_choice)
+	print("Player data: ", player_data)
+	print("Enemy data: ", enemy_data)
 	if player_data.is_empty() or enemy_data.is_empty():
 		push_error("Monster data not found!")
 		return

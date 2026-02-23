@@ -75,6 +75,138 @@ var monsters_info = [
 		"role": "Trickster",
 		"desc": "Bunglon piksel yang mencuri identitas. Tidak pernah menyerang langsung.",
 		"moves": ["Phishing Cast", "Spoofed Token", "Social Override"]
+	},
+	{
+		"id": "vaultex",
+		"name": "VAULTEX",
+		"type": "Data",
+		"color": Color(0.4, 0.8, 1),
+		"hp": 130,
+		"speed": 45,
+		"role": "Support",
+		"desc": "Brankas digital berjalan. Tidak akan terbuka kecuali menerima hash key yang tepat.",
+		"moves": ["Hash Lock", "Integrity Check", "Data Shred", "Mirror Backup"]
+	},
+	{
+		"id": "cipher_ray",
+		"name": "CIPHER-RAY",
+		"type": "Data",
+		"color": Color(0.6, 0.9, 1),
+		"hp": 100,
+		"speed": 80,
+		"role": "Attacker",
+		"desc": "Elang kristal predator data tak terenkripsi di lapisan Upper-Net.",
+		"moves": ["Brute Decrypt", "Key Exchange", "Cipher Strike", "Zero-Knowledge"]
+	},
+	{
+		"id": "routerex",
+		"name": "ROUTEREX",
+		"type": "Connection",
+		"color": Color(1, 0.85, 0.2),
+		"hp": 105,
+		"speed": 65,
+		"role": "Controller",
+		"desc": "Dinosaurus gateway yang membelokkan serangan ke jalur buntu.",
+		"moves": ["NAT Punch", "Port Scan", "Bandwidth Throttle", "Reroute"]
+	},
+	{
+		"id": "latencia",
+		"name": "LATENCIA",
+		"type": "Connection",
+		"color": Color(1, 0.7, 0.1),
+		"hp": 88,
+		"speed": 90,
+		"role": "Speedster",
+		"desc": "Ubur-ubur serat optik manifestasi lag jaringan.",
+		"moves": ["Timeout Strike", "Packet Loss", "QoS Drain", "Syn Flood"]
+	},
+	{
+		"id": "ransom_rex",
+		"name": "RANSOM-REX",
+		"type": "Malware",
+		"color": Color(1, 0.2, 0.2),
+		"hp": 105,
+		"speed": 60,
+		"role": "Controller",
+		"desc": "Naga rantai digital penyandera data paling ditakuti.",
+		"moves": ["File Encrypt", "Ransom Note", "Double Extortion", "Decoy Payload"]
+	},
+	{
+		"id": "worm_ling",
+		"name": "WORM-LING",
+		"type": "Malware",
+		"color": Color(0.8, 0.3, 0.3),
+		"hp": 85,
+		"speed": 95,
+		"role": "Swarm",
+		"desc": "Cacing neon yang menduplikasi diri secara eksponensial.",
+		"moves": ["Propagate", "Network Crawl", "Payload Deploy", "Mass Infection"]
+	},
+	{
+		"id": "patchwork",
+		"name": "PATCHWORK",
+		"type": "Defensive",
+		"color": Color(0.1, 0.8, 0.5),
+		"hp": 140,
+		"speed": 50,
+		"role": "Tank/Healer",
+		"desc": "Beruang tambalan digital dari jutaan perbaikan sistem darurat.",
+		"moves": ["Patch Deploy", "Vulnerability Scan", "Zero-Day Shield", "Hardened Kernel"]
+	},
+	{
+		"id": "bastion",
+		"name": "BASTION",
+		"type": "Defensive",
+		"color": Color(0.3, 1, 0.7),
+		"hp": 160,
+		"speed": 35,
+		"role": "Pure Tank",
+		"desc": "Ksatria firewall baris pertahanan terakhir mainframe.",
+		"moves": ["Perimeter Strike", "Access Denied", "Failover", "Iron Curtain"]
+	},
+	{
+		"id": "daemon_x",
+		"name": "DAEMON-X",
+		"type": "System",
+		"color": Color(0.5, 0.2, 0.9),
+		"hp": 100,
+		"speed": 75,
+		"role": "Debuffer",
+		"desc": "Entitas background yang bisa menghentikan proses hidup lawan.",
+		"moves": ["Process Inject", "Kill Switch", "Daemon Spawn", "Memory Leak"]
+	},
+	{
+		"id": "bios_wraith",
+		"name": "BIOS-WRAITH",
+		"type": "System",
+		"color": Color(0.7, 0.4, 1),
+		"hp": 95,
+		"speed": 55,
+		"role": "Controller",
+		"desc": "Roh motherboard kuno pengontrol instruksi paling dasar.",
+		"moves": ["BIOS Flash", "Boot Loop", "Overclock", "Firmware Lock"]
+	},
+	{
+		"id": "vish_ara",
+		"name": "VISH-ARA",
+		"type": "Social Engineering",
+		"color": Color(1, 0.6, 0.1),
+		"hp": 90,
+		"speed": 80,
+		"role": "Controller",
+		"desc": "Ular kobra speaker spesialis manipulasi suara.",
+		"moves": ["Voice Spoof", "Hypnotic Tone", "Caller ID Fake", "Social Script"]
+	},
+	{
+		"id": "bait_eel",
+		"name": "BAIT-EEL",
+		"type": "Social Engineering",
+		"color": Color(1, 0.5, 0.0),
+		"hp": 92,
+		"speed": 88,
+		"role": "Trickster",
+		"desc": "Belut umpan digital pemancing mangsa dengan janji palsu.",
+		"moves": ["Lure Strike", "Watering Hole", "Click Bait", "Drive-by Download"]
 	}
 ]
 
@@ -93,7 +225,19 @@ var passive_texts = {
 	"biti": "Polymorphic\n30% chance serangan lawan miss",
 	"senti_shell": "Redundancy\nBertahan di 1 HP saat pertama kali KO",
 	"octo_core": "Kernel Panic\nDeal 25 damage saat dikalahkan",
-	"chamele_auth": "Identity Theft\n20% chance salin tipe lawan"
+	"chamele_auth": "Identity Theft\n20% chance salin tipe lawan",
+	"vaultex": "Checksum\nJika HP genap di akhir turn, pulihkan 5 HP",
+	"cipher_ray": "AES-256\n20% chance enkripsi diri, kurangi damage masuk",
+	"routerex": "BGP Route\n25% chance redirect serangan lawan -50% damage",
+	"latencia": "Jitter\n30% chance serangan hit dua kali dengan power separuh",
+	"ransom_rex": "Encryption Lock\n25% chance lock heal lawan 2 turn saat menyerang",
+	"worm_ling": "Self-Replicating\nDamage naik 5 tiap kena serangan (max 3 stack)",
+	"patchwork": "Hot Patch\nDamage > 30 masuk, defense naik 1 otomatis",
+	"bastion": "DMZ\nSerangan di bawah 15 damage diabaikan",
+	"daemon_x": "Background Process\n20% chance 10 damage otomatis tiap akhir turn",
+	"bios_wraith": "Legacy Code\n15% chance lawan gagal gunakan move",
+	"vish_ara": "Vishing\n25% chance serangan lawan menyerang diri sendiri",
+	"bait_eel": "Honeypot\n30% chance lawan skip turn jika pakai move power > 60"
 }
 
 var advantage_texts = {
@@ -102,7 +246,19 @@ var advantage_texts = {
 	"biti": "Kuat vs Connection\nLemah vs Data",
 	"senti_shell": "Kuat vs Social Engineering\nLemah vs System",
 	"octo_core": "Kuat vs Data\nLemah vs Social Engineering",
-	"chamele_auth": "Kuat vs System\nLemah vs Connection"
+	"chamele_auth": "Kuat vs System\nLemah vs Connection",
+	"vaultex": "Kuat vs Malware\nLemah vs Connection",
+	"cipher_ray": "Kuat vs Malware\nLemah vs Connection",
+	"routerex": "Kuat vs Data\nLemah vs Malware",
+	"latencia": "Kuat vs Data\nLemah vs Malware",
+	"ransom_rex": "Kuat vs Connection\nLemah vs Data",
+	"worm_ling": "Kuat vs Connection\nLemah vs Data",
+	"patchwork": "Kuat vs Social Engineering\nLemah vs System",
+	"bastion": "Kuat vs Social Engineering\nLemah vs System",
+	"daemon_x": "Kuat vs Data\nLemah vs Social Engineering",
+	"bios_wraith": "Kuat vs Data\nLemah vs Social Engineering",
+	"vish_ara": "Kuat vs System\nLemah vs Connection",
+	"bait_eel": "Kuat vs System\nLemah vs Connection"
 }
 
 func _ready():

@@ -67,7 +67,14 @@ func player_use_move(move_index: int):
 	execute_move(player_monster, enemy_monster, move, true)
 	player_monster.tick_cooldowns()
 	player_monster.tick_status()
-	_tick_dot(player_monster)
+
+	# DoT damage tick
+	if player_monster.dot_turns > 0 and player_monster.dot_target != null:
+		player_monster.dot_target.hp = max(0, player_monster.dot_target.hp - player_monster.dot_power)
+		player_monster.dot_turns -= 1
+		emit_signal("battle_log", "DoT damage! " + str(player_monster.dot_power) + " damage over time!")
+		if player_monster.dot_turns <= 0:
+			player_monster.dot_target = null
 
 	if enemy_monster.is_alive():
 		await get_tree().create_timer(1.0).timeout
@@ -75,8 +82,21 @@ func player_use_move(move_index: int):
 		await get_tree().create_timer(0.3).timeout
 		enemy_turn()
 
-	_tick_dot(enemy_monster)
-	_tick_background_process()
+	# Enemy DoT tick
+	if enemy_monster.dot_turns > 0 and enemy_monster.dot_target != null:
+		enemy_monster.dot_target.hp = max(0, enemy_monster.dot_target.hp - enemy_monster.dot_power)
+		enemy_monster.dot_turns -= 1
+		emit_signal("battle_log", "DoT damage! " + str(enemy_monster.dot_power) + " damage!")
+		if enemy_monster.dot_turns <= 0:
+			enemy_monster.dot_target = null
+
+	# Background Process passive (Daemon-X)
+	if enemy_monster.passive["name"] == "Background Process" and randf() < 0.2:
+		player_monster.hp = max(0, player_monster.hp - 10)
+		emit_signal("battle_log", "Background Process triggered! 10 automatic damage!")
+	if player_monster.passive["name"] == "Background Process" and randf() < 0.2:
+		enemy_monster.hp = max(0, enemy_monster.hp - 10)
+		emit_signal("battle_log", "Background Process triggered! 10 automatic damage!")
 
 	enemy_monster.tick_cooldowns()
 	enemy_monster.tick_status()
