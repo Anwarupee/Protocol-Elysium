@@ -44,9 +44,53 @@ func _ready():
 	build_ui(player_data, enemy_data)
 	connect_signals()
 	battle_manager.start_battle(player_choice, enemy_choice)
+	await play_intro_animation()
 	
 	print("Player data: ", player_data)
 	print("Enemy data: ", enemy_data)
+
+func play_intro_animation():
+	battle_active = false
+	set_buttons_disabled(true)
+
+	var player_sprite = get_node("player_sprite")
+	var enemy_sprite = get_node("enemy_sprite")
+
+	if player_sprite == null or enemy_sprite == null:
+		battle_active = true
+		set_buttons_disabled(false)
+		return
+
+	# Simpan posisi asli
+	var player_original_pos = player_sprite.position
+	var enemy_original_pos = enemy_sprite.position
+
+	# Taruh di luar layar
+	player_sprite.position = Vector2(-200, player_original_pos.y)
+	enemy_sprite.position = Vector2(1350, enemy_original_pos.y)
+
+	# Sembunyikan move buttons dan log dulu
+	battle_log_label.text = ""
+
+	# Intro text
+	battle_log_label.text = "A wild " + enemy_sprite.get_meta("monster_name", "Enemy") + " appeared!"
+
+	# Animasi masuk — tween player
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(player_sprite, "position", player_original_pos, 0.8).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_property(enemy_sprite, "position", enemy_original_pos, 0.8).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+
+	await tween.finished
+	await get_tree().create_timer(0.5).timeout
+
+	# VS flash
+	battle_log_label.text = player_sprite.get_meta("monster_name", "Player") + "⚔" + enemy_sprite.get_meta("monster_name", "Enemy")
+	await get_tree().create_timer(0.8).timeout
+
+	battle_log_label.text = "Battle Start!"
+	battle_active = true
+	set_buttons_disabled(false)
 
 func create_panel_styled(pos: Vector2, size: Vector2, accent: Color) -> Node2D:
 	var container = Node2D.new()
@@ -73,7 +117,7 @@ func create_panel_styled(pos: Vector2, size: Vector2, accent: Color) -> Node2D:
 
 	return container
 
-func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: bool):
+func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: bool, monster_name: String = ""):
 	# Outer glow ring
 	var ring = ColorRect.new()
 	ring.color = Color(color.r, color.g, color.b, 0.08)
@@ -94,6 +138,8 @@ func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: boo
 	body.size = Vector2(size, size)
 	body.position = pos - Vector2(size/2, size/2)
 	body.name = "enemy_sprite" if not is_player else "player_sprite"
+	if monster_name != "":
+		body.set_meta("monster_name", monster_name)
 	add_child(body)
 
 	# Shine effect
@@ -241,8 +287,8 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 		move_buttons.append(btn)
 
 	# ── MONSTER SPRITES ──
-	draw_monster_sprite(Vector2(800, 185), enemy_color, 65, false)
-	draw_monster_sprite(Vector2(270, 295), player_color, 55, true)
+	draw_monster_sprite(Vector2(800, 185), enemy_color, 65, false, enemy_data["name"])
+	draw_monster_sprite(Vector2(270, 295), player_color, 55, true, player_data["name"])
 
 func get_type_color(type: String) -> Color:
 	match type:
