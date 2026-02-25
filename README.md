@@ -7,7 +7,7 @@
 
 ## Tentang Game
 
-**Protocol: Elysium** adalah game battle simulator berbasis giliran (turn-based) bertemakan keamanan siber. Setiap karakter dalam game — disebut **Sentinel** — merepresentasikan konsep nyata dalam dunia cybersecurity, mulai dari enkripsi, malware, social engineering, hingga sistem pertahanan jaringan.
+**Protocol: Elysium** adalah game battle simulator berbasis giliran (turn-based) bertemakan keamanan siber. Setiap karakter dalam game disebut **Sentinel** dan mereka merepresentasikan konsep nyata dalam dunia cybersecurity, mulai dari enkripsi, malware, social engineering, hingga sistem pertahanan jaringan.
 
 Game ini dirancang sebagai media pembelajaran interaktif yang membuat konsep keamanan siber lebih mudah dipahami melalui gameplay.
 
