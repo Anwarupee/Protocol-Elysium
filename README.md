@@ -1,7 +1,7 @@
 # Protocol: Elysium
 > Cybersecurity Battle Simulator — Godot 4 Prototype
 
-![Godot](https://img.shields.io/badge/Godot-4.x-blue) ![GDScript](https://img.shields.io/badge/Language-GDScript-orange) ![Status](https://img.shields.io/badge/Status-Prototype-yellow)
+![Godot](https://img.shields.io/badge/Godot-4.x-blue) 
 
 ---
 
