@@ -51,7 +51,7 @@ func build_ui():
 	add_child(logo_shine)
 
 	# Title
-	var title = create_label("CYBER-MON", Vector2(0, 218), 52, Color(0.4, 0.9, 1))
+	var title = create_label("Protocol: Elysium", Vector2(0, 218), 52, Color(0.4, 0.9, 1))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.custom_minimum_size = Vector2(1152, 65)
 	add_child(title)
@@ -73,7 +73,7 @@ func build_ui():
 	play_btn.pressed.connect(go_to_selection)
 	add_child(play_btn)
 
-	var dex_btn = create_menu_button("◈   CYBER-DEX", Vector2(426, 405), Color(0.15, 0.35, 0.65))
+	var dex_btn = create_menu_button("◈   Protocol-Link", Vector2(426, 405), Color(0.15, 0.35, 0.65))
 	dex_btn.pressed.connect(go_to_cyberdex)
 	add_child(dex_btn)
 
@@ -82,7 +82,7 @@ func build_ui():
 	add_child(quit_btn)
 
 	# Version + credit
-	var version = create_label("v0.1 PROTOTYPE  —  Made by You & Claude & Gemini", Vector2(0, 620), 11, Color(0.3, 0.3, 0.5))
+	var version = create_label("v0.1 PROTOTYPE  —  Made by Anwarupee", Vector2(0, 620), 11, Color(0.3, 0.3, 0.5))
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	version.custom_minimum_size = Vector2(1152, 20)
 	add_child(version)

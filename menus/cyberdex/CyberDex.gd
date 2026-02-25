@@ -292,10 +292,10 @@ func build_ui():
 	header_border.position = Vector2(0, 48)
 	add_child(header_border)
 
-	var title = create_label("◈  CYBER-DEX", Vector2(20, 12), 20, Color(0.4, 0.9, 1))
+	var title = create_label("◈  Protocol-Link", Vector2(20, 12), 20, Color(0.4, 0.9, 1))
 	add_child(title)
 
-	var count = create_label(str(monsters_data.size()) + " CYBER-MON REGISTERED", Vector2(0, 15), 13, Color(0.5, 0.5, 0.7))
+	var count = create_label(str(monsters_data.size()) + " Sentinels Registered", Vector2(0, 15), 13, Color(0.5, 0.5, 0.7))
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count.custom_minimum_size = Vector2(1132, 20)
 	add_child(count)
@@ -402,7 +402,7 @@ func build_ui():
 	vbox.add_child(_divider())
 
 	# Advantage
-	vbox.add_child(create_label("TYPE ADVANTAGE", Vector2(0, 0), 11, Color(0.4, 1, 0.4)))
+	vbox.add_child(create_label("Domain Advantage", Vector2(0, 0), 11, Color(0.4, 1, 0.4)))
 	detail_labels["advantage"] = create_label("", Vector2(0, 0), 11, Color(0.7, 1, 0.7))
 	detail_labels["advantage"].autowrap_mode = TextServer.AUTOWRAP_WORD
 	detail_labels["advantage"].custom_minimum_size = Vector2(440, 0)
@@ -421,7 +421,7 @@ func build_ui():
 	right_border.position = Vector2(492, 50)
 	add_child(right_border)
 
-	add_child(create_label("ALL CYBER-MON", Vector2(510, 88), 13, Color(0.5, 0.6, 0.8)))
+	add_child(create_label("All Sentinels", Vector2(510, 88), 13, Color(0.5, 0.6, 0.8)))
 
 	# Grid scroll container
 	var grid_scroll = ScrollContainer.new()

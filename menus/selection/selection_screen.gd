@@ -280,7 +280,7 @@ func build_ui():
 		add_child(line)
 
 	# Title
-	var title = create_label("CHOOSE YOUR CYBER-MON", Vector2(0, 25), 28, Color(0.4, 0.9, 1))
+	var title = create_label("Choose Your Sentinel", Vector2(0, 25), 28, Color(0.4, 0.9, 1))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.custom_minimum_size = Vector2(1152, 40)
 	add_child(title)

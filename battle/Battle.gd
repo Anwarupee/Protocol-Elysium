@@ -97,18 +97,16 @@ func create_panel_styled(pos: Vector2, size: Vector2, accent: Color) -> Node2D:
 	container.position = pos
 
 	var bg = ColorRect.new()
-	bg.color = Color(0.08, 0.08, 0.22, 0.95)
+	bg.color = Color(0.08, 0.08, 0.22, 0.6)  # tambah alpha 0.6
 	bg.size = size
 	container.add_child(bg)
 
-	# Accent border top
 	var border = ColorRect.new()
 	border.color = accent
 	border.size = Vector2(size.x, 3)
 	border.position = Vector2(0, 0)
 	container.add_child(border)
 
-	# Subtle side border
 	var side = ColorRect.new()
 	side.color = Color(accent.r, accent.g, accent.b, 0.4)
 	side.size = Vector2(3, size.y)
@@ -151,45 +149,107 @@ func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: boo
 
 func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 	# ── BACKGROUND ──
-	var bg = ColorRect.new()
-	bg.color = Color(0.05, 0.05, 0.15)
-	bg.size = Vector2(1152, 648)
-	add_child(bg)
+	# Sky/far background
+	var sky = ColorRect.new()
+	sky.color = Color(0.08, 0.08, 0.25)
+	sky.size = Vector2(1152, 648)
+	add_child(sky)
 
-	# Grid lines
-	for i in range(0, 1152, 80):
+	# Far background (enemy side) — lebih terang
+	var far_bg = ColorRect.new()
+	far_bg.color = Color(0.12, 0.15, 0.35)
+	far_bg.size = Vector2(1152, 320)
+	far_bg.position = Vector2(0, 0)
+	add_child(far_bg)
+
+	# Horizon glow
+	var horizon = ColorRect.new()
+	horizon.color = Color(0.2, 0.3, 0.6, 0.3)
+	horizon.size = Vector2(1152, 40)
+	horizon.position = Vector2(0, 290)
+	add_child(horizon)
+
+	# Near background (player side) — lebih gelap
+	var near_bg = ColorRect.new()
+	near_bg.color = Color(0.05, 0.06, 0.18)
+	near_bg.size = Vector2(1152, 340)
+	near_bg.position = Vector2(0, 310)
+	add_child(near_bg)
+
+	# Grid lines far (lebih tipis, perspektif)
+	for i in range(0, 1152, 120):
 		var line = ColorRect.new()
-		line.color = Color(1, 1, 1, 0.015)
-		line.size = Vector2(1, 648)
+		line.color = Color(1, 1, 1, 0.02)
+		line.size = Vector2(1, 300)
 		line.position = Vector2(i, 0)
 		add_child(line)
-	for i in range(0, 648, 80):
+
+	# Grid lines near (lebih tebal)
+	for i in range(0, 1152, 80):
 		var line = ColorRect.new()
-		line.color = Color(1, 1, 1, 0.015)
-		line.size = Vector2(1152, 1)
-		line.position = Vector2(0, i)
+		line.color = Color(1, 1, 1, 0.03)
+		line.size = Vector2(1, 340)
+		line.position = Vector2(i, 310)
 		add_child(line)
 
-	# Arena divider
+	# Enemy platform
+	var enemy_platform = ColorRect.new()
+	enemy_platform.color = Color(0.18, 0.22, 0.45)
+	enemy_platform.size = Vector2(220, 18)
+	enemy_platform.position = Vector2(690, 262)
+	add_child(enemy_platform)
+
+	var enemy_platform_shadow = ColorRect.new()
+	enemy_platform_shadow.color = Color(0.0, 0.0, 0.0, 0.3)
+	enemy_platform_shadow.size = Vector2(200, 8)
+	enemy_platform_shadow.position = Vector2(700, 274)
+	add_child(enemy_platform_shadow)
+
+	var enemy_platform_shine = ColorRect.new()
+	enemy_platform_shine.color = Color(0.4, 0.5, 0.9, 0.3)
+	enemy_platform_shine.size = Vector2(220, 3)
+	enemy_platform_shine.position = Vector2(690, 258)
+	add_child(enemy_platform_shine)
+
+	# Player platform
+	var player_platform = ColorRect.new()
+	player_platform.color = Color(0.12, 0.16, 0.35)
+	player_platform.size = Vector2(280, 22)
+	player_platform.position = Vector2(130, 342)
+	add_child(player_platform)
+
+	var player_platform_shadow = ColorRect.new()
+	player_platform_shadow.color = Color(0.0, 0.0, 0.0, 0.4)
+	player_platform_shadow.size = Vector2(240, 10)
+	player_platform_shadow.position = Vector2(150, 358)
+	add_child(player_platform_shadow)
+
+	var player_platform_shine = ColorRect.new()
+	player_platform_shine.color = Color(0.3, 0.4, 0.8, 0.3)
+	player_platform_shine.size = Vector2(260, 4)
+	player_platform_shine.position = Vector2(140, 338)
+	add_child(player_platform_shine)
+
+	# Divider line horizon
 	var divider = ColorRect.new()
-	divider.color = Color(0.3, 0.3, 0.6, 0.4)
+	divider.color = Color(0.3, 0.4, 0.7, 0.5)
 	divider.size = Vector2(1152, 2)
-	divider.position = Vector2(0, 300)
+	divider.position = Vector2(0, 308)
 	add_child(divider)
 
-	# Arena glow top (enemy side)
-	var top_glow = ColorRect.new()
-	top_glow.color = Color(1, 0.2, 0.2, 0.04)
-	top_glow.size = Vector2(1152, 300)
-	top_glow.position = Vector2(0, 0)
-	add_child(top_glow)
+	# Ambient glow enemy side
+	var enemy_glow = ColorRect.new()
+	enemy_glow.color = Color(0.8, 0.2, 0.2, 0.04)
+	enemy_glow.size = Vector2(1152, 310)
+	enemy_glow.position = Vector2(0, 0)
+	add_child(enemy_glow)
 
-	# Arena glow bottom (player side)
-	var bot_glow = ColorRect.new()
-	bot_glow.color = Color(0.1, 0.3, 0.6, 0.04)
-	bot_glow.size = Vector2(1152, 298)
-	bot_glow.position = Vector2(0, 302)
-	add_child(bot_glow)
+	# Ambient glow player side
+	var player_glow = ColorRect.new()
+	player_glow.color = Color(0.1, 0.2, 0.5, 0.05)
+	player_glow.size = Vector2(1152, 340)
+	player_glow.position = Vector2(0, 308)
+	add_child(player_glow)
 
 	# ── ENEMY PANEL ──
 	var enemy_color = get_type_color(enemy_data["type"])
@@ -287,8 +347,8 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 		move_buttons.append(btn)
 
 	# ── MONSTER SPRITES ──
-	draw_monster_sprite(Vector2(800, 185), enemy_color, 65, false, enemy_data["name"])
-	draw_monster_sprite(Vector2(270, 295), player_color, 55, true, player_data["name"])
+	draw_monster_sprite(Vector2(800, 215), enemy_color, 85, false, enemy_data["name"])
+	draw_monster_sprite(Vector2(270, 270), player_color, 130, true, player_data["name"])
 
 func get_type_color(type: String) -> Color:
 	match type:
