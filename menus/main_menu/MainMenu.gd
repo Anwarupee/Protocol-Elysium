@@ -169,30 +169,6 @@ func build_ui():
 	version.custom_minimum_size = Vector2(1152, 20)
 	add_child(version)
 
-	# Sentinel domain badges di bawah buttons
-	var domains = ["Data", "Connection", "Malware", "Defensive", "System", "Social Eng."]
-	var domain_colors = [
-		Color(0.4, 0.8, 1), Color(1, 0.9, 0.3), Color(1, 0.4, 0.4),
-		Color(0.2, 0.9, 0.6), Color(0.6, 0.3, 1), Color(1, 0.7, 0.2)
-	]
-	for i in domains.size():
-		var badge_bg = ColorRect.new()
-		badge_bg.color = Color(domain_colors[i].r * 0.15, domain_colors[i].g * 0.15, domain_colors[i].b * 0.15)
-		badge_bg.size = Vector2(148, 28)
-		badge_bg.position = Vector2(130 + i * 154, 560)
-		add_child(badge_bg)
-
-		var badge_border = ColorRect.new()
-		badge_border.color = Color(domain_colors[i].r, domain_colors[i].g, domain_colors[i].b, 0.5)
-		badge_border.size = Vector2(148, 2)
-		badge_border.position = Vector2(130 + i * 154, 560)
-		add_child(badge_border)
-
-		var badge_label = create_label(domains[i], Vector2(130 + i * 154, 566), 12, domain_colors[i])
-		badge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		badge_label.custom_minimum_size = Vector2(148, 20)
-		add_child(badge_label)
-
 func spawn_particles():
 	for i in 40:
 		var p = ColorRect.new()
