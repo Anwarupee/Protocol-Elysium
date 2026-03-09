@@ -8,8 +8,13 @@ var trojan_turns_left: int = 0
 var trojan_power: int = 0
 var last_enemy_move: Dictionary = {}
 
+# ── EDU POPUP SYSTEM ──
+var move_popup_count: Dictionary = {}  # { "move_name": count }
+const MAX_POPUP_PER_MOVE = 2
+
 signal battle_log(message: String)
 signal edu_log(message: String)
+signal edu_popup(move_name: String, edu_text: String, domain: String)
 signal battle_ended(player_won: bool)
 signal hp_updated(player_hp: int, player_max: int, enemy_hp: int, enemy_max: int)
 signal enemy_attacking
@@ -35,6 +40,7 @@ func get_monster_data(id: String) -> Dictionary:
 func start_battle(player_id: String, enemy_id: String):
 	player_monster = create_monster(player_id)
 	enemy_monster = create_monster(enemy_id)
+	move_popup_count.clear()
 	emit_signal("battle_log", "Battle Start! " + player_monster.monster_name + " VS " + enemy_monster.monster_name)
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
@@ -53,6 +59,25 @@ func get_cooldown_states() -> Array:
 		states.append(player_monster.is_move_on_cooldown(move["name"]))
 	return states
 
+# ── SMART REPETITION POPUP ──
+func should_show_popup(move_name: String) -> bool:
+	var count = move_popup_count.get(move_name, 0)
+	return count < MAX_POPUP_PER_MOVE
+
+func register_popup_shown(move_name: String):
+	move_popup_count[move_name] = move_popup_count.get(move_name, 0) + 1
+
+func try_show_edu_popup(move: Dictionary, attacker: Monster) -> bool:
+	var move_name = move["name"]
+	var edu_text = move.get("edu_popup", move.get("edu_log", ""))
+	if edu_text == "":
+		return false
+	if not should_show_popup(move_name):
+		return false
+	register_popup_shown(move_name)
+	emit_signal("edu_popup", move_name, edu_text, attacker.type)
+	return true
+
 func player_use_move(move_index: int):
 	if not player_monster.is_alive() or not enemy_monster.is_alive():
 		return
@@ -68,7 +93,6 @@ func player_use_move(move_index: int):
 	player_monster.tick_cooldowns()
 	player_monster.tick_status()
 
-	# DoT damage tick
 	if player_monster.dot_turns > 0 and player_monster.dot_target != null:
 		player_monster.dot_target.hp = max(0, player_monster.dot_target.hp - player_monster.dot_power)
 		player_monster.dot_turns -= 1
@@ -82,7 +106,6 @@ func player_use_move(move_index: int):
 		await get_tree().create_timer(0.3).timeout
 		enemy_turn()
 
-	# Enemy DoT tick
 	if enemy_monster.dot_turns > 0 and enemy_monster.dot_target != null:
 		enemy_monster.dot_target.hp = max(0, enemy_monster.dot_target.hp - enemy_monster.dot_power)
 		enemy_monster.dot_turns -= 1
@@ -90,7 +113,6 @@ func player_use_move(move_index: int):
 		if enemy_monster.dot_turns <= 0:
 			enemy_monster.dot_target = null
 
-	# Background Process passive (Daemon-X)
 	if enemy_monster.passive["name"] == "Background Process" and randf() < 0.2:
 		player_monster.hp = max(0, player_monster.hp - 10)
 		emit_signal("battle_log", "Background Process triggered! 10 automatic damage!")
@@ -104,22 +126,6 @@ func player_use_move(move_index: int):
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
 	check_battle_end()
-
-func _tick_dot(source: Monster):
-	if source.dot_turns > 0 and source.dot_target != null:
-		source.dot_target.hp = max(0, source.dot_target.hp - source.dot_power)
-		source.dot_turns -= 1
-		emit_signal("battle_log", "DoT! " + str(source.dot_power) + " damage!")
-		if source.dot_turns <= 0:
-			source.dot_target = null
-
-func _tick_background_process():
-	if enemy_monster.passive["name"] == "Background Process" and randf() < 0.2:
-		player_monster.hp = max(0, player_monster.hp - 10)
-		emit_signal("battle_log", "Background Process! 10 auto damage!")
-	if player_monster.passive["name"] == "Background Process" and randf() < 0.2:
-		enemy_monster.hp = max(0, enemy_monster.hp - 10)
-		emit_signal("battle_log", "Background Process! 10 auto damage!")
 
 func enemy_turn():
 	var available_moves = []
@@ -150,7 +156,6 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		attacker.blocked_next_turn = false
 		return
 
-	# Polymorphic miss
 	var poly_chance = 0.3
 	if defender.polymorphic_boosted:
 		poly_chance = 0.6
@@ -158,19 +163,18 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		emit_signal("battle_log", "Attack missed! " + defender.monster_name + " morphed away!")
 		return
 
-	# Vishing passive
 	if defender.passive["name"] == "Vishing" and randf() < 0.25:
 		attacker.hp = max(0, attacker.hp - int(move.get("power", 0) * 0.5))
 		emit_signal("battle_log", "Vishing! Attack backfired on " + attacker.monster_name + "!")
 		emit_signal("edu_log", move["edu_log"])
+		if is_player:
+			try_show_edu_popup(move, attacker)
 		return
 
-	# Legacy Code passive
 	if attacker.passive["name"] != "Legacy Code" and defender.passive["name"] == "Legacy Code" and randf() < 0.15:
 		emit_signal("battle_log", "Compatibility Error! " + attacker.monster_name + "'s move failed!")
 		return
 
-	# Honeypot passive
 	if defender.passive["name"] == "Honeypot" and move.get("power", 0) > 60 and randf() < 0.3:
 		emit_signal("battle_log", "Honeypot triggered! " + attacker.monster_name + " is trapped!")
 		attacker.blocked_next_turn = true
@@ -178,10 +182,13 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 	emit_signal("battle_log", who + " " + move["name"] + "!")
 	emit_signal("edu_log", move["edu_log"])
 
+	# ── TRIGGER EDU POPUP (player moves only) ──
+	if is_player:
+		try_show_edu_popup(move, attacker)
+
 	if move.get("cooldown", 0) > 0:
 		attacker.set_cooldown(move["name"], move["cooldown"])
 
-	# Identity Theft passive
 	if is_player and player_monster.passive["name"] == "Identity Theft" and randf() < 0.2:
 		player_monster.type = enemy_monster.type
 		emit_signal("battle_log", "Identity Theft! Type changed to " + player_monster.type + "!")
@@ -189,7 +196,6 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		enemy_monster.type = player_monster.type
 		emit_signal("battle_log", "Identity Theft! Type changed to " + enemy_monster.type + "!")
 
-	# AES-256 passive
 	if attacker.passive["name"] == "AES-256" and randf() < 0.2:
 		attacker.defense_stage += 1
 		emit_signal("battle_log", "AES-256 encrypted attacker! Defense +1!")
@@ -199,7 +205,6 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 	if not is_player:
 		last_enemy_move = move
 
-	# Trojan tick
 	if pending_trojan_target != null:
 		trojan_turns_left -= 1
 		if trojan_turns_left <= 0:

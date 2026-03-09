@@ -11,10 +11,38 @@
 		"description": "Defense naik setiap kali menerima serangan"
 	  },
 	  "moves": [
-		{ "name": "Encrypt", "power": 0, "effect": "defense_buff", "cooldown": 0, "edu_log": "Enkripsi mengubah data menjadi ciphertext yang tidak bisa dibaca tanpa kunci." },
-		{ "name": "Firewall Bark", "power": 40, "effect": "block_move", "cooldown": 0, "edu_log": "Firewall memfilter traffic berbahaya sebelum masuk ke sistem." },
-		{ "name": "Backup Howl", "power": 0, "effect": "heal", "cooldown": 2, "edu_log": "Backup rutin memastikan data bisa dipulihkan saat terjadi insiden." },
-		{ "name": "SSL Handshake", "power": 45, "effect": "ssl_handshake", "cooldown": 0, "edu_log": "SSL/TLS Handshake membangun koneksi terenkripsi antara client dan server secara aman." }
+		{
+		  "name": "Encrypt",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Enkripsi mengubah data menjadi ciphertext yang tidak bisa dibaca tanpa kunci.",
+		  "edu_popup": "ENKRIPSI: Mengacak data agar hanya bisa dibaca oleh pihak yang punya kunci dekripsi. Contoh nyata: HTTPS di browser mengenkripsi semua data yang kamu kirim ke website — lihat ikon gembok di URL bar!"
+		},
+		{
+		  "name": "Firewall Bark",
+		  "power": 40,
+		  "effect": "block_move",
+		  "cooldown": 0,
+		  "edu_log": "Firewall memfilter traffic berbahaya sebelum masuk ke sistem.",
+		  "edu_popup": "FIREWALL: Sistem keamanan yang memantau dan memfilter traffic jaringan berdasarkan aturan yang ditetapkan. Tips: Selalu aktifkan firewall di perangkatmu, terutama saat terhubung ke WiFi publik!"
+		},
+		{
+		  "name": "Backup Howl",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 2,
+		  "edu_log": "Backup rutin memastikan data bisa dipulihkan saat terjadi insiden.",
+		  "edu_popup": "BACKUP: Salinan data yang disimpan di tempat terpisah sebagai perlindungan jika data asli rusak atau hilang. Tips: Ikuti aturan 3-2-1 — 3 salinan data, 2 media berbeda, 1 disimpan offsite atau cloud."
+		},
+		{
+		  "name": "SSL Handshake",
+		  "power": 45,
+		  "effect": "ssl_handshake",
+		  "cooldown": 0,
+		  "edu_log": "SSL/TLS Handshake membangun koneksi terenkripsi antara client dan server secara aman.",
+		  "edu_popup": "SSL/TLS HANDSHAKE: Proses negosiasi antara browser dan server untuk membangun koneksi aman sebelum data dikirim. Cek ikon gembok di browser — itu tanda koneksimu sudah terenkripsi dan aman dari penyadapan!"
+		}
 	  ]
 	},
 	{
@@ -28,10 +56,38 @@
 		"description": "Selalu menyerang duluan kecuali lawan punya pasif serupa"
 	  },
 	  "moves": [
-		{ "name": "Packet Dash", "power": 25, "effect": "double_hit", "cooldown": 0, "edu_log": "Data dikirim dalam bentuk paket-paket kecil melalui jaringan." },
-		{ "name": "Traceroute", "power": 0, "effect": "accuracy_buff", "cooldown": 0, "edu_log": "Traceroute memetakan jalur data untuk menemukan titik lemah jaringan." },
-		{ "name": "DDoS Feathers", "power": 50, "effect": "speed_debuff", "cooldown": 0, "edu_log": "DDoS membanjiri server dengan request sampai tidak bisa merespons." },
-		{ "name": "Ping Flood", "power": 55, "effect": "ping_flood", "cooldown": 0, "edu_log": "Ping Flood mengirim ICMP request terus-menerus untuk menghabiskan bandwidth target." }
+		{
+		  "name": "Packet Dash",
+		  "power": 25,
+		  "effect": "double_hit",
+		  "cooldown": 0,
+		  "edu_log": "Data dikirim dalam bentuk paket-paket kecil melalui jaringan.",
+		  "edu_popup": "PACKET: Data dipecah menjadi potongan kecil sebelum dikirim melalui jaringan, lalu disusun kembali di tujuan. Jika satu paket hilang, hanya bagian itu yang dikirim ulang — lebih efisien dari kirim data sekaligus!"
+		},
+		{
+		  "name": "Traceroute",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Traceroute memetakan jalur data untuk menemukan titik lemah jaringan.",
+		  "edu_popup": "TRACEROUTE: Alat diagnostik jaringan yang melacak rute paket data dari sumber ke tujuan, menampilkan setiap router yang dilewati. Berguna untuk menemukan di mana koneksimu melambat atau diblokir!"
+		},
+		{
+		  "name": "DDoS Feathers",
+		  "power": 50,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "DDoS membanjiri server dengan request sampai tidak bisa merespons.",
+		  "edu_popup": "DDoS (Distributed Denial of Service): Serangan menggunakan ribuan perangkat terinfeksi untuk membanjiri server dengan traffic palsu hingga crash. Website besar seperti bank pun pernah jadi korban serangan ini!"
+		},
+		{
+		  "name": "Ping Flood",
+		  "power": 55,
+		  "effect": "ping_flood",
+		  "cooldown": 0,
+		  "edu_log": "Ping Flood mengirim ICMP request terus-menerus untuk menghabiskan bandwidth target.",
+		  "edu_popup": "PING FLOOD: Serangan DoS yang mengirim ribuan paket ICMP Echo Request untuk menghabiskan bandwidth dan memori target. Tips: Rate limiting dan firewall rules bisa mencegah serangan sederhana seperti ini."
+		}
 	  ]
 	},
 	{
@@ -45,10 +101,38 @@
 		"description": "30% chance serangan lawan miss"
 	  },
 	  "moves": [
-		{ "name": "Mimic Byte", "power": 0, "effect": "copy_move", "cooldown": 0, "edu_log": "Malware canggih bisa meniru perilaku software legitimate untuk menghindari deteksi." },
-		{ "name": "Inject", "power": 70, "effect": "requires_debuff", "cooldown": 0, "edu_log": "SQL Injection menyisipkan kode berbahaya ke dalam input yang tidak divalidasi." },
-		{ "name": "Trojan Gift", "power": 80, "effect": "delayed_damage", "duration": 2, "cooldown": 2, "edu_log": "Trojan Horse menyamar sebagai software berguna sebelum mengaktifkan payload berbahaya." },
-		{ "name": "Rootkit Hide", "power": 0, "effect": "rootkit_hide", "cooldown": 3, "edu_log": "Rootkit menyembunyikan keberadaannya di level kernel, membuat deteksi hampir mustahil." }
+		{
+		  "name": "Mimic Byte",
+		  "power": 35,
+		  "effect": "copy_move",
+		  "cooldown": 0,
+		  "edu_log": "Polymorphic malware mengubah kode dirinya untuk menghindari deteksi antivirus.",
+		  "edu_popup": "POLYMORPHIC MALWARE: Malware canggih yang terus mengubah kode dan tanda tangannya agar tidak terdeteksi antivirus. Solusi: Gunakan antivirus berbasis perilaku (behavior-based), bukan hanya signature-based!"
+		},
+		{
+		  "name": "Inject",
+		  "power": 55,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Code injection menyisipkan kode berbahaya ke dalam proses yang sedang berjalan.",
+		  "edu_popup": "CODE INJECTION: Teknik serangan yang menyisipkan kode berbahaya ke dalam program atau database. SQL Injection adalah contoh paling umum — selalu validasi dan sanitasi input user di aplikasimu!"
+		},
+		{
+		  "name": "Trojan Gift",
+		  "power": 0,
+		  "effect": "trojan",
+		  "cooldown": 2,
+		  "edu_log": "Trojan Horse menyamar sebagai program berguna untuk menyembunyikan muatan berbahaya.",
+		  "edu_popup": "TROJAN HORSE: Malware yang menyamar sebagai software legitimate untuk mengelabui user menginstalnya. Tips: Hanya download software dari sumber resmi dan selalu cek digital signature file sebelum menjalankannya!"
+		},
+		{
+		  "name": "Rootkit Hide",
+		  "power": 0,
+		  "effect": "evasion_buff",
+		  "cooldown": 3,
+		  "edu_log": "Rootkit menyembunyikan keberadaan malware dari sistem operasi dan tools keamanan.",
+		  "edu_popup": "ROOTKIT: Malware yang menyembunyikan dirinya di level sistem operasi sehingga sulit terdeteksi — bahkan bisa aktif sebelum antivirus dimuat saat booting. Sangat sulit dihapus tanpa reinstall OS penuh!"
+		}
 	  ]
 	},
 	{
@@ -59,13 +143,41 @@
 	  "speed": 40,
 	  "passive": {
 		"name": "Redundancy",
-		"description": "Saat HP menyentuh 0 pertama kali, bertahan dengan 1 HP"
+		"description": "Bertahan di 1 HP saat pertama kali KO"
 	  },
 	  "moves": [
-		{ "name": "Diamond Layer", "power": 0, "effect": "defense_buff", "cooldown": 0, "edu_log": "Data integrity memastikan informasi tidak berubah saat transit atau penyimpanan." },
-		{ "name": "Shell Slam", "power": 20, "effect": "shell_slam", "cooldown": 0, "edu_log": "Defense in Depth menggunakan lapisan pertahanan berlapis untuk memaksimalkan perlindungan." },
-		{ "name": "Immutable Lock", "power": 0, "effect": "super_defense", "cooldown": 0, "edu_log": "Immutable backup adalah backup yang tidak bisa dimodifikasi atau dihapus bahkan oleh ransomware." },
-		{ "name": "Restore Point", "power": 0, "effect": "heal", "cooldown": 2, "edu_log": "System restore point memungkinkan pemulihan sistem ke kondisi sebelum serangan terjadi." }
+		{
+		  "name": "Diamond Layer",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Defense in Depth menggunakan lapisan keamanan berlapis untuk melindungi sistem.",
+		  "edu_popup": "DEFENSE IN DEPTH: Strategi keamanan berlapis di mana sistem dilindungi oleh multiple layer. Jika satu lapisan jebol, lapisan berikutnya masih melindungi. Seperti bawang — semakin banyak lapisan, semakin aman!"
+		},
+		{
+		  "name": "Shell Slam",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Keamanan aktif tidak hanya bertahan tapi juga merespons ancaman secara agresif.",
+		  "edu_popup": "ACTIVE DEFENSE: Pendekatan keamanan yang tidak hanya pasif menunggu serangan, tapi aktif merespons dan menangkal ancaman secara real-time. Contoh: IPS (Intrusion Prevention System) yang otomatis memblokir serangan!"
+		},
+		{
+		  "name": "Immutable Lock",
+		  "power": 0,
+		  "effect": "block_move",
+		  "cooldown": 2,
+		  "edu_log": "Immutable infrastructure memastikan sistem tidak bisa dimodifikasi setelah deployment.",
+		  "edu_popup": "IMMUTABLE INFRASTRUCTURE: Konsep di mana server tidak pernah dimodifikasi setelah deployment — jika perlu update, sistem lama dihapus dan diganti baru. Ini mencegah konfigurasi drift dan serangan persistent!"
+		},
+		{
+		  "name": "Restore Point",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 3,
+		  "edu_log": "System restore point memungkinkan pemulihan sistem ke kondisi sebelum serangan.",
+		  "edu_popup": "RESTORE POINT / SNAPSHOT: Rekaman kondisi sistem pada titik waktu tertentu untuk memulihkan sistem jika terjadi serangan atau kerusakan. Tips: Buat restore point sebelum instal software baru atau update besar!"
+		}
 	  ]
 	},
 	{
@@ -76,13 +188,41 @@
 	  "speed": 70,
 	  "passive": {
 		"name": "Kernel Panic",
-		"description": "Saat dikalahkan, mengirim damage flat 25 ke lawan"
+		"description": "Deal 25 damage saat dikalahkan"
 	  },
 	  "moves": [
-		{ "name": "Memory Overflow", "power": 60, "effect": "overflow", "cooldown": 0, "edu_log": "Buffer overflow terjadi saat program menulis data melebihi batas memori yang dialokasikan." },
-		{ "name": "Process Kill", "power": 45, "effect": "speed_debuff", "cooldown": 0, "edu_log": "Menghentikan proses kritis bisa melumpuhkan sistem operasi secara keseluruhan." },
-		{ "name": "System Hijack", "power": 0, "effect": "steal_buff", "cooldown": 0, "edu_log": "Privilege escalation memungkinkan attacker mengambil alih kontrol sistem dengan hak akses tertinggi." },
-		{ "name": "Fork Bomb", "power": 18, "effect": "fork_bomb", "cooldown": 1, "edu_log": "Fork Bomb membuat proses yang terus menggandakan diri hingga sistem kehabisan resource." }
+		{
+		  "name": "Memory Overflow",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Buffer overflow terjadi saat program menulis data melebihi batas memori yang dialokasikan.",
+		  "edu_popup": "BUFFER OVERFLOW: Kerentanan ketika program menulis data melebihi kapasitas buffer di memori, menimpa data lain. Salah satu teknik eksploitasi tertua dan paling berbahaya — bisa memberi attacker kontrol penuh atas sistem!"
+		},
+		{
+		  "name": "Process Kill",
+		  "power": 60,
+		  "effect": "speed_debuff",
+		  "cooldown": 2,
+		  "edu_log": "Privilege escalation memungkinkan attacker mendapatkan akses lebih tinggi dari yang seharusnya.",
+		  "edu_popup": "PRIVILEGE ESCALATION: Teknik di mana attacker meningkatkan hak aksesnya dari user biasa menjadi admin/root. Tips: Terapkan Principle of Least Privilege — berikan user hanya akses minimum yang mereka butuhkan!"
+		},
+		{
+		  "name": "System Hijack",
+		  "power": 50,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Remote Code Execution memungkinkan attacker menjalankan kode berbahaya dari jarak jauh.",
+		  "edu_popup": "REMOTE CODE EXECUTION (RCE): Kerentanan paling kritis — memungkinkan attacker menjalankan kode apapun di sistem target dari jarak jauh tanpa akses fisik. Selalu update software untuk menutup celah RCE!"
+		},
+		{
+		  "name": "Fork Bomb",
+		  "power": 0,
+		  "effect": "block_move",
+		  "cooldown": 3,
+		  "edu_log": "Fork bomb membuat proses menduplikasi diri terus-menerus hingga sistem kehabisan resource.",
+		  "edu_popup": "FORK BOMB: Serangan DoS lokal yang membuat proses menduplikasi diri secara eksponensial hingga sistem crash karena kehabisan memori dan CPU. Di Linux, serangan ini bisa dibuat hanya dengan satu baris kode!"
+		}
 	  ]
 	},
 	{
@@ -93,13 +233,41 @@
 	  "speed": 85,
 	  "passive": {
 		"name": "Identity Theft",
-		"description": "20% chance mengubah tipe sendiri menjadi tipe lawan saat menyerang"
+		"description": "20% chance salin tipe lawan"
 	  },
 	  "moves": [
-		{ "name": "Phishing Cast", "power": 50, "effect": "confuse", "cooldown": 0, "edu_log": "Phishing menipu korban agar menyerahkan kredensial dengan menyamar sebagai entitas terpercaya." },
-		{ "name": "Spoofed Token", "power": 0, "effect": "type_steal", "cooldown": 2, "edu_log": "Token spoofing memalsukan access token untuk mendapatkan akses tidak sah ke sistem." },
-		{ "name": "Social Override", "power": 70, "effect": "bypass_defense", "cooldown": 0, "edu_log": "Social engineering mengeksploitasi psikologi manusia, bukan celah teknis — pertahanan terkuat adalah edukasi." },
-		{ "name": "Pretexting", "power": 0, "effect": "pretexting", "cooldown": 2, "edu_log": "Pretexting membuat skenario palsu yang meyakinkan untuk memanipulasi korban memberikan akses." }
+		{
+		  "name": "Phishing Cast",
+		  "power": 40,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Phishing menipu korban agar memberikan informasi sensitif melalui komunikasi palsu.",
+		  "edu_popup": "PHISHING: Serangan yang mengelabui korban melalui email, SMS, atau website palsu yang menyerupai entitas terpercaya untuk mencuri kredensial. Tips: Selalu cek URL dengan teliti sebelum login — satu huruf beda bisa jadi jebakan!"
+		},
+		{
+		  "name": "Spoofed Token",
+		  "power": 45,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Token spoofing memalsukan identitas digital untuk mendapatkan akses tidak sah.",
+		  "edu_popup": "TOKEN SPOOFING: Teknik memalsukan token autentikasi (seperti session cookie atau JWT) untuk menyamar sebagai user lain tanpa password. Gunakan token dengan expiry pendek dan HTTPS untuk mencegah pencurian token!"
+		},
+		{
+		  "name": "Social Override",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Social engineering mengeksploitasi psikologi manusia sebagai celah keamanan terbesar.",
+		  "edu_popup": "SOCIAL ENGINEERING: Manipulasi psikologis untuk mengelabui orang melakukan tindakan yang menguntungkan attacker. Fakta: 90% serangan siber melibatkan elemen ini. Manusia adalah mata rantai terlemah dalam keamanan!"
+		},
+		{
+		  "name": "Pretexting",
+		  "power": 50,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 0,
+		  "edu_log": "Pretexting membuat skenario palsu yang meyakinkan untuk memanipulasi korban.",
+		  "edu_popup": "PRETEXTING: Membuat identitas atau skenario palsu yang meyakinkan untuk memanipulasi korban memberikan akses. Contoh: Pura-pura jadi teknisi IT untuk meminta password. Selalu verifikasi identitas sebelum berikan akses apapun!"
+		}
 	  ]
 	},
 	{
@@ -110,13 +278,41 @@
 	  "speed": 45,
 	  "passive": {
 		"name": "Checksum",
-		"description": "Setiap akhir turn, jika HP genap, pulihkan 5 HP"
+		"description": "Jika HP genap di akhir turn, pulihkan 5 HP"
 	  },
 	  "moves": [
-		{ "name": "Hash Lock", "power": 45, "effect": "block_move", "cooldown": 0, "edu_log": "Hash function mengubah data menjadi nilai unik. Jika data berubah, hash-nya akan berbeda — deteksi manipulasi secara instan." },
-		{ "name": "Integrity Check", "power": 0, "effect": "cleanse_debuff", "cooldown": 2, "edu_log": "Integrity check memverifikasi bahwa data tidak dimodifikasi secara tidak sah sejak terakhir kali divalidasi." },
-		{ "name": "Data Shred", "power": 65, "effect": "shred_defense", "cooldown": 1, "edu_log": "Data shredding menghapus informasi secara permanen agar tidak bisa dipulihkan oleh attacker." },
-		{ "name": "Mirror Backup", "power": 0, "effect": "mirror_defense", "cooldown": 3, "edu_log": "Mirror backup menyalin data secara real-time ke lokasi kedua, memastikan ketersediaan data saat terjadi kegagalan." }
+		{
+		  "name": "Hash Lock",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Hashing mengubah data menjadi nilai unik untuk verifikasi integritas.",
+		  "edu_popup": "HASHING: Fungsi satu arah yang mengubah data apapun menjadi string unik berukuran tetap. Website seharusnya menyimpan HASH password-mu, bukan password aslinya — jika database bocor, password tetap aman!"
+		},
+		{
+		  "name": "Integrity Check",
+		  "power": 35,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Integrity checking memverifikasi bahwa data tidak dimodifikasi secara tidak sah.",
+		  "edu_popup": "DATA INTEGRITY: Jaminan bahwa data tidak diubah tanpa otorisasi. Tools seperti SHA-256 menghasilkan checksum yang berubah jika file dimodifikasi satu bit pun — cara mudah deteksi file yang sudah dimanipulasi!"
+		},
+		{
+		  "name": "Data Shred",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Secure deletion memastikan data yang dihapus tidak bisa dipulihkan oleh attacker.",
+		  "edu_popup": "SECURE DELETION: Menghapus file biasa tidak benar-benar menghapus data — hanya menandainya sebagai ruang kosong dan bisa dipulihkan! Secure shredding menimpa data berkali-kali. Penting sebelum jual atau buang perangkat lama!"
+		},
+		{
+		  "name": "Mirror Backup",
+		  "power": 0,
+		  "effect": "steal_buff",
+		  "cooldown": 3,
+		  "edu_log": "Mirroring membuat salinan real-time sistem untuk ketersediaan data yang tinggi.",
+		  "edu_popup": "MIRRORING: Replikasi data secara real-time ke sistem lain untuk memastikan ketersediaan tinggi (high availability). Digunakan bank dan layanan kritis agar tidak ada downtime saat terjadi kerusakan hardware!"
+		}
 	  ]
 	},
 	{
@@ -127,13 +323,41 @@
 	  "speed": 80,
 	  "passive": {
 		"name": "AES-256",
-		"description": "20% chance setiap serangan keluar mengenkripsi diri, mengurangi damage masuk berikutnya"
+		"description": "20% chance enkripsi diri, kurangi damage masuk"
 	  },
 	  "moves": [
-		{ "name": "Brute Decrypt", "power": 70, "effect": "brute_decrypt", "cooldown": 1, "edu_log": "Brute force attack mencoba semua kombinasi kunci secara sistematis — semakin panjang kunci enkripsi, semakin lama waktu yang dibutuhkan." },
-		{ "name": "Key Exchange", "power": 0, "effect": "accuracy_buff", "cooldown": 0, "edu_log": "Diffie-Hellman Key Exchange memungkinkan dua pihak berbagi kunci enkripsi secara aman meski komunikasi mereka disadap." },
-		{ "name": "Cipher Strike", "power": 50, "effect": "cipher_strike", "cooldown": 0, "edu_log": "Chosen-plaintext attack mengeksploitasi kelemahan cipher dengan memilih plaintext spesifik untuk dianalisis pola enkripsinya." },
-		{ "name": "Zero-Knowledge", "power": 55, "effect": "zero_knowledge", "cooldown": 2, "edu_log": "Zero-Knowledge Proof membuktikan pengetahuan akan sebuah rahasia tanpa mengungkapkan rahasia itu sendiri." }
+		{
+		  "name": "Brute Decrypt",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Brute force mencoba semua kemungkinan kombinasi password hingga menemukan yang benar.",
+		  "edu_popup": "BRUTE FORCE ATTACK: Mencoba semua kombinasi password secara sistematis. Password 8 karakter bisa di-crack dalam hitungan jam! Tips: Gunakan password 16+ karakter dengan kombinasi huruf besar, kecil, angka, dan simbol."
+		},
+		{
+		  "name": "Key Exchange",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Diffie-Hellman key exchange memungkinkan dua pihak berbagi kunci enkripsi secara aman.",
+		  "edu_popup": "KEY EXCHANGE (Diffie-Hellman): Protokol yang memungkinkan dua pihak membuat kunci enkripsi bersama melalui jaringan tidak aman — tanpa pernah mengirim kunci itu sendiri. Dasar dari hampir semua komunikasi aman di internet!"
+		},
+		{
+		  "name": "Cipher Strike",
+		  "power": 65,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "AES-256 adalah standar enkripsi militer yang hampir tidak bisa dipecahkan dengan teknologi saat ini.",
+		  "edu_popup": "AES-256: Standar enkripsi yang digunakan militer dan pemerintah dunia. Untuk memecahkannya dengan brute force dibutuhkan waktu lebih lama dari usia alam semesta — bahkan dengan komputer tercepat yang ada saat ini!"
+		},
+		{
+		  "name": "Zero-Knowledge",
+		  "power": 40,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 0,
+		  "edu_log": "Zero-Knowledge Proof membuktikan kepemilikan informasi tanpa mengungkapkan informasinya.",
+		  "edu_popup": "ZERO-KNOWLEDGE PROOF: Metode kriptografi yang membuktikan kamu tahu sesuatu tanpa mengungkapkan apa yang kamu tahu. Digunakan dalam blockchain dan autentikasi modern untuk privasi maksimal — keren secara matematis!"
+		}
 	  ]
 	},
 	{
@@ -144,13 +368,41 @@
 	  "speed": 65,
 	  "passive": {
 		"name": "BGP Route",
-		"description": "25% chance redirect serangan lawan ke diri sendiri dengan damage -50%"
+		"description": "25% chance redirect serangan lawan -50% damage"
 	  },
 	  "moves": [
-		{ "name": "NAT Punch", "power": 55, "effect": "double_hit", "cooldown": 0, "edu_log": "NAT Traversal memungkinkan koneksi menembus firewall dan router NAT untuk mencapai perangkat di jaringan privat." },
-		{ "name": "Port Scan", "power": 0, "effect": "accuracy_buff", "cooldown": 0, "edu_log": "Port scanning memetakan layanan yang aktif pada sebuah host untuk menemukan celah yang bisa dieksploitasi." },
-		{ "name": "Bandwidth Throttle", "power": 40, "effect": "speed_debuff", "cooldown": 0, "edu_log": "Bandwidth throttling membatasi kecepatan koneksi secara sengaja — teknik yang digunakan ISP untuk mengontrol penggunaan jaringan." },
-		{ "name": "Reroute", "power": 0, "effect": "reroute_debuff", "cooldown": 2, "edu_log": "BGP hijacking membelokkan trafik internet ke jalur yang salah — salah satu serangan paling berbahaya pada infrastruktur internet." }
+		{
+		  "name": "NAT Punch",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "NAT (Network Address Translation) menyembunyikan IP internal dari jaringan luar.",
+		  "edu_popup": "NAT (Network Address Translation): Memungkinkan banyak perangkat di jaringan lokal berbagi satu IP publik, sekaligus menyembunyikan IP internal dari internet. Router rumahmu melakukan ini setiap saat tanpa kamu sadari!"
+		},
+		{
+		  "name": "Port Scan",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Port scanning memetakan layanan yang berjalan di suatu sistem untuk menemukan celah.",
+		  "edu_popup": "PORT SCANNING: Teknik memetakan port terbuka di sistem target untuk menemukan layanan yang berjalan. Digunakan hacker untuk cari celah, tapi juga oleh admin jaringan untuk audit keamanan sistem mereka sendiri!"
+		},
+		{
+		  "name": "Bandwidth Throttle",
+		  "power": 40,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Traffic shaping mengontrol bandwidth untuk mencegah penyalahgunaan jaringan.",
+		  "edu_popup": "BANDWIDTH THROTTLING: Pembatasan kecepatan koneksi secara sengaja untuk mengontrol penggunaan jaringan. ISP sering melakukan ini saat streaming video. VPN bisa membantu karena traffic yang terenkripsi lebih sulit di-throttle!"
+		},
+		{
+		  "name": "Reroute",
+		  "power": 0,
+		  "effect": "redirect_debuff",
+		  "cooldown": 3,
+		  "edu_log": "BGP hijacking memanipulasi routing tabel internet untuk menyadap atau memblokir traffic.",
+		  "edu_popup": "BGP HIJACKING: Serangan pada protokol routing internet yang bisa mengarahkan ulang traffic skala besar. Pernah terjadi nyata pada 2018 — traffic Google diarahkan melalui Rusia dan Nigeria selama 74 menit!"
+		}
 	  ]
 	},
 	{
@@ -161,13 +413,41 @@
 	  "speed": 90,
 	  "passive": {
 		"name": "Jitter",
-		"description": "30% chance serangan Latencia menyerang dua kali dengan power separuh"
+		"description": "30% chance serangan hit dua kali dengan power separuh"
 	  },
 	  "moves": [
-		{ "name": "Timeout Strike", "power": 50, "effect": "ping_flood", "cooldown": 0, "edu_log": "Connection timeout terjadi saat server tidak merespons dalam batas waktu yang ditentukan, sering dimanfaatkan dalam serangan DoS." },
-		{ "name": "Packet Loss", "power": 85, "effect": "packet_loss", "cooldown": 1, "edu_log": "Packet loss terjadi saat data yang dikirim tidak sampai ke tujuan — bisa akibat kongesti jaringan atau serangan yang disengaja." },
-		{ "name": "QoS Drain", "power": 0, "effect": "qos_drain", "cooldown": 2, "edu_log": "QoS (Quality of Service) mengatur prioritas trafik jaringan. Menyabotase QoS bisa melumpuhkan layanan kritis seperti VoIP." },
-		{ "name": "Syn Flood", "power": 45, "effect": "block_move", "cooldown": 0, "edu_log": "SYN Flood mengeksploitasi TCP handshake dengan mengirim request palsu yang membanjiri antrian koneksi server." }
+		{
+		  "name": "Timeout Strike",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Connection timeout terjadi saat server tidak merespons dalam waktu yang ditentukan.",
+		  "edu_popup": "CONNECTION TIMEOUT: Server tidak merespons dalam batas waktu yang ditetapkan, biasanya karena server overload, jaringan lambat, atau firewall memblokir koneksi. Tools: ping bisa digunakan untuk mendiagnosis masalah ini!"
+		},
+		{
+		  "name": "Packet Loss",
+		  "power": 35,
+		  "effect": "accuracy_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Packet loss menyebabkan degradasi performa jaringan dan koneksi tidak stabil.",
+		  "edu_popup": "PACKET LOSS: Paket data gagal mencapai tujuan, menyebabkan koneksi lambat atau putus. Bisa karena jaringan padat, hardware rusak, atau serangan aktif. Cek dengan perintah 'ping' — packet loss > 5% sudah bermasalah!"
+		},
+		{
+		  "name": "QoS Drain",
+		  "power": 40,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Quality of Service menentukan prioritas traffic jaringan untuk layanan kritis.",
+		  "edu_popup": "QoS (Quality of Service): Mekanisme yang memprioritaskan jenis traffic tertentu seperti video call atau VoIP agar mendapat bandwidth lebih besar. Tanpa QoS, semua traffic diperlakukan sama dan bisa menyebabkan lag saat meeting!"
+		},
+		{
+		  "name": "Syn Flood",
+		  "power": 60,
+		  "effect": "block_move",
+		  "cooldown": 3,
+		  "edu_log": "SYN Flood mengeksploitasi TCP handshake untuk menghabiskan resource server.",
+		  "edu_popup": "SYN FLOOD: Serangan yang mengeksploitasi TCP three-way handshake dengan mengirim ribuan SYN request palsu, membuat server kehabisan memori menunggu koneksi yang tidak pernah selesai. Solusi: SYN cookies dan rate limiting!"
+		}
 	  ]
 	},
 	{
@@ -178,13 +458,41 @@
 	  "speed": 60,
 	  "passive": {
 		"name": "Encryption Lock",
-		"description": "25% chance lawan tidak bisa menggunakan heal move selama 2 turn saat diserang"
+		"description": "25% chance lock heal lawan 2 turn saat menyerang"
 	  },
 	  "moves": [
-		{ "name": "File Encrypt", "power": 50, "effect": "lock_heal", "cooldown": 0, "edu_log": "Ransomware mengenkripsi file korban dengan kunci yang hanya dimiliki attacker, memaksa korban membayar tebusan untuk mendapatkan kuncinya." },
-		{ "name": "Ransom Note", "power": 0, "effect": "dot_damage", "cooldown": 2, "edu_log": "Ransom note adalah pesan yang ditampilkan ransomware kepada korban berisi instruksi pembayaran dan ancaman penghapusan data." },
-		{ "name": "Double Extortion", "power": 60, "effect": "double_extortion", "cooldown": 1, "edu_log": "Double extortion ransomware tidak hanya mengenkripsi data, tapi juga mengancam mempublikasikan data sensitif jika tebusan tidak dibayar." },
-		{ "name": "Decoy Payload", "power": 70, "effect": "decoy_payload", "cooldown": 2, "edu_log": "Decoy payload menyamarkan malware sebagai file tak berbahaya untuk melewati deteksi antivirus berbasis signature." }
+		{
+		  "name": "File Encrypt",
+		  "power": 45,
+		  "effect": "heal_lock",
+		  "cooldown": 0,
+		  "edu_log": "Ransomware mengenkripsi file korban dan meminta tebusan untuk kunci dekripsinya.",
+		  "edu_popup": "RANSOMWARE: Malware yang mengenkripsi semua file di sistem korban dan meminta tebusan (biasanya cryptocurrency) untuk kunci dekripsi. Tips: Backup offline rutin adalah pertahanan terbaik — tidak ada file yang bisa disandera!"
+		},
+		{
+		  "name": "Ransom Note",
+		  "power": 0,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Serangan ransomware sering disertai intimidasi psikologis untuk memaksa pembayaran.",
+		  "edu_popup": "PSYCHOLOGICAL PRESSURE: Ransomware menggunakan countdown timer dan ancaman publish data untuk menciptakan kepanikan agar korban cepat membayar. Jangan panik! Pembayaran tidak menjamin file dikembalikan — hubungi ahli keamanan!"
+		},
+		{
+		  "name": "Double Extortion",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Double extortion mencuri data sebelum mengenkripsi, lalu mengancam publikasi sebagai leverage tambahan.",
+		  "edu_popup": "DOUBLE EXTORTION: Evolusi ransomware modern — attacker mencuri data sensitif terlebih dahulu lalu mengenkripsinya. Bahkan jika kamu punya backup, mereka masih bisa ancam publish data rahasiamu ke publik!"
+		},
+		{
+		  "name": "Decoy Payload",
+		  "power": 40,
+		  "effect": "evasion_buff",
+		  "cooldown": 0,
+		  "edu_log": "Decoy payload mengalihkan perhatian defender dari ancaman utama yang sebenarnya.",
+		  "edu_popup": "DECOY ATTACK: Menggunakan serangan kecil yang terlihat sebagai ancaman utama untuk mengalihkan perhatian tim keamanan dari serangan yang sebenarnya berlangsung di tempat lain. Strategi klasik dalam perang siber modern!"
+		}
 	  ]
 	},
 	{
@@ -195,13 +503,41 @@
 	  "speed": 95,
 	  "passive": {
 		"name": "Self-Replicating",
-		"description": "Setiap kali terkena serangan, damage ke lawan naik 5 (max 3 stack)"
+		"description": "Damage naik 5 tiap kena serangan (max 3 stack)"
 	  },
 	  "moves": [
-		{ "name": "Propagate", "power": 22, "effect": "double_hit", "cooldown": 0, "edu_log": "Worm propagation menyebar ke sistem lain secara otomatis tanpa interaksi pengguna, berbeda dari virus yang membutuhkan host file." },
-		{ "name": "Network Crawl", "power": 40, "effect": "speed_debuff", "cooldown": 0, "edu_log": "Network crawling memetakan seluruh jaringan secara sistematis untuk menemukan sistem yang rentan." },
-		{ "name": "Payload Deploy", "power": 0, "effect": "dot_damage", "cooldown": 2, "edu_log": "Payload adalah komponen berbahaya dari malware yang dieksekusi setelah infeksi berhasil — bisa berupa spyware, ransomware, atau backdoor." },
-		{ "name": "Mass Infection", "power": 90, "effect": "overflow", "cooldown": 3, "edu_log": "Mass infection campaign menggunakan botnet untuk menyebarkan malware ke jutaan perangkat secara serentak." }
+		{
+		  "name": "Propagate",
+		  "power": 30,
+		  "effect": "double_hit",
+		  "cooldown": 0,
+		  "edu_log": "Worm menyebar secara otomatis ke sistem lain tanpa intervensi pengguna.",
+		  "edu_popup": "COMPUTER WORM: Malware yang bisa menyebar sendiri ke komputer lain melalui jaringan tanpa perlu interaksi user. WannaCry (2017) adalah worm yang menginfeksi 200.000+ komputer di 150 negara hanya dalam satu hari!"
+		},
+		{
+		  "name": "Network Crawl",
+		  "power": 35,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Network scanning mencari sistem yang rentan untuk diinfeksi berikutnya.",
+		  "edu_popup": "NETWORK CRAWLING: Proses otomatis yang memetakan semua perangkat dalam jaringan untuk menemukan sistem rentan. Worm menggunakan teknik ini untuk menyebar secara eksponensial — dari 1 komputer bisa menginfeksi ribuan dalam menit!"
+		},
+		{
+		  "name": "Payload Deploy",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Payload adalah komponen berbahaya dari malware yang dieksekusi setelah infeksi berhasil.",
+		  "edu_popup": "PAYLOAD: Bagian berbahaya dari malware yang dieksekusi setelah berhasil menginfeksi sistem. Payload bisa berupa ransomware, spyware, backdoor, atau penghapus data. Worm bisa membawa berbagai jenis payload sekaligus!"
+		},
+		{
+		  "name": "Mass Infection",
+		  "power": 60,
+		  "effect": "attack",
+		  "cooldown": 3,
+		  "edu_log": "Botnet mengendalikan ribuan sistem terinfeksi secara terpusat untuk serangan masif.",
+		  "edu_popup": "BOTNET: Jaringan ribuan komputer terinfeksi yang dikendalikan attacker secara remote untuk DDoS, spam, atau pencurian data. Perangkatmu bisa menjadi bagian botnet tanpa kamu sadari — cek monitor traffic jaringan secara rutin!"
+		}
 	  ]
 	},
 	{
@@ -212,13 +548,41 @@
 	  "speed": 50,
 	  "passive": {
 		"name": "Hot Patch",
-		"description": "Setiap menerima damage di atas 30, defense otomatis naik 1"
+		"description": "Damage > 30 masuk, defense naik 1 otomatis"
 	  },
 	  "moves": [
-		{ "name": "Patch Deploy", "power": 0, "effect": "patch_deploy", "cooldown": 2, "edu_log": "Security patch adalah pembaruan perangkat lunak yang menutup kerentanan yang ditemukan sebelum dieksploitasi attacker." },
-		{ "name": "Vulnerability Scan", "power": 0, "effect": "accuracy_buff", "cooldown": 0, "edu_log": "Vulnerability scanning secara proaktif mencari kelemahan dalam sistem sebelum attacker menemukannya lebih dulu." },
-		{ "name": "Zero-Day Shield", "power": 0, "effect": "zero_day_shield", "cooldown": 3, "edu_log": "Zero-day vulnerability adalah celah keamanan yang belum diketahui vendor — sangat berbahaya karena belum ada patch yang tersedia." },
-		{ "name": "Hardened Kernel", "power": 35, "effect": "hardened_kernel", "cooldown": 1, "edu_log": "Kernel hardening memperkuat inti sistem operasi dengan menonaktifkan fitur yang tidak perlu dan menerapkan kontrol akses ketat." }
+		{
+		  "name": "Patch Deploy",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 2,
+		  "edu_log": "Patch management memastikan sistem selalu mendapat update keamanan terbaru.",
+		  "edu_popup": "PATCH MANAGEMENT: Proses sistematis menerapkan update keamanan software. Fakta mengejutkan: 60% pelanggaran data terjadi karena patch yang tersedia tidak diterapkan. Update sistem adalah tindakan keamanan termudah dan terpenting!"
+		},
+		{
+		  "name": "Vulnerability Scan",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Vulnerability scanning mengidentifikasi kelemahan sistem sebelum attacker menemukannya.",
+		  "edu_popup": "VULNERABILITY SCANNING: Proses otomatis menemukan celah keamanan sebelum attacker menemukannya. Ini adalah inti dari ethical hacking — lebih baik kamu yang temukan kelemahanmu sendiri daripada orang jahat yang menemukannya!"
+		},
+		{
+		  "name": "Zero-Day Shield",
+		  "power": 0,
+		  "effect": "zero_day_shield",
+		  "cooldown": 4,
+		  "edu_log": "Zero-day vulnerability adalah celah yang belum diketahui vendor dan belum ada patchnya.",
+		  "edu_popup": "ZERO-DAY VULNERABILITY: Celah keamanan yang belum diketahui vendor sehingga belum ada patch tersedia — artinya 'zero days' untuk bertahan. Sangat berbahaya karena antivirus berbasis signature tidak bisa mendeteksinya sama sekali!"
+		},
+		{
+		  "name": "Hardened Kernel",
+		  "power": 40,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Kernel hardening mengkonfigurasi OS untuk meminimalkan attack surface sistem.",
+		  "edu_popup": "KERNEL HARDENING: Mengkonfigurasi sistem operasi untuk meminimalkan attack surface dengan menonaktifkan layanan tidak perlu dan menerapkan security policies ketat. Prinsip utama: Jika tidak dibutuhkan, nonaktifkan!"
+		}
 	  ]
 	},
 	{
@@ -229,13 +593,41 @@
 	  "speed": 35,
 	  "passive": {
 		"name": "DMZ",
-		"description": "Serangan di bawah 15 damage diabaikan sepenuhnya"
+		"description": "Serangan di bawah 15 damage diabaikan"
 	  },
 	  "moves": [
-		{ "name": "Perimeter Strike", "power": 20, "effect": "shell_slam", "cooldown": 0, "edu_log": "Perimeter security membentuk lapisan pertahanan terluar jaringan — semakin kuat perimeter, semakin besar kekuatan serangan baliknya." },
-		{ "name": "Access Denied", "power": 25, "effect": "access_denied", "cooldown": 0, "edu_log": "Access control memastikan hanya entitas yang berwenang yang bisa mengakses sumber daya — prinsip dasar keamanan informasi." },
-		{ "name": "Failover", "power": 0, "effect": "failover", "cooldown": 3, "edu_log": "Failover system secara otomatis beralih ke sistem cadangan saat sistem utama gagal — menjamin ketersediaan layanan tanpa gangguan." },
-		{ "name": "Iron Curtain", "power": 0, "effect": "super_defense", "cooldown": 2, "edu_log": "Network segmentation memisahkan jaringan menjadi zona-zona terisolasi untuk membatasi penyebaran serangan." }
+		{
+		  "name": "Perimeter Strike",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Perimeter security membangun batas pertahanan di sekitar jaringan yang dilindungi.",
+		  "edu_popup": "NETWORK PERIMETER: Batas antara jaringan internal yang aman dan jaringan eksternal yang tidak dipercaya. DMZ (Demilitarized Zone) adalah zona buffer antara keduanya — seperti ruang tamu sebelum masuk ke kamar pribadi!"
+		},
+		{
+		  "name": "Access Denied",
+		  "power": 0,
+		  "effect": "block_move",
+		  "cooldown": 2,
+		  "edu_log": "Access control membatasi siapa yang bisa mengakses sumber daya sistem.",
+		  "edu_popup": "ACCESS CONTROL: Mengatur siapa (authentication) boleh melakukan apa (authorization) pada sistem. Prinsip Least Privilege: Berikan akses minimum yang diperlukan saja — jangan beri semua orang akses admin!"
+		},
+		{
+		  "name": "Failover",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 3,
+		  "edu_log": "Failover secara otomatis mengalihkan sistem ke backup saat sistem utama gagal.",
+		  "edu_popup": "FAILOVER: Kemampuan sistem beralih otomatis ke backup ketika sistem utama gagal. Digunakan bank dan rumah sakit untuk memastikan zero downtime — layanan kritis tidak boleh berhenti meski ada kerusakan hardware!"
+		},
+		{
+		  "name": "Iron Curtain",
+		  "power": 55,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Network segmentation membagi jaringan menjadi zona-zona terisolasi untuk membatasi penyebaran ancaman.",
+		  "edu_popup": "NETWORK SEGMENTATION: Membagi jaringan menjadi segmen terisolasi sehingga jika satu bagian dikompromis, serangan tidak bisa menyebar ke seluruh jaringan. Seperti pintu kedap air di kapal — jika satu bocor, yang lain tetap aman!"
+		}
 	  ]
 	},
 	{
@@ -246,13 +638,41 @@
 	  "speed": 75,
 	  "passive": {
 		"name": "Background Process",
-		"description": "20% chance melakukan 10 damage otomatis di akhir turn tanpa menggunakan giliran"
+		"description": "20% chance 10 damage otomatis tiap akhir turn"
 	  },
 	  "moves": [
-		{ "name": "Process Inject", "power": 45, "effect": "confuse", "cooldown": 0, "edu_log": "Process injection menyisipkan kode berbahaya ke dalam proses yang sah untuk menghindari deteksi dan mendapatkan hak akses lebih tinggi." },
-		{ "name": "Kill Switch", "power": 999, "effect": "kill_switch", "cooldown": 4, "edu_log": "Kill switch adalah mekanisme untuk menghentikan sistem secara paksa — digunakan baik sebagai fitur keamanan maupun oleh malware." },
-		{ "name": "Daemon Spawn", "power": 0, "effect": "dot_damage", "cooldown": 1, "edu_log": "Daemon adalah program background yang berjalan terus tanpa interaksi pengguna — jika disusupi, bisa menjadi ancaman persisten." },
-		{ "name": "Memory Leak", "power": 30, "effect": "memory_leak", "cooldown": 0, "edu_log": "Memory leak terjadi saat program tidak melepas memori yang sudah tidak dipakai, menyebabkan sistem melambat hingga crash." }
+		{
+		  "name": "Process Inject",
+		  "power": 45,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Process injection menyisipkan kode berbahaya ke dalam proses yang sudah berjalan.",
+		  "edu_popup": "PROCESS INJECTION: Malware menyisipkan kode ke dalam proses legitimate yang sedang berjalan (seperti browser atau antivirus itu sendiri) untuk menyembunyikan aktivitas berbahaya dan menghindari deteksi keamanan!"
+		},
+		{
+		  "name": "Kill Switch",
+		  "power": 70,
+		  "effect": "execute_low_hp",
+		  "cooldown": 3,
+		  "edu_log": "Kill switch adalah mekanisme untuk menghentikan operasi sistem secara paksa dalam keadaan darurat.",
+		  "edu_popup": "KILL SWITCH: Uniknya, WannaCry ransomware punya kill switch tidak sengaja — seorang researcher menemukannya dan menghentikan penyebaran global hanya dengan mendaftarkan satu domain seharga $10.69!"
+		},
+		{
+		  "name": "Daemon Spawn",
+		  "power": 0,
+		  "effect": "dot",
+		  "cooldown": 2,
+		  "edu_log": "Daemon adalah proses background yang berjalan tanpa interaksi pengguna.",
+		  "edu_popup": "DAEMON PROCESS: Program yang berjalan di background sistem operasi tanpa antarmuka pengguna, menunggu event tertentu untuk bereaksi. Malware sering menyamar sebagai daemon legitimate untuk bertahan lama di sistem!"
+		},
+		{
+		  "name": "Memory Leak",
+		  "power": 35,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Memory leak menyebabkan program terus menggunakan memori tanpa melepaskannya kembali.",
+		  "edu_popup": "MEMORY LEAK: Bug di mana program terus mengalokasikan memori tapi tidak pernah melepaskannya, menyebabkan sistem semakin lambat hingga crash. Bisa sengaja dieksploitasi attacker untuk menyebabkan Denial of Service!"
+		}
 	  ]
 	},
 	{
@@ -263,13 +683,41 @@
 	  "speed": 55,
 	  "passive": {
 		"name": "Legacy Code",
-		"description": "15% chance lawan gagal menggunakan move karena compatibility error"
+		"description": "15% chance lawan gagal gunakan move"
 	  },
 	  "moves": [
-		{ "name": "BIOS Flash", "power": 0, "effect": "bios_flash", "cooldown": 3, "edu_log": "BIOS flashing memperbarui firmware tingkat rendah — jika dimanipulasi attacker, bisa membuat perangkat keras tidak bisa digunakan sama sekali." },
-		{ "name": "Boot Loop", "power": 40, "effect": "confuse", "cooldown": 1, "edu_log": "Boot loop terjadi saat sistem gagal menyelesaikan proses startup dan terus mengulang — sering akibat malware yang merusak bootloader." },
-		{ "name": "Overclock", "power": 0, "effect": "overclock", "cooldown": 2, "edu_log": "Overclocking memaksa prosesor bekerja di atas spesifikasi resminya — meningkatkan performa tapi juga risiko kerusakan hardware." },
-		{ "name": "Firmware Lock", "power": 50, "effect": "firmware_lock", "cooldown": 2, "edu_log": "Firmware lock mengunci konfigurasi hardware sehingga tidak bisa dimodifikasi — digunakan untuk mencegah tampering pada perangkat kritis." }
+		{
+		  "name": "BIOS Flash",
+		  "power": 0,
+		  "effect": "reset_buffs",
+		  "cooldown": 3,
+		  "edu_log": "BIOS/UEFI adalah firmware yang mengontrol hardware sebelum sistem operasi dimuat.",
+		  "edu_popup": "BIOS/UEFI ATTACK: Malware yang menginfeksi firmware BIOS/UEFI bisa bertahan meski hard drive diganti atau OS diinstal ulang. Hampir tidak bisa dihapus tanpa mengganti chip fisik di motherboard — mimpi buruk para sysadmin!"
+		},
+		{
+		  "name": "Boot Loop",
+		  "power": 40,
+		  "effect": "block_move",
+		  "cooldown": 0,
+		  "edu_log": "Bootloader attack memodifikasi proses boot untuk menjalankan kode berbahaya sebelum OS.",
+		  "edu_popup": "BOOTLOADER ATTACK: Memodifikasi proses booting untuk menjalankan kode berbahaya sebelum sistem operasi dimuat — aktif sebelum antivirus pun bisa berjalan. Secure Boot di UEFI modern dirancang khusus untuk mencegah serangan ini!"
+		},
+		{
+		  "name": "Overclock",
+		  "power": 0,
+		  "effect": "speed_buff",
+		  "cooldown": 2,
+		  "edu_log": "Resource exhaustion memaksa sistem bekerja melebihi kapasitas hingga tidak stabil.",
+		  "edu_popup": "RESOURCE EXHAUSTION: Serangan yang memaksa sistem menggunakan CPU, memori, atau storage melebihi kapasitasnya hingga crash. Berbeda dengan DDoS yang menyerang dari luar — ini menyerang dari dalam sistem itu sendiri!"
+		},
+		{
+		  "name": "Firmware Lock",
+		  "power": 50,
+		  "effect": "heal_lock",
+		  "cooldown": 0,
+		  "edu_log": "Firmware vulnerabilities memberikan akses ke level sistem yang paling dalam dan sulit diperbaiki.",
+		  "edu_popup": "FIRMWARE VULNERABILITY: Kerentanan di level firmware yang sangat sulit diperbaiki karena tertanam di hardware. Router, printer, dan kamera IoT sering memiliki firmware yang tidak pernah di-update — celah keamanan yang sering terlupakan!"
+		}
 	  ]
 	},
 	{
@@ -280,13 +728,41 @@
 	  "speed": 80,
 	  "passive": {
 		"name": "Vishing",
-		"description": "25% chance serangan lawan salah target dan menyerang diri sendiri dengan 50% damage"
+		"description": "25% chance serangan lawan menyerang diri sendiri"
 	  },
 	  "moves": [
-		{ "name": "Voice Spoof", "power": 45, "effect": "confuse", "cooldown": 0, "edu_log": "Vishing (voice phishing) menggunakan panggilan telepon palsu untuk menipu korban agar memberikan informasi sensitif." },
-		{ "name": "Hypnotic Tone", "power": 0, "effect": "block_move", "cooldown": 2, "edu_log": "Social engineering berbasis suara memanfaatkan kepercayaan dan urgensi — korban sering tidak sadar mereka sedang dimanipulasi." },
-		{ "name": "Caller ID Fake", "power": 0, "effect": "type_steal", "cooldown": 2, "edu_log": "Caller ID spoofing memalsukan nomor penelepon agar terlihat seperti berasal dari institusi terpercaya seperti bank atau kantor pemerintah." },
-		{ "name": "Social Script", "power": 55, "effect": "pretexting", "cooldown": 1, "edu_log": "Social script adalah skenario yang disiapkan attacker untuk membangun kepercayaan korban sebelum meminta informasi sensitif." }
+		{
+		  "name": "Voice Spoof",
+		  "power": 40,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Vishing menggunakan panggilan telepon palsu untuk menipu korban memberikan informasi sensitif.",
+		  "edu_popup": "VISHING (Voice Phishing): Serangan melalui telepon di mana attacker berpura-pura jadi bank, pemerintah, atau tech support untuk mencuri informasi. Tips: Bank TIDAK PERNAH meminta PIN atau OTP melalui telepon — tutup langsung!"
+		},
+		{
+		  "name": "Hypnotic Tone",
+		  "power": 0,
+		  "effect": "confuse",
+		  "cooldown": 2,
+		  "edu_log": "Psychological manipulation menggunakan urgency dan fear untuk membuat korban bertindak tanpa berpikir.",
+		  "edu_popup": "URGENCY MANIPULATION: Teknik social engineering yang menciptakan rasa mendesak agar korban bertindak cepat tanpa berpikir rasional. 'Akun Anda diblokir dalam 1 jam!' adalah contoh klasik. Selalu pause dan verifikasi terlebih dahulu!"
+		},
+		{
+		  "name": "Caller ID Fake",
+		  "power": 45,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 0,
+		  "edu_log": "Caller ID spoofing memalsukan nomor penelepon untuk menyamar sebagai entitas terpercaya.",
+		  "edu_popup": "CALLER ID SPOOFING: Teknologi yang memungkinkan attacker memalsukan nomor telepon — termasuk nomor resmi bank atau pemerintah! Nomor yang terlihat di layarmu TIDAK bisa dijadikan bukti identitas penelepon yang sebenarnya!"
+		},
+		{
+		  "name": "Social Script",
+		  "power": 50,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Social engineering scripts adalah panduan manipulasi psikologis yang terstruktur.",
+		  "edu_popup": "SOCIAL ENGINEERING SCRIPT: Attacker profesional menggunakan skrip percakapan yang dilatih untuk memanipulasi korban. Mereka riset targetnya dulu dari media sosial agar serangan terasa lebih personal dan meyakinkan!"
+		}
 	  ]
 	},
 	{
@@ -297,13 +773,41 @@
 	  "speed": 88,
 	  "passive": {
 		"name": "Honeypot",
-		"description": "Jika lawan menggunakan move dengan power > 60, ada 30% chance lawan skip turn berikutnya"
+		"description": "30% chance lawan skip turn jika pakai move power > 60"
 	  },
 	  "moves": [
-		{ "name": "Lure Strike", "power": 35, "effect": "lure_strike", "cooldown": 0, "edu_log": "Lure attack memancing lawan melakukan tindakan yang menguntungkan attacker — teknik dasar dalam social engineering dan cyber deception." },
-		{ "name": "Watering Hole", "power": 0, "effect": "dot_damage", "cooldown": 2, "edu_log": "Watering hole attack menginfeksi website yang sering dikunjungi target — menunggu korban datang sendiri daripada menyerang langsung." },
-		{ "name": "Click Bait", "power": 50, "effect": "confuse", "cooldown": 0, "edu_log": "Clickbait menggunakan konten menarik atau mengejutkan untuk memancing klik yang mengarah ke halaman berbahaya atau mengunduh malware." },
-		{ "name": "Drive-by Download", "power": 75, "effect": "bypass_defense", "cooldown": 3, "edu_log": "Drive-by download menginfeksi perangkat hanya dengan mengunjungi halaman web tanpa interaksi apapun dari pengguna." }
+		{
+		  "name": "Lure Strike",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Baiting menggunakan umpan menarik untuk mengelabui korban mengeksekusi malware.",
+		  "edu_popup": "BAITING: Serangan menggunakan umpan fisik atau digital — seperti USB drive yang sengaja ditinggal di parkiran berisi malware. Penelitian menunjukkan 45-98% USB yang ditemukan akan dicolokkan ke komputer oleh yang menemukannya!"
+		},
+		{
+		  "name": "Watering Hole",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Watering hole attack mengkompromis website yang sering dikunjungi target untuk menginfeksi mereka.",
+		  "edu_popup": "WATERING HOLE ATTACK: Seperti predator menunggu di sumber air — attacker menginfeksi website yang sering dikunjungi target (forum komunitas, portal industri) alih-alih menyerang langsung. Sangat sulit dideteksi karena website-nya legitimate!"
+		},
+		{
+		  "name": "Click Bait",
+		  "power": 35,
+		  "effect": "confuse",
+		  "cooldown": 0,
+		  "edu_log": "Malicious ads dan clickbait mengarahkan pengguna ke konten berbahaya melalui iming-iming.",
+		  "edu_popup": "MALVERTISING: Iklan digital yang mengandung malware atau mengarahkan ke website berbahaya. Bahkan website legitimate bisa menjadi vektor serangan jika memasang iklan dari jaringan iklan yang dikompromis. Ad blocker membantu mencegah ini!"
+		},
+		{
+		  "name": "Drive-by Download",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Drive-by download menginstal malware secara otomatis saat korban mengunjungi website berbahaya.",
+		  "edu_popup": "DRIVE-BY DOWNLOAD: Malware yang otomatis terunduh hanya dengan mengunjungi website berbahaya — tanpa klik apapun! Memanfaatkan kerentanan di browser atau plugin usang. Tips: Selalu update browser dan nonaktifkan plugin yang tidak diperlukan!"
+		}
 	  ]
 	}
   ]

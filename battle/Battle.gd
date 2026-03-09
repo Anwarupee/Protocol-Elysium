@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var battle_manager = $BattleManager
+var edu_popup = null  # Di-assign di _ready() setelah scene siap
 
 var player_hp_bar: ProgressBar
 var enemy_hp_bar: ProgressBar
@@ -20,6 +21,7 @@ var original_position: Vector2
 
 func _ready():
 	original_position = position
+	edu_popup = get_node_or_null("EduPopup")
 	var player_choice = "encryp_pup"
 	if has_meta("player_monster"):
 		player_choice = get_meta("player_monster")
@@ -46,8 +48,7 @@ func _ready():
 	battle_manager.start_battle(player_choice, enemy_choice)
 	await play_intro_animation()
 
-func _process(delta):
-	# Screen shake decay
+func _process(_delta):
 	if screen_shake_intensity > 0:
 		screen_shake_intensity = lerp(screen_shake_intensity, 0.0, 0.2)
 		position = original_position + Vector2(
@@ -68,14 +69,12 @@ func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: boo
 		sprite_root.set_meta("monster_name", monster_name)
 	add_child(sprite_root)
 
-	# Outer glow
 	var glow = ColorRect.new()
 	glow.color = Color(color.r, color.g, color.b, 0.08)
 	glow.size = Vector2(size + 50, size + 50)
 	glow.position = Vector2(-(size+50)/2, -(size+50)/2)
 	sprite_root.add_child(glow)
 
-	# Draw specific shape based on monster_id
 	match monster_id:
 		"encryp_pup":    _draw_encryp_pup(sprite_root, color, size, is_player)
 		"ping_go":       _draw_ping_go(sprite_root, color, size, is_player)
@@ -110,475 +109,327 @@ func _dark(col: Color, amt: float = 0.3) -> Color:
 func _light(col: Color, amt: float = 0.3) -> Color:
 	return col.lightened(amt)
 
-# Encryp-Pup — anjing dengan telinga dan ekor
-func _draw_encryp_pup(p: Node, c: Color, s: float, flip: bool):
+func _draw_encryp_pup(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan
 	_rect(p, -25*sc, -15*sc, 50*sc, 40*sc, c)
-	# Kepala
 	_rect(p, -20*sc, -40*sc, 40*sc, 28*sc, c)
-	# Telinga kiri
 	_rect(p, -22*sc, -55*sc, 14*sc, 20*sc, _dark(c))
-	# Telinga kanan
 	_rect(p, 8*sc, -55*sc, 14*sc, 20*sc, _dark(c))
-	# Moncong
 	_rect(p, -10*sc, -25*sc, 20*sc, 12*sc, _light(c, 0.4))
-	# Mata kiri
 	_rect(p, -14*sc, -36*sc, 7*sc, 7*sc, Color(0.1, 0.1, 0.2))
-	# Mata kanan
 	_rect(p, 7*sc, -36*sc, 7*sc, 7*sc, Color(0.1, 0.1, 0.2))
-	# Kaki
 	_rect(p, -22*sc, 22*sc, 14*sc, 18*sc, _dark(c))
 	_rect(p, -5*sc, 22*sc, 14*sc, 18*sc, _dark(c))
 	_rect(p, 12*sc, 22*sc, 14*sc, 18*sc, _dark(c))
-	# Ekor
 	_rect(p, 24*sc, -10*sc, 10*sc, 8*sc, c)
 	_rect(p, 32*sc, -18*sc, 8*sc, 10*sc, c)
-	# Gembok di badan
 	_rect(p, -8*sc, -8*sc, 16*sc, 12*sc, Color(1, 0.85, 0.2))
 	_rect(p, -5*sc, -16*sc, 10*sc, 10*sc, Color(1, 0.85, 0.2, 0.7))
-	# Shine
 	_rect(p, -18*sc, -38*sc, 8*sc, 4*sc, Color(1,1,1,0.2))
 
-# Ping-Go — burung dengan sayap dan paruh
-func _draw_ping_go(p: Node, c: Color, s: float, flip: bool):
+func _draw_ping_go(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan oval
 	_rect(p, -20*sc, -15*sc, 40*sc, 35*sc, c)
-	# Kepala
 	_rect(p, -15*sc, -38*sc, 30*sc, 26*sc, c)
-	# Sayap kiri
 	_rect(p, -38*sc, -10*sc, 20*sc, 28*sc, _dark(c, 0.2))
 	_rect(p, -50*sc, -5*sc, 15*sc, 15*sc, _dark(c, 0.3))
-	# Sayap kanan
 	_rect(p, 18*sc, -10*sc, 20*sc, 28*sc, _dark(c, 0.2))
 	_rect(p, 35*sc, -5*sc, 15*sc, 15*sc, _dark(c, 0.3))
-	# Paruh
 	_rect(p, 12*sc, -28*sc, 18*sc, 10*sc, Color(1, 0.7, 0.1))
 	_rect(p, 16*sc, -20*sc, 14*sc, 8*sc, Color(1, 0.6, 0.0))
-	# Mata
 	_rect(p, -8*sc, -32*sc, 9*sc, 9*sc, Color(0.05, 0.05, 0.15))
 	_rect(p, -5*sc, -30*sc, 4*sc, 4*sc, Color(1,1,1,0.5))
-	# Kaki
 	_rect(p, -10*sc, 20*sc, 8*sc, 16*sc, Color(1, 0.7, 0.1))
 	_rect(p, 2*sc, 20*sc, 8*sc, 16*sc, Color(1, 0.7, 0.1))
-	# Signal rings
 	_rect(p, -5*sc, -52*sc, 10*sc, 4*sc, Color(1,1,1,0.3))
 	_rect(p, -10*sc, -60*sc, 20*sc, 4*sc, Color(1,1,1,0.2))
 
-# Biti — virus kecil dengan spike
-func _draw_biti(p: Node, c: Color, s: float, flip: bool):
+func _draw_biti(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Inti
 	_rect(p, -18*sc, -18*sc, 36*sc, 36*sc, c)
-	# Spike atas
 	_rect(p, -5*sc, -34*sc, 10*sc, 18*sc, c)
 	_rect(p, -2*sc, -40*sc, 4*sc, 8*sc, _dark(c))
-	# Spike bawah
 	_rect(p, -5*sc, 16*sc, 10*sc, 18*sc, c)
 	_rect(p, -2*sc, 32*sc, 4*sc, 8*sc, _dark(c))
-	# Spike kiri
 	_rect(p, -34*sc, -5*sc, 18*sc, 10*sc, c)
 	_rect(p, -40*sc, -2*sc, 8*sc, 4*sc, _dark(c))
-	# Spike kanan
 	_rect(p, 16*sc, -5*sc, 18*sc, 10*sc, c)
 	_rect(p, 32*sc, -2*sc, 8*sc, 4*sc, _dark(c))
-	# Spike diagonal
 	_rect(p, -28*sc, -28*sc, 10*sc, 10*sc, _dark(c, 0.2))
 	_rect(p, 18*sc, -28*sc, 10*sc, 10*sc, _dark(c, 0.2))
 	_rect(p, -28*sc, 18*sc, 10*sc, 10*sc, _dark(c, 0.2))
 	_rect(p, 18*sc, 18*sc, 10*sc, 10*sc, _dark(c, 0.2))
-	# Mata jahat
 	_rect(p, -10*sc, -8*sc, 8*sc, 10*sc, Color(0.8, 0.1, 0.1))
 	_rect(p, 2*sc, -8*sc, 8*sc, 10*sc, Color(0.8, 0.1, 0.1))
-	# Core glow
 	_rect(p, -8*sc, -8*sc, 16*sc, 16*sc, Color(c.r, c.g, c.b, 0.4))
 
-# Senti-Shell — kura-kura dengan cangkang berlian
-func _draw_senti_shell(p: Node, c: Color, s: float, flip: bool):
+func _draw_senti_shell(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Cangkang luar
 	_rect(p, -30*sc, -25*sc, 60*sc, 45*sc, _dark(c, 0.2))
-	# Cangkang panel
 	_rect(p, -20*sc, -22*sc, 18*sc, 18*sc, c)
 	_rect(p, 2*sc, -22*sc, 18*sc, 18*sc, _light(c, 0.1))
 	_rect(p, -25*sc, -2*sc, 22*sc, 18*sc, _light(c, 0.1))
 	_rect(p, -1*sc, -2*sc, 22*sc, 18*sc, c)
-	# Garis cangkang
 	_rect(p, -30*sc, -4*sc, 60*sc, 2*sc, _dark(c, 0.4))
 	_rect(p, -2*sc, -25*sc, 2*sc, 45*sc, _dark(c, 0.4))
-	# Kepala
 	_rect(p, -12*sc, -38*sc, 24*sc, 16*sc, _light(c, 0.2))
-	# Mata
 	_rect(p, -8*sc, -35*sc, 6*sc, 6*sc, Color(0.1,0.1,0.2))
 	_rect(p, 2*sc, -35*sc, 6*sc, 6*sc, Color(0.1,0.1,0.2))
-	# Kaki
 	_rect(p, -38*sc, -5*sc, 10*sc, 14*sc, _light(c, 0.2))
 	_rect(p, 28*sc, -5*sc, 10*sc, 14*sc, _light(c, 0.2))
 	_rect(p, -20*sc, 18*sc, 12*sc, 14*sc, _light(c, 0.2))
 	_rect(p, 8*sc, 18*sc, 12*sc, 14*sc, _light(c, 0.2))
-	# Diamond shine
 	_rect(p, -15*sc, -20*sc, 10*sc, 5*sc, Color(1,1,1,0.3))
 
-# Octo-Core — gurita dengan tentakel
-func _draw_octo_core(p: Node, c: Color, s: float, flip: bool):
+func _draw_octo_core(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Kepala/mantel
 	_rect(p, -25*sc, -40*sc, 50*sc, 45*sc, c)
-	# Pola CPU di kepala
 	_rect(p, -15*sc, -30*sc, 30*sc, 20*sc, _dark(c, 0.3))
 	_rect(p, -10*sc, -28*sc, 20*sc, 16*sc, Color(0.8, 0.5, 1, 0.3))
-	# Mata
 	_rect(p, -15*sc, -35*sc, 12*sc, 12*sc, Color(0.9, 0.3, 1))
 	_rect(p, 3*sc, -35*sc, 12*sc, 12*sc, Color(0.9, 0.3, 1))
 	_rect(p, -11*sc, -32*sc, 5*sc, 5*sc, Color(1,1,1,0.6))
 	_rect(p, 7*sc, -32*sc, 5*sc, 5*sc, Color(1,1,1,0.6))
-	# 8 Tentakel
 	for i in 8:
 		var tx = (-35 + i * 10)*sc
 		var wave = 5 if i % 2 == 0 else -5
 		_rect(p, tx, 5*sc, 8*sc, 20*sc, _dark(c, 0.1))
 		_rect(p, tx + wave*sc, 22*sc, 8*sc, 15*sc, _dark(c, 0.2))
 		_rect(p, tx + wave*2*sc, 34*sc, 6*sc, 10*sc, _dark(c, 0.3))
-	# Circuit lines
 	_rect(p, -22*sc, -20*sc, 44*sc, 2*sc, Color(0.8, 0.5, 1, 0.4))
 	_rect(p, -10*sc, -30*sc, 2*sc, 25*sc, Color(0.8, 0.5, 1, 0.4))
 	_rect(p, 8*sc, -30*sc, 2*sc, 25*sc, Color(0.8, 0.5, 1, 0.4))
 
-# Chamele-Auth — bunglon dengan ekor melingkar
-func _draw_chamele_auth(p: Node, c: Color, s: float, flip: bool):
+func _draw_chamele_auth(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan
 	_rect(p, -20*sc, -10*sc, 42*sc, 32*sc, c)
-	# Kepala segitiga
 	_rect(p, -22*sc, -30*sc, 38*sc, 24*sc, c)
 	_rect(p, -30*sc, -22*sc, 12*sc, 15*sc, c)
-	# Mata bunglon (besar dan menonjol)
 	_rect(p, -20*sc, -32*sc, 16*sc, 16*sc, _dark(c, 0.3))
 	_rect(p, -17*sc, -29*sc, 10*sc, 10*sc, Color(0.9, 0.7, 0.1))
 	_rect(p, -14*sc, -27*sc, 5*sc, 5*sc, Color(0.05, 0.05, 0.1))
 	_rect(p, 4*sc, -28*sc, 12*sc, 12*sc, _dark(c, 0.3))
 	_rect(p, 6*sc, -26*sc, 8*sc, 8*sc, Color(0.9, 0.7, 0.1))
 	_rect(p, 8*sc, -24*sc, 4*sc, 4*sc, Color(0.05, 0.05, 0.1))
-	# Kaki
 	_rect(p, -28*sc, 5*sc, 10*sc, 22*sc, _dark(c, 0.2))
 	_rect(p, -36*sc, 22*sc, 10*sc, 6*sc, _dark(c, 0.3))
 	_rect(p, 20*sc, 5*sc, 10*sc, 22*sc, _dark(c, 0.2))
 	_rect(p, 24*sc, 22*sc, 12*sc, 6*sc, _dark(c, 0.3))
-	# Ekor melingkar
 	_rect(p, 20*sc, -5*sc, 18*sc, 8*sc, c)
 	_rect(p, 34*sc, -14*sc, 8*sc, 12*sc, c)
 	_rect(p, 28*sc, -22*sc, 10*sc, 10*sc, c)
-	# Mask/tanda
 	_rect(p, -10*sc, -15*sc, 22*sc, 14*sc, Color(1, 0.85, 0.2, 0.3))
 
-# Vaultex — brankas berjalan
-func _draw_vaultex(p: Node, c: Color, s: float, flip: bool):
+func _draw_vaultex(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Bodi brankas
 	_rect(p, -28*sc, -32*sc, 56*sc, 58*sc, _dark(c, 0.2))
 	_rect(p, -24*sc, -28*sc, 48*sc, 50*sc, c)
-	# Handle brankas (roda putar)
 	_rect(p, -14*sc, -18*sc, 28*sc, 28*sc, _dark(c, 0.4))
 	_rect(p, -10*sc, -14*sc, 20*sc, 20*sc, _light(c, 0.2))
-	# Garis cross handle
 	_rect(p, -14*sc, -5*sc, 28*sc, 3*sc, _dark(c, 0.5))
 	_rect(p, -2*sc, -18*sc, 3*sc, 28*sc, _dark(c, 0.5))
-	# Engsel
 	_rect(p, 22*sc, -20*sc, 6*sc, 8*sc, _dark(c, 0.4))
 	_rect(p, 22*sc, 4*sc, 6*sc, 8*sc, _dark(c, 0.4))
-	# Kaki
 	_rect(p, -24*sc, 26*sc, 16*sc, 12*sc, _dark(c, 0.3))
 	_rect(p, 8*sc, 26*sc, 16*sc, 12*sc, _dark(c, 0.3))
-	# Shine
 	_rect(p, -22*sc, -26*sc, 20*sc, 6*sc, Color(1,1,1,0.2))
-	# Keyhole
 	_rect(p, -4*sc, 10*sc, 8*sc, 10*sc, _dark(c, 0.6))
 
-# Cipher-Ray — elang dengan sayap kristal
-func _draw_cipher_ray(p: Node, c: Color, s: float, flip: bool):
+func _draw_cipher_ray(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan
 	_rect(p, -14*sc, -12*sc, 28*sc, 32*sc, c)
-	# Kepala
 	_rect(p, -12*sc, -30*sc, 24*sc, 22*sc, c)
-	# Paruh elang (bengkok)
 	_rect(p, 8*sc, -28*sc, 16*sc, 8*sc, Color(1, 0.8, 0.2))
 	_rect(p, 18*sc, -22*sc, 10*sc, 8*sc, Color(1, 0.7, 0.1))
-	# Mata tajam
 	_rect(p, -8*sc, -26*sc, 10*sc, 8*sc, Color(0.1, 0.05, 0.2))
 	_rect(p, -5*sc, -24*sc, 6*sc, 5*sc, Color(1, 0.9, 0.2))
-	# Sayap kiri — kristal
 	_rect(p, -50*sc, -20*sc, 38*sc, 8*sc, Color(c.r, c.g, c.b, 0.7))
 	_rect(p, -55*sc, -12*sc, 30*sc, 6*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, -48*sc, -28*sc, 25*sc, 6*sc, Color(c.r, c.g, c.b, 0.6))
-	# Sayap kanan — kristal
 	_rect(p, 12*sc, -20*sc, 38*sc, 8*sc, Color(c.r, c.g, c.b, 0.7))
 	_rect(p, 25*sc, -12*sc, 30*sc, 6*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, 23*sc, -28*sc, 25*sc, 6*sc, Color(c.r, c.g, c.b, 0.6))
-	# Cakar
 	_rect(p, -12*sc, 20*sc, 10*sc, 14*sc, _dark(c))
 	_rect(p, 2*sc, 20*sc, 10*sc, 14*sc, _dark(c))
-	# Crystal shine
 	_rect(p, -45*sc, -22*sc, 12*sc, 3*sc, Color(1,1,1,0.3))
 	_rect(p, 25*sc, -22*sc, 12*sc, 3*sc, Color(1,1,1,0.3))
 
-# Routerex — dinosaurus dengan antena
-func _draw_routerex(p: Node, c: Color, s: float, flip: bool):
+func _draw_routerex(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan besar
 	_rect(p, -25*sc, -5*sc, 50*sc, 42*sc, c)
-	# Leher
 	_rect(p, -12*sc, -25*sc, 24*sc, 22*sc, c)
-	# Kepala
 	_rect(p, -18*sc, -45*sc, 36*sc, 24*sc, c)
-	# Moncong panjang
 	_rect(p, 12*sc, -38*sc, 28*sc, 14*sc, _dark(c, 0.1))
-	# Mata
 	_rect(p, -12*sc, -40*sc, 10*sc, 10*sc, Color(0.2,0.2,0.1))
 	_rect(p, -9*sc, -38*sc, 5*sc, 5*sc, Color(1, 0.9, 0.2))
-	# Antena router (port/LED)
 	_rect(p, -20*sc, -58*sc, 6*sc, 15*sc, _dark(c, 0.3))
 	_rect(p, -8*sc, -60*sc, 6*sc, 17*sc, _dark(c, 0.3))
 	_rect(p, 4*sc, -56*sc, 6*sc, 13*sc, _dark(c, 0.3))
-	# LED di antena
 	_rect(p, -18*sc, -60*sc, 4*sc, 4*sc, Color(0.2, 1, 0.3))
 	_rect(p, -6*sc, -62*sc, 4*sc, 4*sc, Color(1, 0.8, 0.1))
 	_rect(p, 6*sc, -58*sc, 4*sc, 4*sc, Color(0.2, 0.5, 1))
-	# Kaki
 	_rect(p, -22*sc, 35*sc, 16*sc, 14*sc, _dark(c, 0.2))
 	_rect(p, 6*sc, 35*sc, 16*sc, 14*sc, _dark(c, 0.2))
-	# Ekor
 	_rect(p, -40*sc, 10*sc, 18*sc, 10*sc, c)
 	_rect(p, -52*sc, 18*sc, 14*sc, 8*sc, _dark(c))
 
-# Latencia — ubur-ubur
-func _draw_latencia(p: Node, c: Color, s: float, flip: bool):
+func _draw_latencia(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Mantel
 	_rect(p, -28*sc, -35*sc, 56*sc, 40*sc, c)
-	# Inner glow mantel
 	_rect(p, -20*sc, -30*sc, 40*sc, 30*sc, Color(c.r, c.g, c.b, 0.4))
-	# Ring patterns
 	_rect(p, -26*sc, -20*sc, 52*sc, 4*sc, Color(1,1,1,0.15))
 	_rect(p, -24*sc, -10*sc, 48*sc, 3*sc, Color(1,1,1,0.1))
-	# Tentakel
 	for i in 7:
 		var tx = (-24 + i * 8)*sc
-		var len = 30 + (i % 3) * 15
-		_rect(p, tx, 5*sc, 4*sc, len*sc, Color(c.r, c.g, c.b, 0.6 - i * 0.05))
-	# Mata
+		var tentacle_len = 30 + (i % 3) * 15
+		_rect(p, tx, 5*sc, 4*sc, tentacle_len*sc, Color(c.r, c.g, c.b, 0.6 - i * 0.05))
 	_rect(p, -14*sc, -28*sc, 10*sc, 10*sc, Color(1, 0.9, 0.2, 0.8))
 	_rect(p, 4*sc, -28*sc, 10*sc, 10*sc, Color(1, 0.9, 0.2, 0.8))
-	# Pulse ring
 	_rect(p, -30*sc, -37*sc, 60*sc, 4*sc, Color(c.r, c.g, c.b, 0.3))
 
-# Ransom-Rex — dinosaurus rantai
-func _draw_ransom_rex(p: Node, c: Color, s: float, flip: bool):
+func _draw_ransom_rex(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan besar
 	_rect(p, -28*sc, -5*sc, 55*sc, 45*sc, c)
-	# Kepala besar
 	_rect(p, -20*sc, -42*sc, 45*sc, 40*sc, c)
-	# Rahang bawah
 	_rect(p, -18*sc, -18*sc, 40*sc, 15*sc, _dark(c, 0.2))
-	# Gigi
 	for i in 5:
 		_rect(p, (-15 + i * 8)*sc, -20*sc, 5*sc, 6*sc, Color(0.95, 0.95, 0.9))
-	# Mata merah
 	_rect(p, -14*sc, -38*sc, 14*sc, 14*sc, Color(0.1, 0.05, 0.05))
 	_rect(p, -10*sc, -35*sc, 8*sc, 8*sc, Color(0.9, 0.1, 0.1))
 	_rect(p, -8*sc, -33*sc, 4*sc, 4*sc, Color(1, 0.5, 0.5))
-	# Rantai di badan
 	for i in 4:
 		_rect(p, (-20 + i * 12)*sc, 5*sc, 10*sc, 8*sc, Color(0.7, 0.6, 0.2))
 		_rect(p, (-16 + i * 12)*sc, 2*sc, 2*sc, 14*sc, Color(0.7, 0.6, 0.2))
-	# Kaki
 	_rect(p, -22*sc, 38*sc, 18*sc, 16*sc, _dark(c))
 	_rect(p, 6*sc, 38*sc, 18*sc, 16*sc, _dark(c))
-	# Ekor
 	_rect(p, -42*sc, 8*sc, 16*sc, 10*sc, c)
 	_rect(p, -54*sc, 15*sc, 14*sc, 8*sc, _dark(c))
 
-# Worm-Ling — cacing neon bersegmen
-func _draw_worm_ling(p: Node, c: Color, s: float, flip: bool):
+func _draw_worm_ling(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Kepala
 	_rect(p, -16*sc, -38*sc, 32*sc, 28*sc, c)
-	# Mata
 	_rect(p, -10*sc, -32*sc, 8*sc, 8*sc, Color(0.1, 0.1, 0.1))
 	_rect(p, 2*sc, -32*sc, 8*sc, 8*sc, Color(0.1, 0.1, 0.1))
 	_rect(p, -7*sc, -30*sc, 4*sc, 4*sc, Color(1, 0.3, 0.3))
 	_rect(p, 5*sc, -30*sc, 4*sc, 4*sc, Color(1, 0.3, 0.3))
-	# Segmen badan
-	var segs = 5
-	for i in segs:
+	for i in 5:
 		var bright = 1.0 - i * 0.1
 		_rect(p, (-14 + i*2)*sc, (-12 + i*10)*sc, (28 - i*4)*sc, 12*sc, Color(c.r*bright, c.g*bright, c.b*bright))
-		# garis segmen
 		_rect(p, (-14 + i*2)*sc, (-2 + i*10)*sc, (28 - i*4)*sc, 2*sc, _dark(c, 0.3))
-	# Mini cacing spawn
 	_rect(p, 20*sc, -10*sc, 10*sc, 8*sc, _light(c, 0.1))
 	_rect(p, 22*sc, -18*sc, 8*sc, 10*sc, _light(c, 0.1))
 	_rect(p, -32*sc, 5*sc, 10*sc, 8*sc, _light(c, 0.1))
 
-# Patchwork — beruang tambalan
-func _draw_patchwork(p: Node, c: Color, s: float, flip: bool):
+func _draw_patchwork(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan bulat besar
 	_rect(p, -28*sc, -10*sc, 56*sc, 48*sc, c)
-	# Kepala
 	_rect(p, -22*sc, -38*sc, 44*sc, 32*sc, c)
-	# Telinga
 	_rect(p, -26*sc, -48*sc, 16*sc, 16*sc, c)
 	_rect(p, 10*sc, -48*sc, 16*sc, 16*sc, c)
 	_rect(p, -22*sc, -46*sc, 10*sc, 10*sc, _light(c, 0.2))
 	_rect(p, 12*sc, -46*sc, 10*sc, 10*sc, _light(c, 0.2))
-	# Muka
 	_rect(p, -10*sc, -28*sc, 20*sc, 14*sc, _light(c, 0.3))
-	# Mata
 	_rect(p, -14*sc, -34*sc, 8*sc, 8*sc, Color(0.1,0.1,0.15))
 	_rect(p, 6*sc, -34*sc, 8*sc, 8*sc, Color(0.1,0.1,0.15))
-	# Patch-patch tambalan (berbeda warna)
 	_rect(p, -22*sc, -5*sc, 16*sc, 14*sc, _dark(c, 0.2))
 	_rect(p, 6*sc, 5*sc, 14*sc, 12*sc, _light(c, 0.2))
 	_rect(p, -10*sc, 18*sc, 18*sc, 14*sc, _dark(c, 0.15))
 	_rect(p, 14*sc, -10*sc, 12*sc, 12*sc, _light(c, 0.3))
-	# Jahitan patch
 	_rect(p, -22*sc, -5*sc, 16*sc, 1*sc, Color(1,1,1,0.2))
 	_rect(p, -22*sc, 8*sc, 16*sc, 1*sc, Color(1,1,1,0.2))
-	# Kaki
 	_rect(p, -24*sc, 36*sc, 18*sc, 14*sc, _dark(c, 0.2))
 	_rect(p, 6*sc, 36*sc, 18*sc, 14*sc, _dark(c, 0.2))
 
-# Bastion — ksatria perisai
-func _draw_bastion(p: Node, c: Color, s: float, flip: bool):
+func _draw_bastion(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Perisai utama
 	_rect(p, -28*sc, -40*sc, 56*sc, 70*sc, _dark(c, 0.2))
 	_rect(p, -24*sc, -36*sc, 48*sc, 62*sc, c)
-	# Emblem di perisai
 	_rect(p, -14*sc, -22*sc, 28*sc, 36*sc, _light(c, 0.15))
 	_rect(p, -4*sc, -32*sc, 8*sc, 56*sc, Color(1,1,1,0.1))
 	_rect(p, -18*sc, -8*sc, 36*sc, 8*sc, Color(1,1,1,0.1))
-	# Helm di atas perisai
 	_rect(p, -16*sc, -50*sc, 32*sc, 14*sc, _dark(c, 0.3))
 	_rect(p, -10*sc, -58*sc, 20*sc, 12*sc, _dark(c, 0.4))
-	# Visor
 	_rect(p, -14*sc, -46*sc, 28*sc, 6*sc, Color(0.1, 0.8, 1, 0.6))
-	# Bahu
 	_rect(p, -40*sc, -30*sc, 14*sc, 24*sc, _dark(c, 0.1))
 	_rect(p, 26*sc, -30*sc, 14*sc, 24*sc, _dark(c, 0.1))
-	# Kaki
 	_rect(p, -20*sc, 28*sc, 14*sc, 18*sc, _dark(c, 0.2))
 	_rect(p, 6*sc, 28*sc, 14*sc, 18*sc, _dark(c, 0.2))
-	# Shine perisai
 	_rect(p, -20*sc, -34*sc, 18*sc, 8*sc, Color(1,1,1,0.2))
 
-# Daemon-X — sosok shadow dengan cpu core
-func _draw_daemon_x(p: Node, c: Color, s: float, flip: bool):
+func _draw_daemon_x(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Shadow body (tak beraturan)
 	_rect(p, -22*sc, -8*sc, 44*sc, 46*sc, Color(c.r*0.4, c.g*0.4, c.b*0.4))
 	_rect(p, -18*sc, -5*sc, 36*sc, 40*sc, Color(c.r*0.6, c.g*0.6, c.b*0.6))
-	# Kepala
 	_rect(p, -16*sc, -32*sc, 32*sc, 26*sc, Color(c.r*0.5, c.g*0.5, c.b*0.5))
-	# CPU core di dada (glowing)
 	_rect(p, -12*sc, 2*sc, 24*sc, 24*sc, _dark(c, 0.4))
 	_rect(p, -8*sc, 6*sc, 16*sc, 16*sc, c)
 	_rect(p, -4*sc, 10*sc, 8*sc, 8*sc, _light(c))
-	# Circuit lines dari core
 	_rect(p, -16*sc, 14*sc, 8*sc, 2*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, 8*sc, 14*sc, 8*sc, 2*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, -2*sc, -8*sc, 4*sc, 12*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, -2*sc, 26*sc, 4*sc, 12*sc, Color(c.r, c.g, c.b, 0.5))
-	# Mata glowing
 	_rect(p, -12*sc, -26*sc, 10*sc, 8*sc, c)
 	_rect(p, 2*sc, -26*sc, 10*sc, 8*sc, c)
 	_rect(p, -9*sc, -24*sc, 5*sc, 4*sc, Color(1,1,1,0.8))
 	_rect(p, 5*sc, -24*sc, 5*sc, 4*sc, Color(1,1,1,0.8))
-	# Tangan shadow
 	_rect(p, -36*sc, 0*sc, 16*sc, 10*sc, Color(c.r*0.4, c.g*0.4, c.b*0.4))
 	_rect(p, 20*sc, 0*sc, 16*sc, 10*sc, Color(c.r*0.4, c.g*0.4, c.b*0.4))
 
-# BIOS-Wraith — roh motherboard
-func _draw_bios_wraith(p: Node, c: Color, s: float, flip: bool):
+func _draw_bios_wraith(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Ekor hantu (mengambang)
 	_rect(p, -24*sc, 10*sc, 10*sc, 28*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, -10*sc, 15*sc, 10*sc, 32*sc, Color(c.r, c.g, c.b, 0.6))
 	_rect(p, 4*sc, 12*sc, 10*sc, 30*sc, Color(c.r, c.g, c.b, 0.5))
 	_rect(p, 18*sc, 8*sc, 10*sc, 26*sc, Color(c.r, c.g, c.b, 0.4))
-	# Badan utama
 	_rect(p, -26*sc, -28*sc, 52*sc, 42*sc, c)
-	# Pola PCB di badan
 	_rect(p, -22*sc, -24*sc, 44*sc, 34*sc, Color(c.r*0.7, c.g*0.7, c.b*0.7, 0.5))
-	# Circuit traces
 	_rect(p, -20*sc, -10*sc, 40*sc, 2*sc, Color(1, 0.9, 0.3, 0.4))
 	_rect(p, -8*sc, -24*sc, 2*sc, 30*sc, Color(1, 0.9, 0.3, 0.4))
 	_rect(p, 6*sc, -24*sc, 2*sc, 20*sc, Color(1, 0.9, 0.3, 0.4))
 	_rect(p, -20*sc, 4*sc, 20*sc, 2*sc, Color(1, 0.9, 0.3, 0.4))
-	# BIOS chip
 	_rect(p, -12*sc, -22*sc, 24*sc, 18*sc, Color(0.1, 0.1, 0.1))
 	_rect(p, -8*sc, -18*sc, 16*sc, 10*sc, Color(0.2, 0.8, 0.4))
-	# Mata
 	_rect(p, -14*sc, -24*sc, 10*sc, 6*sc, _light(c))
 	_rect(p, 4*sc, -24*sc, 10*sc, 6*sc, _light(c))
 
-# Vish-Ara — ular kobra
-func _draw_vish_ara(p: Node, c: Color, s: float, flip: bool):
+func _draw_vish_ara(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan ular bersegmen
 	_rect(p, -8*sc, 5*sc, 18*sc, 14*sc, c)
 	_rect(p, -6*sc, 18*sc, 16*sc, 12*sc, _dark(c, 0.1))
 	_rect(p, -10*sc, 28*sc, 20*sc, 12*sc, c)
 	_rect(p, -8*sc, 38*sc, 16*sc, 10*sc, _dark(c, 0.1))
-	# Kepala tegak
 	_rect(p, -18*sc, -35*sc, 36*sc, 42*sc, c)
-	# Hood kobra (melebarkan)
 	_rect(p, -30*sc, -28*sc, 60*sc, 20*sc, _dark(c, 0.1))
 	_rect(p, -28*sc, -20*sc, 56*sc, 10*sc, Color(c.r, c.g, c.b, 0.7))
-	# Pola hood
 	_rect(p, -24*sc, -26*sc, 48*sc, 4*sc, Color(1,1,1,0.1))
-	# Mata
 	_rect(p, -10*sc, -28*sc, 10*sc, 10*sc, Color(0.8, 0.1, 0.1))
 	_rect(p, 0*sc, -28*sc, 10*sc, 10*sc, Color(0.8, 0.1, 0.1))
 	_rect(p, -7*sc, -26*sc, 5*sc, 5*sc, Color(0.05, 0.05, 0.05))
 	_rect(p, 3*sc, -26*sc, 5*sc, 5*sc, Color(0.05, 0.05, 0.05))
-	# Lidah bercabang
 	_rect(p, -2*sc, -10*sc, 4*sc, 16*sc, Color(1, 0.3, 0.3))
 	_rect(p, -6*sc, 4*sc, 4*sc, 8*sc, Color(1, 0.2, 0.2))
 	_rect(p, 2*sc, 4*sc, 4*sc, 8*sc, Color(1, 0.2, 0.2))
-	# Speaker/microphone
 	_rect(p, -14*sc, -18*sc, 6*sc, 6*sc, _dark(c, 0.4))
 	_rect(p, 8*sc, -18*sc, 6*sc, 6*sc, _dark(c, 0.4))
 
-# Bait-Eel — belut dengan umpan
-func _draw_bait_eel(p: Node, c: Color, s: float, flip: bool):
+func _draw_bait_eel(p: Node, c: Color, s: float, _flip: bool):
 	var sc = s / 80.0
-	# Badan belut bergelombang
 	_rect(p, -10*sc, -10*sc, 22*sc, 14*sc, c)
 	_rect(p, -14*sc, 2*sc, 22*sc, 12*sc, _dark(c, 0.1))
 	_rect(p, -8*sc, 12*sc, 22*sc, 12*sc, c)
 	_rect(p, -12*sc, 22*sc, 20*sc, 12*sc, _dark(c, 0.1))
 	_rect(p, -6*sc, 32*sc, 16*sc, 12*sc, c)
-	# Kepala
 	_rect(p, -18*sc, -32*sc, 36*sc, 24*sc, c)
-	# Mulut lebar
 	_rect(p, -16*sc, -16*sc, 32*sc, 8*sc, _dark(c, 0.4))
-	# Gigi
 	for i in 4:
 		_rect(p, (-12 + i * 8)*sc, -16*sc, 4*sc, 5*sc, Color(0.9, 0.9, 0.85))
-	# Mata
 	_rect(p, -12*sc, -28*sc, 12*sc, 12*sc, Color(0.8, 0.7, 0.1))
 	_rect(p, 0*sc, -28*sc, 12*sc, 12*sc, Color(0.8, 0.7, 0.1))
 	_rect(p, -9*sc, -26*sc, 6*sc, 6*sc, Color(0.1, 0.1, 0.1))
 	_rect(p, 3*sc, -26*sc, 6*sc, 6*sc, Color(0.1, 0.1, 0.1))
-	# Umpan (lure) di atas kepala
 	_rect(p, -2*sc, -48*sc, 4*sc, 18*sc, _dark(c, 0.3))
 	_rect(p, -8*sc, -56*sc, 16*sc, 10*sc, Color(1, 0.9, 0.2))
 	_rect(p, -5*sc, -54*sc, 10*sc, 6*sc, Color(1, 1, 0.5, 0.8))
-	# Fin
 	_rect(p, 10*sc, -5*sc, 18*sc, 6*sc, Color(c.r, c.g, c.b, 0.6))
 	_rect(p, 14*sc, 8*sc, 14*sc, 5*sc, Color(c.r, c.g, c.b, 0.5))
 
@@ -599,21 +450,17 @@ func spawn_hit_particles(pos: Vector2, color: Color, count: int = 12):
 		particle.color = Color(color.r, color.g, color.b, 0.9)
 		particle.position = pos + Vector2(randf_range(-20, 20), randf_range(-20, 20))
 		add_child(particle)
-
 		var vel = Vector2(randf_range(-120, 120), randf_range(-150, -30))
 		var lifetime = randf_range(0.3, 0.7)
-
 		var tween = create_tween()
 		tween.set_parallel(true)
 		tween.tween_property(particle, "position", particle.position + vel * lifetime, lifetime)
 		tween.tween_property(particle, "modulate:a", 0.0, lifetime)
 		tween.tween_property(particle, "size", Vector2(0, 0), lifetime * 0.8)
-
 		var t = lifetime
 		get_tree().create_timer(t).timeout.connect(func(): particle.queue_free())
 
 func spawn_slash_effect(pos: Vector2, color: Color, is_player: bool):
-	# Slash lines
 	for i in 3:
 		var slash = ColorRect.new()
 		slash.color = Color(color.r, color.g, color.b, 0.8)
@@ -622,7 +469,6 @@ func spawn_slash_effect(pos: Vector2, color: Color, is_player: bool):
 		slash.rotation = deg_to_rad(-30 + i * 20)
 		slash.position = pos + Vector2(dir * (i * 10 - 10), -10 + i * 15)
 		add_child(slash)
-
 		var tween = create_tween()
 		tween.set_parallel(true)
 		tween.tween_property(slash, "modulate:a", 0.0, 0.25)
@@ -635,7 +481,6 @@ func spawn_impact_flash(pos: Vector2, color: Color):
 	flash.size = Vector2(80, 80)
 	flash.position = pos - Vector2(40, 40)
 	add_child(flash)
-
 	var tween = create_tween()
 	tween.tween_property(flash, "size", Vector2(160, 160), 0.1)
 	tween.tween_property(flash, "modulate:a", 0.0, 0.15)
@@ -646,51 +491,33 @@ func animate_attack(is_player: bool):
 	var target_name = "enemy_sprite" if is_player else "player_sprite"
 	var sprite = find_child(sprite_name, true, false)
 	var target = find_child(target_name, true, false)
-
 	if sprite == null or target == null:
 		return
-
 	var original_pos = sprite.position
 	var direction = Vector2(120, -20) if is_player else Vector2(-120, 20)
 	var target_pos = target.position
-
-	# Phase 1 — windup (mundur dulu)
 	var tween = create_tween()
 	tween.tween_property(sprite, "position", original_pos - direction * 0.3, 0.1)
 	await tween.finished
-
-	# Phase 2 — lunge maju cepat
 	var tween2 = create_tween()
 	tween2.set_parallel(true)
 	tween2.tween_property(sprite, "position", original_pos + direction, 0.12).set_trans(Tween.TRANS_EXPO)
 	await tween2.finished
-
-	# Spawn slash effect
 	spawn_slash_effect(target_pos, sprite.get_child(0).color if sprite.get_child_count() > 0 else Color.WHITE, is_player)
-
-	# Phase 3 — impact
 	spawn_impact_flash(target_pos, Color.WHITE)
 	trigger_screen_shake(6.0)
-
-	# Flash target merah
 	var flash_tween = create_tween()
 	flash_tween.tween_property(target, "modulate", Color(2, 0.3, 0.3), 0.06)
 	flash_tween.tween_property(target, "modulate", Color(1, 1, 1), 0.06)
 	flash_tween.tween_property(target, "modulate", Color(2, 0.3, 0.3), 0.06)
 	flash_tween.tween_property(target, "modulate", Color(1, 1, 1), 0.08)
-
-	# Shake target
 	var target_orig = target.position
 	var shake_tween = create_tween()
 	shake_tween.tween_property(target, "position", target_orig + Vector2(8, -4), 0.05)
 	shake_tween.tween_property(target, "position", target_orig + Vector2(-8, 4), 0.05)
 	shake_tween.tween_property(target, "position", target_orig + Vector2(5, -2), 0.04)
 	shake_tween.tween_property(target, "position", target_orig, 0.04)
-
-	# Spawn particles di target
 	spawn_hit_particles(target_pos, Color(1, 0.4, 0.4))
-
-	# Phase 4 — kembali
 	await get_tree().create_timer(0.15).timeout
 	var tween3 = create_tween()
 	tween3.tween_property(sprite, "position", original_pos, 0.2).set_trans(Tween.TRANS_BACK)
@@ -698,61 +525,44 @@ func animate_attack(is_player: bool):
 func play_intro_animation():
 	battle_active = false
 	set_buttons_disabled(true)
-
 	var player_sprite = get_node_or_null("player_sprite")
 	var enemy_sprite = get_node_or_null("enemy_sprite")
-
 	if player_sprite == null or enemy_sprite == null:
 		battle_active = true
 		set_buttons_disabled(false)
 		return
-
 	var player_original_pos = player_sprite.position
 	var enemy_original_pos = enemy_sprite.position
-
-	# Mulai dari luar layar
 	player_sprite.position = Vector2(-250, player_original_pos.y)
 	enemy_sprite.position = Vector2(1400, enemy_original_pos.y)
 	player_sprite.modulate.a = 0.0
 	enemy_sprite.modulate.a = 0.0
-
 	battle_log_label.text = ""
-
-	# Fade in
 	var fade_tween = create_tween()
 	fade_tween.set_parallel(true)
 	fade_tween.tween_property(player_sprite, "modulate:a", 1.0, 0.3)
 	fade_tween.tween_property(enemy_sprite, "modulate:a", 1.0, 0.3)
 	await fade_tween.finished
-
 	battle_log_label.text = "A wild " + enemy_sprite.get_meta("monster_name", "Enemy") + " appeared!"
-
-	# Slide in
 	var tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(player_sprite, "position", player_original_pos, 0.7).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(enemy_sprite, "position", enemy_original_pos, 0.7).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 	await tween.finished
-
-	# Landing impact
 	trigger_screen_shake(4.0)
 	spawn_hit_particles(player_sprite.position, get_type_color("Data"), 8)
 	spawn_hit_particles(enemy_sprite.position, Color.WHITE, 8)
 	await get_tree().create_timer(0.5).timeout
-
-	# VS flash
 	var vs_label = create_label("⚔ VS ⚔", Vector2(0, 260), 36, Color(1, 0.9, 0.2))
 	vs_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vs_label.custom_minimum_size = Vector2(1152, 50)
 	vs_label.modulate.a = 0.0
 	add_child(vs_label)
-
 	var vs_tween = create_tween()
 	vs_tween.tween_property(vs_label, "modulate:a", 1.0, 0.2)
 	vs_tween.tween_property(vs_label, "modulate:a", 0.0, 0.5)
 	await vs_tween.finished
 	vs_label.queue_free()
-
 	battle_log_label.text = "Battle Start!"
 	battle_active = true
 	set_buttons_disabled(false)
@@ -760,63 +570,52 @@ func play_intro_animation():
 # ── BUILD UI ──
 
 func build_ui(player_data: Dictionary, enemy_data: Dictionary):
-	# Background
 	var sky = ColorRect.new()
 	sky.color = Color(0.08, 0.08, 0.25)
 	sky.size = Vector2(1152, 648)
 	add_child(sky)
-
 	var far_bg = ColorRect.new()
 	far_bg.color = Color(0.12, 0.15, 0.35)
 	far_bg.size = Vector2(1152, 320)
 	add_child(far_bg)
-
 	var horizon = ColorRect.new()
 	horizon.color = Color(0.2, 0.3, 0.6, 0.3)
 	horizon.size = Vector2(1152, 40)
 	horizon.position = Vector2(0, 290)
 	add_child(horizon)
-
 	var near_bg = ColorRect.new()
 	near_bg.color = Color(0.05, 0.06, 0.18)
 	near_bg.size = Vector2(1152, 340)
 	near_bg.position = Vector2(0, 310)
 	add_child(near_bg)
-
 	for i in range(0, 1152, 120):
 		var line = ColorRect.new()
 		line.color = Color(1, 1, 1, 0.02)
 		line.size = Vector2(1, 300)
 		line.position = Vector2(i, 0)
 		add_child(line)
-
 	for i in range(0, 1152, 80):
 		var line = ColorRect.new()
 		line.color = Color(1, 1, 1, 0.03)
 		line.size = Vector2(1, 340)
 		line.position = Vector2(i, 310)
 		add_child(line)
-
-	# Platforms
 	var ep = ColorRect.new(); ep.color = Color(0.18, 0.22, 0.45)
 	ep.size = Vector2(220, 18); ep.position = Vector2(690, 262); add_child(ep)
 	var eps = ColorRect.new(); eps.color = Color(0,0,0,0.3)
 	eps.size = Vector2(200, 8); eps.position = Vector2(700, 274); add_child(eps)
 	var epp = ColorRect.new(); epp.color = Color(0.4, 0.5, 0.9, 0.3)
 	epp.size = Vector2(220, 3); epp.position = Vector2(690, 258); add_child(epp)
-
 	var pp = ColorRect.new(); pp.color = Color(0.12, 0.16, 0.35)
 	pp.size = Vector2(280, 22); pp.position = Vector2(130, 342); add_child(pp)
 	var pps = ColorRect.new(); pps.color = Color(0,0,0,0.4)
 	pps.size = Vector2(240, 10); pps.position = Vector2(150, 358); add_child(pps)
 	var ppp = ColorRect.new(); ppp.color = Color(0.3, 0.4, 0.8, 0.3)
 	ppp.size = Vector2(260, 4); ppp.position = Vector2(140, 338); add_child(ppp)
-
 	var divider = ColorRect.new()
 	divider.color = Color(0.3, 0.4, 0.7, 0.5)
 	divider.size = Vector2(1152, 2); divider.position = Vector2(0, 308); add_child(divider)
 
-	# Enemy panel
 	var enemy_color = get_type_color(enemy_data["type"])
 	add_child(create_panel_styled(Vector2(620, 30), Vector2(460, 140), enemy_color))
 	enemy_name_label = create_label(enemy_data["name"], Vector2(640, 45), 22, enemy_color)
@@ -829,7 +628,6 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 	enemy_hp_label = create_label("HP: " + str(enemy_data["hp"]) + "/" + str(enemy_data["hp"]), Vector2(640, 128), 12, Color(0.9,0.9,0.9))
 	add_child(enemy_hp_label)
 
-	# Player panel
 	var player_color = get_type_color(player_data["type"])
 	add_child(create_panel_styled(Vector2(50, 320), Vector2(460, 140), player_color))
 	player_name_label = create_label(player_data["name"], Vector2(70, 335), 22, player_color)
@@ -851,31 +649,26 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 	player_hp_label = create_label("HP: " + str(player_data["hp"]) + "/" + str(player_data["hp"]), Vector2(70, 418), 12, Color(0.9,0.9,0.9))
 	add_child(player_hp_label)
 
-	# Battle log
 	add_child(create_panel_styled(Vector2(50, 472), Vector2(610, 55), Color(0.5, 0.5, 0.8)))
 	battle_log_label = create_label("Battle Start!", Vector2(65, 482), 15, Color(1, 1, 0.7))
 	battle_log_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	battle_log_label.custom_minimum_size = Vector2(585, 40)
 	add_child(battle_log_label)
 
-	# EDU-LOG
 	var edu_panel = create_panel_styled(Vector2(50, 530), Vector2(610, 110), Color(0.3, 0.5, 0.3))
 	add_child(edu_panel)
 	add_child(create_label("EDU-LOG", Vector2(65, 538), 12, Color(0.5, 1, 0.5)))
-
 	var scroll = ScrollContainer.new()
 	scroll.position = Vector2(55, 555)
 	scroll.size = Vector2(598, 80)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(scroll)
 	edu_scroll = scroll
-
 	var vbox = VBoxContainer.new()
 	vbox.custom_minimum_size = Vector2(580, 0)
 	scroll.add_child(vbox)
 	edu_vbox = vbox
 
-	# Move buttons
 	var moves = player_data["moves"]
 	var btn_colors = [Color(0.15, 0.35, 0.75), Color(0.75, 0.35, 0.05), Color(0.15, 0.6, 0.25), Color(0.5, 0.15, 0.6)]
 	var btn_positions = [Vector2(690, 478), Vector2(910, 478), Vector2(690, 535), Vector2(910, 535)]
@@ -884,16 +677,6 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 		var btn = create_move_button(moves[i]["name"], btn_positions[i], btn_colors[i], i)
 		add_child(btn)
 		move_buttons.append(btn)
-
-	# Sprites — kirim monster_id
-	var player_choice = "encryp_pup"
-	if has_meta("player_monster"):
-		player_choice = get_meta("player_monster")
-
-	var all_monsters = ["encryp_pup","ping_go","biti","senti_shell","octo_core","chamele_auth",
-		"vaultex","cipher_ray","routerex","latencia","ransom_rex","worm_ling",
-		"patchwork","bastion","daemon_x","bios_wraith","vish_ara","bait_eel"]
-	all_monsters.erase(player_choice)
 
 	draw_monster_sprite(Vector2(800, 240), enemy_color, 85, false, enemy_data["name"], enemy_data["id"])
 	draw_monster_sprite(Vector2(270, 310), player_color, 100, true, player_data["name"], player_data["id"])
@@ -970,6 +753,7 @@ func create_move_button(text: String, pos: Vector2, color: Color, index: int) ->
 func connect_signals():
 	battle_manager.battle_log.connect(on_battle_log)
 	battle_manager.edu_log.connect(on_edu_log)
+	battle_manager.edu_popup.connect(on_edu_popup)   # ← BARU
 	battle_manager.battle_ended.connect(on_battle_ended)
 	battle_manager.hp_updated.connect(on_hp_updated)
 	battle_manager.enemy_attacking.connect(func(): animate_attack(false))
@@ -998,7 +782,12 @@ func on_edu_log(message: String):
 	sep.custom_minimum_size = Vector2(575, 1)
 	edu_vbox.add_child(sep)
 	await get_tree().process_frame
-	edu_scroll.scroll_vertical = edu_scroll.get_v_scroll_bar().max_value
+	edu_scroll.scroll_vertical = int(edu_scroll.get_v_scroll_bar().max_value)
+
+# ── EDU POPUP HANDLER ──
+func on_edu_popup(move_name: String, edu_text: String, domain: String):
+	if edu_popup:
+		edu_popup.show_popup(move_name, edu_text, domain)
 
 func on_hp_updated(p_hp: int, p_max: int, e_hp: int, e_max: int):
 	player_hp_bar.value = (float(p_hp) / p_max) * 100
@@ -1026,8 +815,6 @@ func on_cooldown_updated(cooldowns: Array):
 func on_battle_ended(player_won: bool):
 	battle_active = false
 	set_buttons_disabled(true)
-
-	# Death animation
 	var loser_name = "player_sprite" if not player_won else "enemy_sprite"
 	var loser = find_child(loser_name, true, false)
 	if loser:
@@ -1037,9 +824,7 @@ func on_battle_ended(player_won: bool):
 		death_tween.tween_property(loser, "modulate:a", 0.0, 0.8)
 		death_tween.tween_property(loser, "position", loser.position + Vector2(0, 30), 0.8)
 		trigger_screen_shake(10.0)
-
 	await get_tree().create_timer(2.5).timeout
-
 	var result_scene = load("res://menus/result/ResultScreen.tscn").instantiate()
 	result_scene.set_meta("player_won", player_won)
 	result_scene.set_meta("player_monster_name", player_name_label.text)
