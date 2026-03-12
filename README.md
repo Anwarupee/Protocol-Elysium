@@ -6,6 +6,9 @@
 ---
 
 ## Tentang Game
+<img width="1151" height="650" alt="Screenshot 2026-03-12 131440" src="https://github.com/user-attachments/assets/0cdb2b10-2e9f-4783-8233-812e7d2a62a5" />
+<img width="1149" height="645" alt="Screenshot 2026-03-12 131508" src="https://github.com/user-attachments/assets/d2a70f1c-4946-4d1d-932d-6b61f8174faa" />
+<img width="1152" height="653" alt="Screenshot 2026-03-12 131544" src="https://github.com/user-attachments/assets/9a55649b-3357-40ed-9fba-fd71d40e451f" />
 
 **Protocol: Elysium** adalah game battle simulator berbasis giliran (turn-based) bertemakan keamanan siber. Setiap karakter dalam game disebut **Sentinel** dan mereka merepresentasikan konsep nyata dalam dunia cybersecurity, mulai dari enkripsi, malware, social engineering, hingga sistem pertahanan jaringan.
 
