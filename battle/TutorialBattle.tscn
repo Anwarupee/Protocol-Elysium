@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c0q26uo3rlhk0"]
+
+[ext_resource type="Script" uid="uid://ch22xirjyohye" path="res://battle/Battle.gd" id="1_xxqts"]
+[ext_resource type="Script" uid="uid://b4r5dhfm28uop" path="res://battle/BattleManager.gd" id="2_g5yt1"]
+[ext_resource type="Script" uid="uid://vsadxe0cf13w" path="res://battle/TutorialBattle.gd" id="3_g5yt1"]
+
+[node name="Battle" type="Node2D" unique_id=1903894832]
+script = ExtResource("1_xxqts")
+
+[node name="BattleManager" type="Node" parent="." unique_id=1744800659]
+script = ExtResource("2_g5yt1")
+
+[node name="TutorialBattle" type="Node" parent="." unique_id=983045388]
+script = ExtResource("3_g5yt1")

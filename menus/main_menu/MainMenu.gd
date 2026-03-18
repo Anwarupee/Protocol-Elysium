@@ -265,6 +265,12 @@ func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> L
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	return label
+	
+func go_to_tutorial():
+	var battle_scene = load("res://battle/TutorialBattle.tscn").instantiate()
+	get_tree().root.add_child(battle_scene)
+	get_tree().current_scene = battle_scene
+	queue_free()
 
 func go_to_selection():
 	var scene = load("res://menus/selection/SelectionScreen.tscn").instantiate()

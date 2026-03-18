@@ -7,6 +7,7 @@ var pending_trojan_target: Monster = null
 var trojan_turns_left: int = 0
 var trojan_power: int = 0
 var last_enemy_move: Dictionary = {}
+var tutorial_mode : bool = false
 
 # ── EDU POPUP SYSTEM ──
 var move_popup_count: Dictionary = {}  # { "move_name": count }
@@ -60,9 +61,14 @@ func get_cooldown_states() -> Array:
 	return states
 
 # ── SMART REPETITION POPUP ──
+# Modify should_show_popup
 func should_show_popup(move_name: String) -> bool:
+	if tutorial_mode:
+		return true   # always show popup in tutorial
 	var count = move_popup_count.get(move_name, 0)
 	return count < MAX_POPUP_PER_MOVE
+	
+	
 
 func register_popup_shown(move_name: String):
 	move_popup_count[move_name] = move_popup_count.get(move_name, 0) + 1
@@ -252,3 +258,4 @@ func check_battle_end():
 	elif not player_monster.is_alive():
 		emit_signal("battle_log", "You lost!")
 		emit_signal("battle_ended", false)
+		
