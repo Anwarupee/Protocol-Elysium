@@ -2,68 +2,6 @@
 
 [ext_resource type="Script" uid="uid://7711ay1vhxrg" path="res://ui/edu_popup/EduPopup.gd" id="1_4itu4"]
 
-[node name="EduPopup" type="Node2D" unique_id=1643532739]
+[node name="EduPopup" type="CanvasLayer" unique_id=1207618561]
 process_mode = 3
 script = ExtResource("1_4itu4")
-
-[node name="Root" type="Control" parent="." unique_id=1018152775]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Dimmer" type="ColorRect" parent="Root" unique_id=219010698]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 0.94509804, 0.3137255)
-
-[node name="Panel" type="Panel" parent="Root" unique_id=220876410]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -140.0
-offset_right = 260.0
-offset_bottom = 140.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBox" type="VBoxContainer" parent="Root/Panel" unique_id=1354249457]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Header" type="HBoxContainer" parent="Root/Panel/VBox" unique_id=926615248]
-layout_mode = 2
-
-[node name="DomainBadge" type="Label" parent="Root/Panel/VBox/Header" unique_id=578337936]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-
-[node name="MoveName" type="Label" parent="Root/Panel/VBox/Header" unique_id=1404969142]
-layout_mode = 2
-theme_override_constants/outline_size = 1
-theme_override_font_sizes/font_size = 18
-
-[node name="HSeparator" type="HSeparator" parent="Root/Panel/VBox" unique_id=1515234191]
-layout_mode = 2
-
-[node name="EduText" type="Label" parent="Root/Panel/VBox" unique_id=1920848951]
-layout_mode = 2
-
-[node name="ContinueBtn" type="Button" parent="Root/Panel/VBox" unique_id=575488921]
-layout_mode = 2
-theme_override_font_sizes/font_size = 14
-text = "UNDERSTOOD"

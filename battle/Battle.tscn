@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://ch22xirjyohye" path="res://battle/Battle.gd" id="1_pjid2"]
 [ext_resource type="Script" uid="uid://b4r5dhfm28uop" path="res://battle/BattleManager.gd" id="2_5r4g4"]
+[ext_resource type="PackedScene" uid="uid://btbbfogbeygra" path="res://ui/edu_popup/EduPopup.tscn" id="3_5r4g4"]
 
 [node name="Battle" type="Node2D" unique_id=1903894832]
 script = ExtResource("1_pjid2")
 
 [node name="BattleManager" type="Node" parent="." unique_id=1744800659]
 script = ExtResource("2_5r4g4")
+
+[node name="EduPopup" parent="." unique_id=1643532739 instance=ExtResource("3_5r4g4")]
