@@ -679,11 +679,21 @@ func select_monster(card: Node2D, info: Dictionary):
 func start_battle():
 	if selected_monster == "":
 		return
-	var battle_scene = load("res://battle/Battle.tscn").instantiate()
-	battle_scene.set_meta("player_monster", selected_monster)
-	get_tree().root.add_child(battle_scene)
-	get_tree().current_scene = battle_scene
-	queue_free()
+	print("is_first_time: ", GlobalData.is_first_time)
+	print("Loading: ", "TutorialBattle" if GlobalData.is_first_time else "Battle")
+	if GlobalData.is_first_time:
+		GlobalData.mark_played()
+		var battle_scene = load("res://battle/TutorialBattle.tscn").instantiate()
+		battle_scene.set_meta("player_monster", selected_monster)
+		get_tree().root.add_child(battle_scene)
+		get_tree().current_scene = battle_scene
+		queue_free()
+	else:
+		var battle_scene = load("res://battle/Battle.tscn").instantiate()
+		battle_scene.set_meta("player_monster", selected_monster)
+		get_tree().root.add_child(battle_scene)
+		get_tree().current_scene = battle_scene
+		queue_free()
 
 func spawn_particles():
 	for i in 30:

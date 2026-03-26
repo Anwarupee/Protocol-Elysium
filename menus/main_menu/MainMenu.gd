@@ -150,6 +150,24 @@ func build_ui():
 	var quit_btn = create_menu_button("✕   QUIT", Vector2(426, 480), Color(0.35, 0.08, 0.08))
 	quit_btn.pressed.connect(quit_game)
 	add_child(quit_btn)
+	
+	var reset_btn = Button.new()
+	reset_btn.text = "↺ RESET TUTORIAL"
+	reset_btn.position = Vector2(20, 560)
+	reset_btn.size = Vector2(180, 28)
+	reset_btn.add_theme_font_size_override("font_size", 11)
+	reset_btn.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+	reset_btn.flat = true
+	reset_btn.pressed.connect(
+		func():
+		if FileAccess.file_exists("user://savedata.cfg"):
+			DirAccess.remove_absolute(
+			ProjectSettings.globalize_path("user://savedata.cfg")
+		)
+		GlobalData.is_first_time = true
+		print("Tutorial reset!")
+	)
+	add_child(reset_btn)
 
 	# ── BOTTOM INFO ──
 	var bottom_bar = ColorRect.new()
