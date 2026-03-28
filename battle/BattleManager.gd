@@ -8,6 +8,7 @@ var trojan_turns_left: int = 0
 var trojan_power: int = 0
 var last_enemy_move: Dictionary = {}
 var tutorial_mode : bool = false
+var moves_used_this_battle: Array = []
 
 # ── EDU POPUP SYSTEM ──
 var move_popup_count: Dictionary = {}  # { "move_name": count }
@@ -39,6 +40,7 @@ func get_monster_data(id: String) -> Dictionary:
 	return {}
 
 func start_battle(player_id: String, enemy_id: String):
+	moves_used_this_battle.clear()
 	player_monster = create_monster(player_id)
 	enemy_monster = create_monster(enemy_id)
 	move_popup_count.clear()
@@ -128,10 +130,20 @@ func player_use_move(move_index: int):
 
 	enemy_monster.tick_cooldowns()
 	enemy_monster.tick_status()
-
+	
+	var already_tracked = false
+	for m in moves_used_this_battle:
+		if m["name"] == move["name"]:
+				already_tracked = true
+				break
+	
+	if not already_tracked:
+		moves_used_this_battle.append(move)
+		print("Move tracked: ", move["name"], " total: ", moves_used_this_battle.size())
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
 	check_battle_end()
+	
 
 func enemy_turn():
 	var available_moves = []
@@ -234,6 +246,9 @@ func get_type_multiplier(attacker_type: String, defender_type: String) -> float:
 	elif advantage[attacker_type]["weak"] == defender_type:
 		return 0.5
 	return 1.0
+
+func get_moves_used() -> Array:
+	return moves_used_this_battle
 
 func check_battle_end():
 	if player_monster == null or enemy_monster == null:

@@ -17,7 +17,7 @@ signal popup_closed
 const SCREEN_W = 1152.0
 const SCREEN_H = 648.0
 const POPUP_W  = 680.0
-const POPUP_H  = 170.0
+const POPUP_H  = 200.0
 
 const DOMAIN_COLORS = {
 	"Data":               Color(0.4, 0.8, 1.0),
@@ -106,7 +106,7 @@ func _build_ui():
 	continue_btn = Button.new()
 	continue_btn.text = "[ UNDERSTOOD ]"
 	continue_btn.size = Vector2(POPUP_W - 32, 32)
-	continue_btn.position = Vector2(px + 16, py + POPUP_H - 42)
+	continue_btn.position = Vector2(px + 16, py + POPUP_H - 46)
 	continue_btn.add_theme_font_size_override("font_size", 13)
 	add_child(continue_btn)
 	continue_btn.pressed.connect(_on_continue_pressed)

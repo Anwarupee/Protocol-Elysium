@@ -1,5 +1,7 @@
 extends Node2D
 
+const DEBUG_FILE = "battle.gd v2"
+
 @onready var battle_manager = $BattleManager
 var edu_popup = null  # Di-assign di _ready() setelah scene siap
 
@@ -20,8 +22,10 @@ var screen_shake_intensity: float = 0.0
 var original_position: Vector2
 
 func _ready():
+	print("script file: ", DEBUG_FILE)
 	original_position = position
 	edu_popup = get_node_or_null("EduPopup")
+	print("Battle _ready called")
 	var player_choice = "encryp_pup"
 	if has_meta("player_monster"):
 		player_choice = get_meta("player_monster")
@@ -458,7 +462,9 @@ func spawn_hit_particles(pos: Vector2, color: Color, count: int = 12):
 		tween.tween_property(particle, "modulate:a", 0.0, lifetime)
 		tween.tween_property(particle, "size", Vector2(0, 0), lifetime * 0.8)
 		var t = lifetime
-		get_tree().create_timer(t).timeout.connect(func(): particle.queue_free())
+		get_tree().create_timer(t).timeout.connect(func(): 
+			if is_instance_valid(particle):
+				particle.queue_free())
 
 func spawn_slash_effect(pos: Vector2, color: Color, is_player: bool):
 	for i in 3:
@@ -473,7 +479,9 @@ func spawn_slash_effect(pos: Vector2, color: Color, is_player: bool):
 		tween.set_parallel(true)
 		tween.tween_property(slash, "modulate:a", 0.0, 0.25)
 		tween.tween_property(slash, "position", slash.position + Vector2(dir * 40, -20), 0.25)
-		get_tree().create_timer(0.3).timeout.connect(func(): slash.queue_free())
+		get_tree().create_timer(0.3).timeout.connect(func(): 
+			if is_instance_valid(slash):
+				slash.queue_free())
 
 func spawn_impact_flash(pos: Vector2, color: Color):
 	var flash = ColorRect.new()
@@ -484,7 +492,9 @@ func spawn_impact_flash(pos: Vector2, color: Color):
 	var tween = create_tween()
 	tween.tween_property(flash, "size", Vector2(160, 160), 0.1)
 	tween.tween_property(flash, "modulate:a", 0.0, 0.15)
-	get_tree().create_timer(0.3).timeout.connect(func(): flash.queue_free())
+	get_tree().create_timer(0.3).timeout.connect(func(): 
+		if is_instance_valid(flash):
+			flash.queue_free())
 
 func animate_attack(is_player: bool):
 	var sprite_name = "player_sprite" if is_player else "enemy_sprite"
@@ -758,6 +768,7 @@ func connect_signals():
 	battle_manager.hp_updated.connect(on_hp_updated)
 	battle_manager.enemy_attacking.connect(func(): animate_attack(false))
 	battle_manager.cooldown_updated.connect(on_cooldown_updated)
+	print("Signals connected, battle_manager: ", battle_manager)
 
 func on_move_pressed(index: int):
 	if not battle_active:
@@ -815,6 +826,8 @@ func on_cooldown_updated(cooldowns: Array):
 func on_battle_ended(player_won: bool):
 	battle_active = false
 	set_buttons_disabled(true)
+	print("on_battle_ended called, moves: ", battle_manager.get_moves_used().size())
+	
 	var loser_name = "player_sprite" if not player_won else "enemy_sprite"
 	var loser = find_child(loser_name, true, false)
 	if loser:
@@ -829,6 +842,8 @@ func on_battle_ended(player_won: bool):
 	result_scene.set_meta("player_won", player_won)
 	result_scene.set_meta("player_monster_name", player_name_label.text)
 	result_scene.set_meta("enemy_monster_name", enemy_name_label.text)
+	result_scene.set_meta("moves_used", battle_manager.get_moves_used())
+	print("set_meta moves_used: ", battle_manager.get_moves_used().size())
 	get_tree().root.add_child(result_scene)
 	get_tree().current_scene = result_scene
 	queue_free()

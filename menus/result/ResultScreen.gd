@@ -5,6 +5,7 @@ var player_monster_name: String = ""
 var enemy_monster_name: String = ""
 var particles: Array = []
 var time: float = 0.0
+var moves_used: Array = []
 
 func _ready():
 	if has_meta("player_won"):
@@ -13,6 +14,11 @@ func _ready():
 		player_monster_name = get_meta("player_monster_name")
 	if has_meta("enemy_monster_name"):
 		enemy_monster_name = get_meta("enemy_monster_name")
+	if has_meta("moves_used"):
+		moves_used = get_meta("moves_used")
+		print("moves_used loaded: ", moves_used.size())
+	else:
+		print("NO moves_used meta found!")
 	build_ui()
 	spawn_particles()
 	animate_result()
@@ -207,6 +213,9 @@ func build_ui():
 	edu_label.custom_minimum_size = Vector2(670, 60)
 	add_child(edu_label)
 
+	# ── call quiz ──
+	call_deferred("show_quiz")
+
 	# ── BUTTONS ──
 	var btn_play = create_styled_button("⚔  MAIN LAGI", Vector2(256, 478), Vector2(260, 52), Color(0.08, 0.35, 0.12))
 	btn_play.pressed.connect(go_to_selection)
@@ -237,6 +246,159 @@ func build_ui():
 	bottom_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	bottom_label.custom_minimum_size = Vector2(1152, 20)
 	add_child(bottom_label)
+
+func show_quiz():
+	print("show_quiz called")
+	print("moves_used count: ", moves_used.size())
+	print("moves_used ", moves_used)
+	
+	if moves_used.is_empty():
+		print("EMPTY - returning early")
+		return
+	
+	# Pilih satu move random dari yang dipakai
+	var move = moves_used[randi() % moves_used.size()]
+	var move_name = move["name"]
+	var edu_text = move.get("edu_popup", move.get("edu_log", ""))
+	
+	if edu_text == "":
+		return
+	
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.85)
+	overlay.size = Vector2(1152, 648)
+	add_child(overlay)
+	
+	var panel = ColorRect.new()
+	panel.color = Color(0.07, 0.08, 0.22)
+	panel.size = Vector2(720, 300)
+	panel.position = Vector2(216, 174)
+	overlay.add_child(panel)
+	
+	var border = ColorRect.new()
+	border.color = Color(0.4, 0.9, 1)
+	border.size = Vector2(720, 3)
+	panel.add_child(border)
+	
+	var tag = Label.new()
+	tag.text = "[ INTEL QUIZ ]  — Kamu tadi pakai " + move_name + "!"
+	tag.position = Vector2(20, 12)
+	tag.add_theme_font_size_override("font_size", 12)
+	tag.add_theme_color_override("font_color", Color(0.4, 0.9, 1))
+	panel.add_child(tag)
+	
+	var question_lbl = Label.new()
+	question_lbl.text = "Apa yang sebenarnya terjadi saat " + move_name + " digunakan di dunia nyata?"
+	question_lbl.position = Vector2(20, 36)
+	question_lbl.size = Vector2(680, 50)
+	question_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	question_lbl.add_theme_font_size_override("font_size", 16)
+	question_lbl.add_theme_color_override("font_color", Color(1, 1, 0.9))
+	panel.add_child(question_lbl)
+	
+	# Generate 3 jawaban salah + 1 benar
+	var correct_answer = edu_text
+	var first_sentence = edu_text.split(".")[0] + "." 
+	correct_answer = first_sentence
+	var wrong_answers = _get_wrong_answers(move_name)
+   
+	var all_options = wrong_answers.slice(0, 3)
+	var correct_idx = randi() % 4
+	all_options.insert(correct_idx, correct_answer)
+	
+	var option_bgs = []
+	var option_btns = []
+	for i in 4:
+		var opt_bg = ColorRect.new()
+		opt_bg.color = Color(0.1, 0.12, 0.3)
+		opt_bg.size = Vector2(680, 36)
+		opt_bg.position = Vector2(20, 96 + i * 42)
+		panel.add_child(opt_bg)
+		option_bgs.append(opt_bg)
+		
+		var opt_btn = Button.new()
+		opt_btn.text = "  " + ["A", "B", "C", "D"][i] + ".  " + all_options[i]
+		opt_btn.position = Vector2(20, 96 + i * 42)
+		opt_btn.size = Vector2(680, 36)
+		opt_btn.flat = true
+		opt_btn.add_theme_font_size_override("font_size", 12)
+		opt_btn.add_theme_color_override("font_color", Color(0.85, 0.9, 1))
+		opt_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		panel.add_child(opt_btn)
+		option_btns.append(opt_btn)
+	
+	var feedback_lbl = Label.new()
+	feedback_lbl.position = Vector2(20, 270)
+	feedback_lbl.size = Vector2(500, 24)
+	feedback_lbl.add_theme_font_size_override("font_size", 12)
+	feedback_lbl.visible = false
+	panel.add_child(feedback_lbl)
+	
+	var next_btn = Button.new()
+	next_btn.text = "Lanjut  ▶"
+	next_btn.position = Vector2(550, 258)
+	next_btn.size = Vector2(150, 34)
+	next_btn.visible = false
+	var ns = StyleBoxFlat.new()
+	ns.bg_color = Color(0.1, 0.4, 0.15)
+	ns.set_corner_radius_all(6)
+	next_btn.add_theme_stylebox_override("normal", ns)
+	next_btn.add_theme_font_size_override("font_size", 13)
+	next_btn.add_theme_color_override("font_color", Color.WHITE)
+	panel.add_child(next_btn)
+
+	overlay.modulate.a = 0.0
+	var tween = create_tween()
+	tween.tween_property(overlay, "modulate:a", 1.0, 0.25)
+	await tween.finished
+
+	var answered = false
+	for i in option_btns.size():
+		var idx = i
+		option_btns[i].pressed.connect(func():
+			if answered:
+				return
+			answered = true
+			for j in option_btns.size():
+				option_btns[j].disabled = true
+				if j == correct_idx:
+					option_bgs[j].color = Color(0.05, 0.3, 0.1)
+				else:
+					option_bgs[j].color = Color(0.25, 0.07, 0.07)
+			if idx == correct_idx:
+				feedback_lbl.text = "✓ Tepat sekali!"
+				feedback_lbl.add_theme_color_override("font_color", Color(0.3, 1, 0.4))
+			else:
+				feedback_lbl.text = "✗ Kurang tepat — jawaban benar sudah ditandai hijau."
+				feedback_lbl.add_theme_color_override("font_color", Color(1, 0.4, 0.4))
+			feedback_lbl.visible = true
+			next_btn.visible = true
+		)
+	
+	await next_btn.pressed
+	
+	if is_instance_valid(overlay): 
+		var tween2 = create_tween()
+		tween2.tween_property(overlay, "modulate:a", 0.0, 0.2)
+		await tween2.finished
+	
+	if is_instance_valid(overlay):
+		overlay.queue_free()
+
+func _get_wrong_answers(move_name: String) -> Array:
+	# Pool jawaban salah umum yang plausible
+	var pool = [
+		"Teknik untuk mempercepat koneksi internet pengguna.",
+		"Metode backup otomatis yang melindungi data dari kehilangan.",
+		"Protokol komunikasi standar yang digunakan semua perangkat.",
+		"Fitur keamanan bawaan sistem operasi yang aktif secara default.",
+		"Cara mengoptimalkan penggunaan memori RAM pada server.",
+		"Sistem autentikasi dua faktor untuk melindungi akun pengguna.",
+		"Algoritma enkripsi yang digunakan bank untuk transaksi online.",
+		"Proses verifikasi identitas pengguna sebelum mengakses sistem."
+	]
+	pool.shuffle()
+	return pool.slice(0, 3)
 
 func spawn_particles():
 	var accent = Color(0.2, 0.9, 0.4) if player_won else Color(1, 0.25, 0.25)
