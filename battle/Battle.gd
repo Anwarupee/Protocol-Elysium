@@ -33,7 +33,10 @@ func _ready():
 	var all_monsters = [
 		"encryp_pup", "ping_go", "biti", "senti_shell", "octo_core", "chamele_auth",
 		"vaultex", "cipher_ray", "routerex", "latencia", "ransom_rex", "worm_ling",
-		"patchwork", "bastion", "daemon_x", "bios_wraith", "vish_ara", "bait_eel"
+		"patchwork", "bastion", "daemon_x", "bios_wraith", "vish_ara", "bait_eel",
+		"hash_hound", "key_lynx", "signal_snail", "warp_wolf", "login_leech",
+		"trojan_taurus", "brick_bear", "gate_gorilla", "phish_falcon", "scam_serpent",
+		"sentry_stinger", "radar_rhino"
 	]
 	all_monsters.erase(player_choice)
 	var enemy_choice = all_monsters[randi() % all_monsters.size()]
@@ -643,12 +646,12 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 	player_name_label = create_label(player_data["name"], Vector2(70, 335), 22, player_color)
 	add_child(player_name_label)
 	var advantage_map = {
-		"Data": "⚡ Kuat vs Malware  |  ⚠ Lemah vs Connection",
-		"Connection": "⚡ Kuat vs Data  |  ⚠ Lemah vs Malware",
-		"Malware": "⚡ Kuat vs Connection  |  ⚠ Lemah vs Data",
-		"System": "⚡ Kuat vs Data  |  ⚠ Lemah vs Social Engineering",
-		"Social Engineering": "⚡ Kuat vs System  |  ⚠ Lemah vs Connection",
-		"Defensive": "⚡ Kuat vs Social Engineering  |  ⚠ Lemah vs System",
+		"Crypto": "⚡ Kuat vs Malware  |  ⚠ Lemah vs Network",
+		"Network": "⚡ Kuat vs Crypto  |  ⚠ Lemah vs Firewall",
+		"Malware": "⚡ Kuat vs Firewall  |  ⚠ Lemah vs Crypto",
+		"Monitor": "⚡ Kuat vs Social Engineering  |  ⚠ Lemah vs Malware",
+		"Social Engineering": "⚡ Kuat vs Crypto  |  ⚠ Lemah vs Monitor",
+		"Firewall": "⚡ Kuat vs Network  |  ⚠ Lemah vs Malware",
 	}
 	add_child(create_label(advantage_map[player_data["type"]], Vector2(70, 440), 10, Color(0.6, 0.6, 0.8)))
 	var ptb = ColorRect.new(); ptb.color = Color(player_color.r, player_color.g, player_color.b, 0.2)
@@ -695,12 +698,12 @@ func build_ui(player_data: Dictionary, enemy_data: Dictionary):
 
 func get_type_color(type: String) -> Color:
 	match type:
-		"Data": return Color(0.4, 0.8, 1)
-		"Connection": return Color(1, 0.9, 0.3)
-		"Malware": return Color(1, 0.4, 0.4)
-		"System": return Color(0.6, 0.3, 1)
-		"Social Engineering": return Color(1, 0.7, 0.2)
-		"Defensive": return Color(0.2, 0.9, 0.6)
+		"Malware":            return Color(1.0, 0.3, 0.3)
+		"Firewall":           return Color(0.2, 0.5, 1.0)
+		"Network":            return Color(1.0, 0.9, 0.2)
+		"Crypto":             return Color(0.3, 0.9, 1.0)
+		"Social Engineering": return Color(1.0, 0.6, 0.1)
+		"Monitor":            return Color(0.2, 0.9, 0.4)
 	return Color(1, 1, 1)
 
 func create_panel_styled(pos: Vector2, size: Vector2, accent: Color) -> Node2D:

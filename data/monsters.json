@@ -3,7 +3,7 @@
 	{
 	  "id": "encryp_pup",
 	  "name": "Encryp-Pup",
-	  "type": "Data",
+	  "type": "Crypto",
 	  "hp": 120,
 	  "speed": 60,
 	  "passive": {
@@ -48,7 +48,7 @@
 	{
 	  "id": "ping_go",
 	  "name": "Ping-Go",
-	  "type": "Connection",
+	  "type": "Network",
 	  "hp": 90,
 	  "speed": 100,
 	  "passive": {
@@ -93,7 +93,7 @@
 	{
 	  "id": "biti",
 	  "name": "Biti",
-	  "type": "Malware",
+	  "type": "Firewall",
 	  "hp": 95,
 	  "speed": 80,
 	  "passive": {
@@ -138,7 +138,7 @@
 	{
 	  "id": "senti_shell",
 	  "name": "Senti-Shell",
-	  "type": "Defensive",
+	  "type": "Monitor",
 	  "hp": 150,
 	  "speed": 40,
 	  "passive": {
@@ -183,7 +183,7 @@
 	{
 	  "id": "octo_core",
 	  "name": "Octo-Core",
-	  "type": "System",
+	  "type": "Firewall",
 	  "hp": 110,
 	  "speed": 70,
 	  "passive": {
@@ -273,7 +273,7 @@
 	{
 	  "id": "vaultex",
 	  "name": "Vaultex",
-	  "type": "Data",
+	  "type": "Crypto",
 	  "hp": 130,
 	  "speed": 45,
 	  "passive": {
@@ -318,7 +318,7 @@
 	{
 	  "id": "cipher_ray",
 	  "name": "Cipher-Ray",
-	  "type": "Data",
+	  "type": "Crypto",
 	  "hp": 100,
 	  "speed": 80,
 	  "passive": {
@@ -363,7 +363,7 @@
 	{
 	  "id": "routerex",
 	  "name": "Routerex",
-	  "type": "Connection",
+	  "type": "Network",
 	  "hp": 105,
 	  "speed": 65,
 	  "passive": {
@@ -408,7 +408,7 @@
 	{
 	  "id": "latencia",
 	  "name": "Latencia",
-	  "type": "Connection",
+	  "type": "Network",
 	  "hp": 88,
 	  "speed": 90,
 	  "passive": {
@@ -543,7 +543,7 @@
 	{
 	  "id": "patchwork",
 	  "name": "Patchwork",
-	  "type": "Defensive",
+	  "type": "Monitor",
 	  "hp": 140,
 	  "speed": 50,
 	  "passive": {
@@ -588,7 +588,7 @@
 	{
 	  "id": "bastion",
 	  "name": "Bastion",
-	  "type": "Defensive",
+	  "type": "Firewall",
 	  "hp": 160,
 	  "speed": 35,
 	  "passive": {
@@ -633,7 +633,7 @@
 	{
 	  "id": "daemon_x",
 	  "name": "Daemon-X",
-	  "type": "System",
+	  "type": "Monitor",
 	  "hp": 100,
 	  "speed": 75,
 	  "passive": {
@@ -678,7 +678,7 @@
 	{
 	  "id": "bios_wraith",
 	  "name": "BIOS-Wraith",
-	  "type": "System",
+	  "type": "Malware",
 	  "hp": 95,
 	  "speed": 55,
 	  "passive": {
@@ -807,6 +807,558 @@
 		  "cooldown": 0,
 		  "edu_log": "Drive-by download menginstal malware secara otomatis saat korban mengunjungi website berbahaya.",
 		  "edu_popup": "DRIVE-BY DOWNLOAD: Malware yang otomatis terunduh hanya dengan mengunjungi website berbahaya — tanpa klik apapun! Memanfaatkan kerentanan di browser atau plugin usang. Tips: Selalu update browser dan nonaktifkan plugin yang tidak diperlukan!"
+		}
+	  ]
+	},
+	{
+	  "id": "hash_hound",
+	  "name": "Hash-Hound",
+	  "type": "Crypto",
+	  "hp": 100,
+	  "speed": 65,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Verificator",
+		"description": "Accuracy naik 1 stage permanen di awal pertarungan"
+	  },
+	  "moves": [
+		{
+		  "name": "Hash Bite",
+		  "power": 40,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Hash function menghasilkan sidik jari unik untuk setiap data.",
+		  "edu_popup": "HASH FUNCTION: Setiap file punya sidik jari digital unik yang disebut hash. Jika satu karakter saja berubah, hash-nya langsung berbeda — cara paling efisien untuk deteksi manipulasi data!"
+		},
+		{
+		  "name": "Checksum",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Checksum memverifikasi integritas data saat transmisi.",
+		  "edu_popup": "CHECKSUM: Nilai numerik yang dihitung dari data untuk mendeteksi error transmisi. Jika checksum pengirim dan penerima tidak cocok, data dianggap rusak dan diminta ulang secara otomatis!"
+		},
+		{
+		  "name": "Integrity Scan",
+		  "power": 35,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Integrity scan memeriksa setiap byte data dari modifikasi tidak sah.",
+		  "edu_popup": "INTEGRITY SCAN: Proses otomatis yang membandingkan file dengan hash aslinya untuk mendeteksi perubahan. Tools seperti Tripwire menggunakan teknik ini untuk mendeteksi intrusi pada server!"
+		},
+		{
+		  "name": "SHA Strike",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "SHA-256 adalah algoritma hash yang digunakan blockchain dan keamanan modern.",
+		  "edu_popup": "SHA-256: Algoritma hash yang menghasilkan output 256-bit dari input apapun. Digunakan di Bitcoin, password storage, dan verifikasi file download. Hampir tidak mungkin ditemukan dua input berbeda dengan hash yang sama!"
+		}
+	  ]
+	},
+	{
+	  "id": "key_lynx",
+	  "name": "Key-Lynx",
+	  "type": "Crypto",
+	  "hp": 95,
+	  "speed": 90,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Master Key",
+		"description": "Kebal terhadap efek status dari tipe Social Engineering"
+	  },
+	  "moves": [
+		{
+		  "name": "Key Exchange",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Public key cryptography memungkinkan komunikasi aman tanpa berbagi kunci rahasia.",
+		  "edu_popup": "PUBLIC KEY CRYPTOGRAPHY: Sistem dua kunci — public key untuk enkripsi, private key untuk dekripsi. Seperti kotak surat terbuka: siapa saja bisa memasukkan surat, tapi hanya pemilik kunci yang bisa membacanya!"
+		},
+		{
+		  "name": "PKI Slash",
+		  "power": 55,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "PKI (Public Key Infrastructure) mengelola sertifikat digital dan kepercayaan.",
+		  "edu_popup": "PKI (Public Key Infrastructure): Sistem yang mengelola pembuatan, distribusi, dan pencabutan sertifikat digital. Inilah yang membuat browser tahu apakah sebuah website benar-benar asli atau palsu!"
+		},
+		{
+		  "name": "Asymmetric Guard",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 2,
+		  "edu_log": "Enkripsi asimetris menggunakan pasangan kunci yang berbeda untuk enkripsi dan dekripsi.",
+		  "edu_popup": "ASYMMETRIC ENCRYPTION: Berbeda dengan enkripsi simetris yang pakai satu kunci, enkripsi asimetris pakai dua kunci berbeda. Jauh lebih aman untuk komunikasi publik karena private key tidak pernah dikirim ke siapapun!"
+		},
+		{
+		  "name": "Cipher Claw",
+		  "power": 75,
+		  "effect": "attack",
+		  "cooldown": 3,
+		  "edu_log": "End-to-end encryption memastikan hanya pengirim dan penerima yang bisa membaca pesan.",
+		  "edu_popup": "END-TO-END ENCRYPTION (E2E): Enkripsi yang memastikan hanya pengirim dan penerima yang bisa membaca pesan — bahkan penyedia layanan pun tidak bisa. WhatsApp dan Signal menggunakan E2E encryption untuk semua pesan!"
+		}
+	  ]
+	},
+	{
+	  "id": "signal_snail",
+	  "name": "Signal-Snail",
+	  "type": "Network",
+	  "hp": 95,
+	  "speed": 45,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Stable Ping",
+		"description": "Serangan Signal-Snail tidak pernah miss meski akurasi diturunkan"
+	  },
+	  "moves": [
+		{
+		  "name": "Fiber Tackle",
+		  "power": 35,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Fiber optic mengirim data sebagai cahaya dengan kecepatan dan keandalan tinggi.",
+		  "edu_popup": "FIBER OPTIC: Kabel yang mengirimkan data sebagai pulsa cahaya melalui serat kaca tipis. Kecepatannya bisa mencapai 100 Gbps dengan packet loss hampir nol — jauh lebih andal dari kabel tembaga biasa!"
+		},
+		{
+		  "name": "Packet Preserve",
+		  "power": 0,
+		  "effect": "heal",
+		  "cooldown": 2,
+		  "edu_log": "Reliable transmission protocol memastikan semua paket sampai tanpa kehilangan data.",
+		  "edu_popup": "TCP (Transmission Control Protocol): Protokol yang memastikan semua paket data sampai ke tujuan secara berurutan. Jika ada paket yang hilang, TCP secara otomatis memintanya dikirim ulang — inilah yang membuat download file kamu selalu lengkap!"
+		},
+		{
+		  "name": "Latency Shell",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Buffer system menyerap lonjakan traffic untuk menjaga koneksi tetap stabil.",
+		  "edu_popup": "NETWORK BUFFER: Memori sementara yang menyimpan data sebelum diproses untuk menyerap lonjakan traffic. Buffering saat streaming video terjadi karena buffer sedang mengumpulkan cukup data agar video bisa diputar lancar!"
+		},
+		{
+		  "name": "QoS Pulse",
+		  "power": 50,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "QoS prioritas traffic memastikan layanan kritis mendapat bandwidth yang cukup.",
+		  "edu_popup": "QoS PRIORITY: Quality of Service yang memprioritaskan traffic penting seperti VoIP dan video conference di atas traffic biasa. Inilah mengapa video call kantor tetap jernih meski jaringan sedang padat!"
+		}
+	  ]
+	},
+	{
+	  "id": "warp_wolf",
+	  "name": "Warp-Wolf",
+	  "type": "Network",
+	  "hp": 85,
+	  "speed": 110,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Overclock",
+		"description": "20% chance menyerang dua kali dalam satu giliran"
+	  },
+	  "moves": [
+		{
+		  "name": "Bandwidth Burst",
+		  "power": 50,
+		  "effect": "double_hit",
+		  "cooldown": 0,
+		  "edu_log": "Bandwidth tinggi memungkinkan transfer data masif dalam waktu singkat.",
+		  "edu_popup": "BANDWIDTH: Kapasitas maksimal data yang bisa dikirim melalui jaringan per satuan waktu. Semakin besar bandwidth, semakin banyak data yang bisa dikirim sekaligus — seperti lebar jalan yang menentukan berapa banyak mobil yang bisa lewat!"
+		},
+		{
+		  "name": "Warp Dash",
+		  "power": 45,
+		  "effect": "speed_buff",
+		  "cooldown": 0,
+		  "edu_log": "Low-latency network mengurangi delay antara pengiriman dan penerimaan data.",
+		  "edu_popup": "LATENCY vs BANDWIDTH: Latency adalah waktu yang dibutuhkan data untuk sampai ke tujuan, bandwidth adalah seberapa banyak data yang bisa dikirim. Gaming online butuh latency rendah, streaming video butuh bandwidth tinggi — keduanya berbeda!"
+		},
+		{
+		  "name": "CDN Strike",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "CDN mendistribusikan konten ke server terdekat untuk mengurangi latency.",
+		  "edu_popup": "CDN (Content Delivery Network): Jaringan server yang tersebar di seluruh dunia untuk menyajikan konten dari lokasi terdekat ke pengguna. Itulah mengapa YouTube dan Netflix bisa streaming dengan cepat meski servernya ada di luar negeri!"
+		},
+		{
+		  "name": "Protocol Override",
+		  "power": 70,
+		  "effect": "attack",
+		  "cooldown": 3,
+		  "edu_log": "Protocol stack yang dioptimasi memaksimalkan throughput jaringan.",
+		  "edu_popup": "NETWORK PROTOCOL STACK: Lapisan-lapisan protokol yang bekerja sama untuk mengirim data (seperti model OSI). Setiap lapisan punya fungsi spesifik — dari fisik (kabel) hingga aplikasi (browser). Memahami ini adalah dasar networking!"
+		}
+	  ]
+	},
+	{
+	  "id": "logic_leech",
+	  "name": "Logic-Leech",
+	  "type": "Malware",
+	  "hp": 90,
+	  "speed": 75,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Drainer",
+		"description": "Setiap serangan menyerap 5 HP dari lawan"
+	  },
+	  "moves": [
+		{
+		  "name": "Logic Drain",
+		  "power": 35,
+		  "effect": "dot",
+		  "cooldown": 0,
+		  "edu_log": "Logic bomb adalah kode berbahaya yang aktif saat kondisi tertentu terpenuhi.",
+		  "edu_popup": "LOGIC BOMB: Kode berbahaya yang tidak aktif sampai kondisi tertentu terpenuhi — misalnya tanggal tertentu atau aksi spesifik pengguna. Sangat berbahaya karena tersembunyi dalam kode legitimate dan tidak terdeteksi antivirus!"
+		},
+		{
+		  "name": "Resource Siphon",
+		  "power": 40,
+		  "effect": "speed_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Cryptojacking menyedot resource CPU/GPU korban untuk mining cryptocurrency.",
+		  "edu_popup": "CRYPTOJACKING: Malware yang diam-diam menggunakan CPU/GPU komputer korban untuk mining cryptocurrency. Tanda-tandanya: komputer tiba-tiba lambat, kipas berputar kencang, dan tagihan listrik naik tanpa sebab jelas!"
+		},
+		{
+		  "name": "Memory Leech",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Memory-resident malware bersembunyi di RAM dan aktif sepanjang sistem menyala.",
+		  "edu_popup": "FILELESS MALWARE: Malware canggih yang berjalan di memori RAM tanpa meninggalkan file di hard drive. Karena tidak ada file yang bisa discan, antivirus konvensional kesulitan mendeteksinya — perlu solusi endpoint detection berbasis perilaku!"
+		},
+		{
+		  "name": "System Leech",
+		  "power": 55,
+		  "effect": "heal_lock",
+		  "cooldown": 2,
+		  "edu_log": "Advanced persistent threat (APT) diam-diam mencuri data selama berbulan-bulan.",
+		  "edu_popup": "APT (Advanced Persistent Threat): Serangan jangka panjang di mana attacker diam-diam berada di dalam sistem selama berbulan-bulan untuk mengumpulkan data sensitif. Target biasanya pemerintah atau perusahaan besar dengan data berharga!"
+		}
+	  ]
+	},
+	{
+	  "id": "trojan_taurus",
+	  "name": "Trojan-Taurus",
+	  "type": "Malware",
+	  "hp": 115,
+	  "speed": 55,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Last Payload",
+		"description": "Saat dikalahkan, memberikan 30 damage ke lawan sebagai ledakan terakhir"
+	  },
+	  "moves": [
+		{
+		  "name": "Trojan Charge",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Trojan horse menyembunyikan payload berbahaya di dalam program yang terlihat berguna.",
+		  "edu_popup": "TROJAN HORSE: Malware yang menyamar sebagai software legitimate. Berbeda dengan virus, trojan tidak mereplikasi diri — ia mengandalkan pengguna untuk menginstalnya secara sukarela. Selalu download dari sumber resmi!"
+		},
+		{
+		  "name": "Supply Chain Attack",
+		  "power": 60,
+		  "effect": "defense_debuff",
+		  "cooldown": 2,
+		  "edu_log": "Supply chain attack menyisipkan malware ke software sebelum sampai ke pengguna.",
+		  "edu_popup": "SUPPLY CHAIN ATTACK: Menyerang software atau hardware sebelum sampai ke pengguna akhir — misalnya menyisipkan malware ke update software yang sah. Serangan SolarWinds 2020 menginfeksi ribuan organisasi termasuk pemerintah AS dengan cara ini!"
+		},
+		{
+		  "name": "Backdoor Install",
+		  "power": 0,
+		  "effect": "dot",
+		  "cooldown": 0,
+		  "edu_log": "Backdoor memberikan akses tersembunyi ke sistem yang bisa digunakan kapan saja.",
+		  "edu_popup": "BACKDOOR: Akses tersembunyi ke sistem yang dibuat attacker untuk bisa masuk kembali kapan saja. Beberapa backdoor sengaja ditanam oleh developer software — ini yang disebut intentional backdoor dan sangat kontroversial secara etika!"
+		},
+		{
+		  "name": "Payload Detonate",
+		  "power": 80,
+		  "effect": "attack",
+		  "cooldown": 3,
+		  "edu_log": "Payload detonation adalah fase ketika malware mengeksekusi aksi berbahaya utamanya.",
+		  "edu_popup": "MALWARE PAYLOAD EXECUTION: Fase paling berbahaya dari serangan malware ketika kode berbahaya mulai dieksekusi. Sebelum fase ini, malware mungkin sudah diam di sistem selama berhari-hari menunggu kondisi yang tepat!"
+		}
+	  ]
+	},
+	{
+	  "id": "brick_bear",
+	  "name": "Brick-Bear",
+	  "type": "Firewall",
+	  "hp": 145,
+	  "speed": 40,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Hardened",
+		"description": "Menerima 10% lebih sedikit damage dari semua serangan"
+	  },
+	  "moves": [
+		{
+		  "name": "Packet Filter",
+		  "power": 40,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Packet filtering memeriksa setiap paket data berdasarkan aturan keamanan yang ditetapkan.",
+		  "edu_popup": "PACKET FILTERING: Teknik firewall yang memeriksa header setiap paket data (IP, port, protokol) dan memutuskan apakah diizinkan atau diblokir. Ini adalah lapisan pertahanan pertama di hampir semua jaringan!"
+		},
+		{
+		  "name": "Rule Block",
+		  "power": 0,
+		  "effect": "block_move",
+		  "cooldown": 2,
+		  "edu_log": "Firewall rules mendefinisikan traffic mana yang boleh masuk dan keluar jaringan.",
+		  "edu_popup": "FIREWALL RULES: Aturan yang mendefinisikan traffic yang diizinkan atau diblokir berdasarkan IP, port, atau protokol. Prinsip default deny — blokir semua traffic kecuali yang secara eksplisit diizinkan — adalah praktik terbaik keamanan jaringan!"
+		},
+		{
+		  "name": "Fortify",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Defense hardening memperkuat sistem dengan menutup celah dan menonaktifkan layanan tidak perlu.",
+		  "edu_popup": "SYSTEM HARDENING: Proses memperkuat keamanan sistem dengan menutup port yang tidak digunakan, menonaktifkan layanan tidak perlu, dan menerapkan konfigurasi keamanan ketat. Prinsip: permukaan serangan yang lebih kecil = lebih aman!"
+		},
+		{
+		  "name": "Bear Slam",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Stateful inspection firewall melacak status koneksi untuk deteksi serangan yang lebih akurat.",
+		  "edu_popup": "STATEFUL INSPECTION: Firewall generasi kedua yang tidak hanya memeriksa header paket, tapi juga melacak status koneksi aktif. Jauh lebih efektif dari packet filtering biasa karena bisa mendeteksi serangan yang tersembunyi dalam koneksi yang valid!"
+		}
+	  ]
+	},
+	{
+	  "id": "gate_gorilla",
+	  "name": "Gate-Gorilla",
+	  "type": "Firewall",
+	  "hp": 170,
+	  "speed": 30,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Port Blocker",
+		"description": "15% chance membatalkan serangan berikutnya lawan setiap kali terkena serangan"
+	  },
+	  "moves": [
+		{
+		  "name": "WAF Strike",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Web Application Firewall melindungi aplikasi web dari serangan seperti SQL injection dan XSS.",
+		  "edu_popup": "WAF (Web Application Firewall): Firewall khusus yang memfilter traffic HTTP/HTTPS untuk melindungi aplikasi web dari serangan seperti SQL Injection, XSS, dan CSRF. Berbeda dengan firewall jaringan biasa yang hanya melihat IP dan port!"
+		},
+		{
+		  "name": "Zero Trust Lock",
+		  "power": 0,
+		  "effect": "defense_buff",
+		  "cooldown": 0,
+		  "edu_log": "Zero trust architecture tidak mempercayai siapapun secara default, bahkan pengguna internal.",
+		  "edu_popup": "ZERO TRUST ARCHITECTURE: Prinsip keamanan 'never trust, always verify' — tidak ada yang dipercaya secara otomatis, bahkan pengguna di dalam jaringan sendiri. Setiap akses harus diverifikasi ulang. Ini adalah standar keamanan modern untuk era cloud!"
+		},
+		{
+		  "name": "Perimeter Crush",
+		  "power": 65,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Network segmentation membagi jaringan menjadi zona terisolasi untuk membatasi penyebaran ancaman.",
+		  "edu_popup": "NETWORK SEGMENTATION: Membagi jaringan menjadi segmen-segmen terisolasi sehingga jika satu bagian dikompromis, serangan tidak bisa menyebar bebas. Seperti pintu kedap air di kapal — jika satu bocor, yang lain tetap aman!"
+		},
+		{
+		  "name": "Gate Slam",
+		  "power": 80,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 3,
+		  "edu_log": "Next-gen firewall mengintegrasikan IPS, DPI, dan threat intelligence dalam satu sistem.",
+		  "edu_popup": "NEXT-GEN FIREWALL (NGFW): Firewall modern yang mengintegrasikan inspeksi paket mendalam, intrusion prevention, dan threat intelligence. Bisa mengenali dan memblokir ancaman berdasarkan konten, aplikasi, dan reputasi IP secara bersamaan!"
+		}
+	  ]
+	},
+	{
+	  "id": "phish_falcon",
+	  "name": "Phish-Falcon",
+	  "type": "Social Engineering",
+	  "hp": 88,
+	  "speed": 92,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Lure",
+		"description": "Menurunkan Defense lawan 1 stage saat pertama masuk ke arena"
+	  },
+	  "moves": [
+		{
+		  "name": "Spear Dive",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Spear phishing menarget individu spesifik dengan pesan yang dipersonalisasi.",
+		  "edu_popup": "SPEAR PHISHING: Phishing yang ditargetkan ke individu atau organisasi spesifik menggunakan informasi personal untuk membuat pesan lebih meyakinkan. Jauh lebih berbahaya dari phishing massal karena korban merasa pesan tersebut benar-benar personal!"
+		},
+		{
+		  "name": "Credential Hook",
+		  "power": 40,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Credential harvesting mencuri username dan password melalui halaman login palsu.",
+		  "edu_popup": "CREDENTIAL HARVESTING: Teknik membuat halaman login palsu yang identik dengan situs asli untuk mencuri username dan password. Tips: selalu cek URL dengan teliti — penipu sering pakai domain mirip seperti 'paypa1.com' atau 'g00gle.com'!"
+		},
+		{
+		  "name": "Whaling Strike",
+		  "power": 55,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Whaling attack menarget eksekutif senior atau pemimpin organisasi bernilai tinggi.",
+		  "edu_popup": "WHALING: Spear phishing yang menarget eksekutif senior (CEO, CFO) karena akses dan otoritas mereka yang besar. Satu email whaling yang berhasil bisa menyebabkan transfer dana jutaan dolar atau kebocoran data perusahaan!"
+		},
+		{
+		  "name": "Clone Attack",
+		  "power": 50,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 0,
+		  "edu_log": "Clone phishing menduplikasi email legitimate tapi mengganti link atau attachment dengan yang berbahaya.",
+		  "edu_popup": "CLONE PHISHING: Menduplikasi email legitimate yang pernah diterima korban, mengganti link atau lampiran dengan versi berbahaya, lalu mengirimkan ulang. Sangat efektif karena korban mengira itu email lanjutan dari komunikasi yang sudah ada!"
+		}
+	  ]
+	},
+	{
+	  "id": "scam_serpent",
+	  "name": "Scam-Serpent",
+	  "type": "Social Engineering",
+	  "hp": 92,
+	  "speed": 82,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Disinformation",
+		"description": "25% chance memberikan status Confused saat serangan mengenai lawan"
+	  },
+	  "moves": [
+		{
+		  "name": "Pretext Strike",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Pretexting menciptakan skenario palsu yang meyakinkan untuk memanipulasi korban.",
+		  "edu_popup": "PRETEXTING: Membuat identitas atau skenario palsu yang detail dan meyakinkan untuk memanipulasi korban. Contoh klasik: pura-pura jadi IT support yang perlu password untuk 'perbaikan mendesak'. Verifikasi selalu sebelum memberikan akses!"
+		},
+		{
+		  "name": "Deepfake Venom",
+		  "power": 55,
+		  "effect": "confuse",
+		  "cooldown": 2,
+		  "edu_log": "Deepfake menggunakan AI untuk membuat video atau audio palsu yang sangat meyakinkan.",
+		  "edu_popup": "DEEPFAKE: Konten video atau audio yang dibuat atau dimanipulasi AI untuk menampilkan seseorang mengatakan atau melakukan sesuatu yang tidak pernah terjadi. Semakin sering digunakan untuk social engineering dan disinformasi skala besar!"
+		},
+		{
+		  "name": "Impersonation",
+		  "power": 45,
+		  "effect": "defense_debuff",
+		  "cooldown": 0,
+		  "edu_log": "Impersonation attack menyamar sebagai entitas terpercaya untuk mendapatkan akses.",
+		  "edu_popup": "IMPERSONATION: Menyamar sebagai orang atau organisasi terpercaya untuk mendapatkan kepercayaan korban. Di era digital, penyerang bisa membuat email, website, atau akun media sosial palsu yang hampir identik dengan aslinya!"
+		},
+		{
+		  "name": "Serpent's Charm",
+		  "power": 65,
+		  "effect": "attack",
+		  "cooldown": 3,
+		  "edu_log": "Multi-stage social engineering membangun kepercayaan perlahan sebelum melancarkan serangan utama.",
+		  "edu_popup": "MULTI-STAGE SOCIAL ENGINEERING: Serangan yang membangun hubungan dan kepercayaan korban selama berhari-hari atau berminggu-minggu sebelum meminta sesuatu yang berbahaya. Kesabaran adalah senjata terbesar attacker yang menggunakan teknik ini!"
+		}
+	  ]
+	},
+	{
+	  "id": "sentry_stinger",
+	  "name": "Sentry-Stinger",
+	  "type": "Monitor",
+	  "hp": 98,
+	  "speed": 78,
+	  "tier": "Basic",
+	  "passive": {
+		"name": "Deep Scan",
+		"description": "Selalu melihat HP musuh secara akurat dan accuracy naik 10% permanen"
+	  },
+	  "moves": [
+		{
+		  "name": "Log Sting",
+		  "power": 38,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "Log monitoring mencatat dan menganalisis semua aktivitas sistem untuk deteksi ancaman.",
+		  "edu_popup": "LOG MONITORING: Proses menganalisis log sistem secara real-time untuk mendeteksi aktivitas mencurigakan. SIEM (Security Information and Event Management) mengotomatiskan proses ini — memproses jutaan log per detik untuk menemukan anomali!"
+		},
+		{
+		  "name": "Anomaly Alert",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Anomaly detection mengidentifikasi pola tidak normal yang mengindikasikan serangan.",
+		  "edu_popup": "ANOMALY DETECTION: Sistem yang belajar pola normal aktivitas jaringan dan memberi alert jika ada yang menyimpang. Misalnya: jika biasanya user login jam 9 pagi tapi tiba-tiba ada login jam 3 pagi dari negara berbeda — itu anomali!"
+		},
+		{
+		  "name": "IDS Pulse",
+		  "power": 45,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "IDS (Intrusion Detection System) memantau jaringan dan sistem untuk aktivitas berbahaya.",
+		  "edu_popup": "IDS vs IPS: Intrusion Detection System hanya mendeteksi dan memberi alert, sedangkan Intrusion Prevention System aktif memblokir ancaman. IDS seperti alarm pencuri, IPS seperti pintu yang langsung terkunci otomatis saat ada intrusi!"
+		},
+		{
+		  "name": "Threat Hunt",
+		  "power": 55,
+		  "effect": "guaranteed_hit",
+		  "cooldown": 2,
+		  "edu_log": "Threat hunting secara proaktif mencari ancaman tersembunyi yang belum terdeteksi.",
+		  "edu_popup": "THREAT HUNTING: Pendekatan proaktif di mana analis keamanan aktif mencari tanda-tanda intrusi yang mungkin lolos dari sistem otomatis. Berbeda dari menunggu alert — threat hunter berasumsi sistem sudah dikompromis dan mencari buktinya!"
+		}
+	  ]
+	},
+	{
+	  "id": "radar_rhino",
+	  "name": "Radar-Rhino",
+	  "type": "Monitor",
+	  "hp": 130,
+	  "speed": 50,
+	  "tier": "Advanced",
+	  "passive": {
+		"name": "Auto-Alert",
+		"description": "Setiap kali lawan menggunakan buff, Attack Radar-Rhino naik 1 stage otomatis"
+	  },
+	  "moves": [
+		{
+		  "name": "SIEM Sweep",
+		  "power": 50,
+		  "effect": "attack",
+		  "cooldown": 0,
+		  "edu_log": "SIEM mengumpulkan dan menganalisis data keamanan dari seluruh infrastruktur secara terpusat.",
+		  "edu_popup": "SIEM (Security Information and Event Management): Platform yang mengumpulkan log dari semua sistem (firewall, server, endpoint) dan menganalisisnya secara terpusat untuk mendeteksi serangan. SOC (Security Operations Center) menggunakannya 24/7!"
+		},
+		{
+		  "name": "Radar Lock",
+		  "power": 0,
+		  "effect": "accuracy_buff",
+		  "cooldown": 0,
+		  "edu_log": "Network traffic analysis mengidentifikasi pola serangan dalam aliran data.",
+		  "edu_popup": "NETWORK TRAFFIC ANALYSIS (NTA): Menganalisis pola traffic jaringan untuk mendeteksi serangan yang tersembunyi dalam komunikasi normal. Bisa mendeteksi C2 (Command and Control) traffic dari malware yang mencoba berkomunikasi dengan server attacker!"
+		},
+		{
+		  "name": "Horn Charge",
+		  "power": 65,
+		  "effect": "attack",
+		  "cooldown": 2,
+		  "edu_log": "Endpoint Detection and Response (EDR) memantau dan merespons ancaman di endpoint secara real-time.",
+		  "edu_popup": "EDR (Endpoint Detection and Response): Solusi keamanan yang memantau aktivitas di endpoint (laptop, server) secara real-time dan bisa merespons ancaman secara otomatis. Generasi penerus antivirus yang jauh lebih canggih!"
+		},
+		{
+		  "name": "Full Spectrum Scan",
+		  "power": 75,
+		  "effect": "reset_buffs",
+		  "cooldown": 3,
+		  "edu_log": "Full spectrum security monitoring mengawasi semua layer dari fisik hingga aplikasi.",
+		  "edu_popup": "FULL SPECTRUM MONITORING: Pemantauan keamanan yang mencakup semua lapisan — dari fisik (siapa yang masuk ruang server) hingga aplikasi (API call yang mencurigakan). Pendekatan holistik ini adalah standar untuk organisasi dengan data sangat sensitif!"
 		}
 	  ]
 	}

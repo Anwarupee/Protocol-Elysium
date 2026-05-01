@@ -1,4 +1,4 @@
-extends Node
+exextends Node
 
 var player_monster: Monster
 var enemy_monster: Monster
@@ -7,11 +7,11 @@ var pending_trojan_target: Monster = null
 var trojan_turns_left: int = 0
 var trojan_power: int = 0
 var last_enemy_move: Dictionary = {}
-var tutorial_mode : bool = false
+var tutorial_mode: bool = false
 var moves_used_this_battle: Array = []
 
 # ── EDU POPUP SYSTEM ──
-var move_popup_count: Dictionary = {}  # { "move_name": count }
+var move_popup_count: Dictionary = {}
 const MAX_POPUP_PER_MOVE = 2
 
 signal battle_log(message: String)
@@ -44,9 +44,34 @@ func start_battle(player_id: String, enemy_id: String):
 	player_monster = create_monster(player_id)
 	enemy_monster = create_monster(enemy_id)
 	move_popup_count.clear()
+
+	# ── Trigger on-entry passives ──
+	_apply_entry_passives(player_monster, enemy_monster)
+	_apply_entry_passives(enemy_monster, player_monster)
+
 	emit_signal("battle_log", "Battle Start! " + player_monster.monster_name + " VS " + enemy_monster.monster_name)
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
+
+func _apply_entry_passives(monster: Monster, opponent: Monster):
+	match monster.passive["name"]:
+		"Verificator":
+			if not monster.verificator_applied:
+				monster.accuracy_stage += 1
+				monster.verificator_applied = true
+				emit_signal("battle_log", monster.monster_name + "'s Verificator activated! Accuracy +1!")
+		"Deep Scan":
+			if not monster.deep_scan_applied:
+				monster.accuracy_stage += 1
+				monster.deep_scan_applied = true
+				emit_signal("battle_log", monster.monster_name + "'s Deep Scan activated! Accuracy +1!")
+		"Lure":
+			if not monster.lure_applied:
+				opponent.defense_stage -= 1
+				monster.lure_applied = true
+				emit_signal("battle_log", monster.monster_name + "'s Lure activated! " + opponent.monster_name + "'s Defense -1!")
+		"Low Latency":
+			emit_signal("battle_log", monster.monster_name + " moves first due to Low Latency!")
 
 func create_monster(id: String) -> Monster:
 	for data in monsters_data:
@@ -63,14 +88,11 @@ func get_cooldown_states() -> Array:
 	return states
 
 # ── SMART REPETITION POPUP ──
-# Modify should_show_popup
 func should_show_popup(move_name: String) -> bool:
 	if tutorial_mode:
-		return true   # always show popup in tutorial
+		return true
 	var count = move_popup_count.get(move_name, 0)
 	return count < MAX_POPUP_PER_MOVE
-	
-	
 
 func register_popup_shown(move_name: String):
 	move_popup_count[move_name] = move_popup_count.get(move_name, 0) + 1
@@ -130,20 +152,19 @@ func player_use_move(move_index: int):
 
 	enemy_monster.tick_cooldowns()
 	enemy_monster.tick_status()
-	
+
+	# Track move
 	var already_tracked = false
 	for m in moves_used_this_battle:
 		if m["name"] == move["name"]:
-				already_tracked = true
-				break
-	
+			already_tracked = true
+			break
 	if not already_tracked:
 		moves_used_this_battle.append(move)
-		print("Move tracked: ", move["name"], " total: ", moves_used_this_battle.size())
+
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
 	check_battle_end()
-	
 
 func enemy_turn():
 	var available_moves = []
@@ -169,15 +190,32 @@ func enemy_turn():
 func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_player: bool):
 	var who = "You used" if is_player else (attacker.monster_name + " used")
 
+	# ── Confused check (Disinformation passive) ──
+	if attacker.confused and attacker.confused_turns > 0:
+		if randf() < 0.33:
+			emit_signal("battle_log", attacker.monster_name + " is confused and hurt itself!")
+			attacker.hp = max(0, attacker.hp - int(move.get("power", 10) * 0.5))
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			return
+
+	# ── Port Blocker — cancel serangan jika primed ──
+	if defender.port_blocker_primed:
+		defender.port_blocker_primed = false
+		emit_signal("battle_log", "Port Blocker! " + attacker.monster_name + "'s attack was cancelled!")
+		return
+
 	if attacker.blocked_next_turn:
 		emit_signal("battle_log", attacker.monster_name + "'s move was blocked!")
 		attacker.blocked_next_turn = false
 		return
 
+	# ── Stable Ping — skip miss check ──
+	var skip_miss = attacker.stable_ping_active
+
 	var poly_chance = 0.3
 	if defender.polymorphic_boosted:
 		poly_chance = 0.6
-	if defender.passive["name"] == "Polymorphic" and randf() < poly_chance:
+	if not skip_miss and defender.passive["name"] == "Polymorphic" and randf() < poly_chance:
 		emit_signal("battle_log", "Attack missed! " + defender.monster_name + " morphed away!")
 		return
 
@@ -188,6 +226,18 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		if is_player:
 			try_show_edu_popup(move, attacker)
 		return
+
+	# ── Master Key — kebal efek Social Engineering ──
+	if defender.master_key_active and attacker.type == "Social Engineering":
+		var social_effects = ["confuse", "defense_debuff", "speed_debuff", "heal_lock", "guaranteed_hit"]
+		if move.get("effect", "") in social_effects:
+			emit_signal("battle_log", "Master Key! " + defender.monster_name + " resists " + move["name"] + "!")
+			# Tetap kena damage, tapi efek statusnya diblokir
+			MoveEffects.execute_damage_only(move, attacker, defender, self)
+			emit_signal("edu_log", move["edu_log"])
+			if is_player:
+				try_show_edu_popup(move, attacker)
+			return
 
 	if attacker.passive["name"] != "Legacy Code" and defender.passive["name"] == "Legacy Code" and randf() < 0.15:
 		emit_signal("battle_log", "Compatibility Error! " + attacker.monster_name + "'s move failed!")
@@ -200,7 +250,6 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 	emit_signal("battle_log", who + " " + move["name"] + "!")
 	emit_signal("edu_log", move["edu_log"])
 
-	# ── TRIGGER EDU POPUP (player moves only) ──
 	if is_player:
 		try_show_edu_popup(move, attacker)
 
@@ -220,6 +269,31 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 
 	MoveEffects.execute(move, attacker, defender, self)
 
+	# ── Post-attack passive triggers ──
+
+	# Drainer — serap 5 HP setelah serang
+	if attacker.drainer_active and move.get("power", 0) > 0:
+		var drain = 5
+		attacker.hp = min(attacker.max_hp, attacker.hp + drain)
+		emit_signal("battle_log", attacker.monster_name + "'s Drainer absorbed " + str(drain) + " HP!")
+
+	# Warp Overclock — 20% double hit
+	if attacker.warp_overclock_active and move.get("power", 0) > 0 and randf() < 0.2:
+		emit_signal("battle_log", "Overclock triggered! " + attacker.monster_name + " attacks again!")
+		MoveEffects.execute(move, attacker, defender, self)
+
+	# Disinformation — 25% chance Confused
+	if attacker.disinformation_active and move.get("power", 0) > 0 and randf() < 0.25:
+		defender.confused = true
+		defender.confused_turns = 2
+		emit_signal("battle_log", "Disinformation! " + defender.monster_name + " is confused!")
+
+	# Auto-Alert — attack naik jika lawan pakai buff
+	var buff_effects = ["defense_buff", "speed_buff", "accuracy_buff", "evasion_buff"]
+	if defender.auto_alert_active and move.get("effect", "") in buff_effects:
+		defender.accuracy_stage += 1
+		emit_signal("battle_log", "Auto-Alert! " + defender.monster_name + "'s systems adapt! Attack +1!")
+
 	if not is_player:
 		last_enemy_move = move
 
@@ -232,12 +306,12 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 
 func get_type_multiplier(attacker_type: String, defender_type: String) -> float:
 	var advantage = {
-		"Data": {"strong": "Malware", "weak": "Connection"},
-		"Connection": {"strong": "Data", "weak": "Malware"},
-		"Malware": {"strong": "Connection", "weak": "Data"},
-		"Defensive": {"strong": "Social Engineering", "weak": "System"},
-		"System": {"strong": "Data", "weak": "Social Engineering"},
-		"Social Engineering": {"strong": "System", "weak": "Connection"}
+		"Malware":            {"strong": "Firewall",           "weak": "Crypto"},
+		"Firewall":           {"strong": "Network",            "weak": "Malware"},
+		"Network":            {"strong": "Crypto",             "weak": "Firewall"},
+		"Crypto":             {"strong": "Malware",            "weak": "Network"},
+		"Social Engineering": {"strong": "Crypto",             "weak": "Monitor"},
+		"Monitor":            {"strong": "Social Engineering", "weak": "Malware"}
 	}
 	if not advantage.has(attacker_type):
 		return 1.0
@@ -257,6 +331,14 @@ func check_battle_end():
 		return
 
 	if not enemy_monster.is_alive():
+		# Last Payload passive (Trojan-Taurus)
+		if enemy_monster.last_payload_active and not enemy_monster.last_payload_triggered:
+			enemy_monster.last_payload_triggered = true
+			player_monster.hp = max(0, player_monster.hp - 30)
+			emit_signal("battle_log", "LAST PAYLOAD detonated! 30 damage to " + player_monster.monster_name + "!")
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			await get_tree().create_timer(0.8).timeout
+
 		if enemy_monster.passive["name"] == "Kernel Panic":
 			player_monster.hp = max(0, player_monster.hp - 25)
 			emit_signal("battle_log", "KERNEL PANIC! 25 damage reflected!")
@@ -271,6 +353,18 @@ func check_battle_end():
 			emit_signal("battle_ended", true)
 
 	elif not player_monster.is_alive():
+		# Last Payload passive (player side)
+		if player_monster.last_payload_active and not player_monster.last_payload_triggered:
+			player_monster.last_payload_triggered = true
+			enemy_monster.hp = max(0, enemy_monster.hp - 30)
+			emit_signal("battle_log", "LAST PAYLOAD detonated! 30 damage to " + enemy_monster.monster_name + "!")
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			await get_tree().create_timer(0.8).timeout
+			# Re-check setelah Last Payload
+			if not enemy_monster.is_alive():
+				emit_signal("battle_log", "You won!")
+				emit_signal("battle_ended", true)
+				return
+
 		emit_signal("battle_log", "You lost!")
 		emit_signal("battle_ended", false)
-		
