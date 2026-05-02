@@ -1,4 +1,4 @@
-exextends Node
+extends Node
 
 var player_monster: Monster
 var enemy_monster: Monster

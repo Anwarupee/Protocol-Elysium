@@ -101,6 +101,18 @@ func draw_monster_sprite(pos: Vector2, color: Color, size: float, is_player: boo
 		"bios_wraith":   _draw_bios_wraith(sprite_root, color, size, is_player)
 		"vish_ara":      _draw_vish_ara(sprite_root, color, size, is_player)
 		"bait_eel":      _draw_bait_eel(sprite_root, color, size, is_player)
+		"hash_hound":     _draw_hash_hound(sprite_root, color, size, is_player)
+		"key_lynx":       _draw_key_lynx(sprite_root, color, size, is_player)
+		"signal_snail":   _draw_signal_snail(sprite_root, color, size, is_player)
+		"warp_wolf":      _draw_warp_wolf(sprite_root, color, size, is_player)
+		"logic_leech":    _draw_logic_leech(sprite_root, color, size, is_player)
+		"trojan_taurus":  _draw_trojan_taurus(sprite_root, color, size, is_player)
+		"brick_bear":     _draw_brick_bear(sprite_root, color, size, is_player)
+		"gate_gorilla":   _draw_gate_gorilla(sprite_root, color, size, is_player)
+		"phish_falcon":   _draw_phish_falcon(sprite_root, color, size, is_player)
+		"scam_serpent":   _draw_scam_serpent(sprite_root, color, size, is_player)
+		"sentry_stinger": _draw_sentry_stinger(sprite_root, color, size, is_player)
+		"radar_rhino":    _draw_radar_rhino(sprite_root, color, size, is_player)
 		_:               _draw_default(sprite_root, color, size)
 
 func _rect(parent: Node, x: float, y: float, w: float, h: float, col: Color):
@@ -439,6 +451,396 @@ func _draw_bait_eel(p: Node, c: Color, s: float, _flip: bool):
 	_rect(p, -5*sc, -54*sc, 10*sc, 6*sc, Color(1, 1, 0.5, 0.8))
 	_rect(p, 10*sc, -5*sc, 18*sc, 6*sc, Color(c.r, c.g, c.b, 0.6))
 	_rect(p, 14*sc, 8*sc, 14*sc, 5*sc, Color(c.r, c.g, c.b, 0.5))
+
+func _draw_hash_hound(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan — kotak-kotak pixel
+	_rect(p, -22*sc, -10*sc, 44*sc, 36*sc, c)
+	_rect(p, -18*sc, -38*sc, 36*sc, 30*sc, c)
+	# Telinga boxy
+	_rect(p, -22*sc, -52*sc, 12*sc, 16*sc, _dark(c))
+	_rect(p, 10*sc, -52*sc, 12*sc, 16*sc, _dark(c))
+	# Mata — hash symbol (#)
+	_rect(p, -12*sc, -34*sc, 8*sc, 2*sc, Color(0.1,0.1,0.2))
+	_rect(p, -12*sc, -30*sc, 8*sc, 2*sc, Color(0.1,0.1,0.2))
+	_rect(p, -10*sc, -36*sc, 2*sc, 8*sc, Color(0.1,0.1,0.2))
+	_rect(p, -6*sc, -36*sc, 2*sc, 8*sc, Color(0.1,0.1,0.2))
+	_rect(p, 4*sc, -34*sc, 8*sc, 2*sc, Color(0.1,0.1,0.2))
+	_rect(p, 4*sc, -30*sc, 8*sc, 2*sc, Color(0.1,0.1,0.2))
+	_rect(p, 6*sc, -36*sc, 2*sc, 8*sc, Color(0.1,0.1,0.2))
+	_rect(p, 10*sc, -36*sc, 2*sc, 8*sc, Color(0.1,0.1,0.2))
+	# Moncong
+	_rect(p, -8*sc, -20*sc, 16*sc, 10*sc, _light(c, 0.3))
+	# Kaki kotak
+	_rect(p, -20*sc, 24*sc, 12*sc, 16*sc, _dark(c))
+	_rect(p, -4*sc, 24*sc, 12*sc, 16*sc, _dark(c))
+	_rect(p, 12*sc, 24*sc, 12*sc, 16*sc, _dark(c))
+	# Kubus transparan berputar di sekitar badan
+	_rect(p, 24*sc, -15*sc, 10*sc, 10*sc, Color(c.r, c.g, c.b, 0.4))
+	_rect(p, 28*sc, -5*sc, 8*sc, 8*sc, Color(c.r, c.g, c.b, 0.3))
+	_rect(p, -34*sc, -10*sc, 10*sc, 10*sc, Color(c.r, c.g, c.b, 0.4))
+	_rect(p, -36*sc, 2*sc, 8*sc, 8*sc, Color(c.r, c.g, c.b, 0.3))
+	# Ekor pixel
+	_rect(p, 22*sc, 5*sc, 8*sc, 6*sc, c)
+	_rect(p, 28*sc, -2*sc, 6*sc, 8*sc, c)
+	# Shine
+	_rect(p, -16*sc, -36*sc, 10*sc, 4*sc, Color(1,1,1,0.2))
+
+func _draw_key_lynx(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan ramping
+	_rect(p, -16*sc, -8*sc, 32*sc, 30*sc, c)
+	# Kepala
+	_rect(p, -18*sc, -36*sc, 36*sc, 30*sc, c)
+	# Telinga runcing (lynx)
+	_rect(p, -20*sc, -52*sc, 10*sc, 18*sc, c)
+	_rect(p, -18*sc, -56*sc, 6*sc, 8*sc, _dark(c))
+	_rect(p, 10*sc, -52*sc, 10*sc, 18*sc, c)
+	_rect(p, 12*sc, -56*sc, 6*sc, 8*sc, _dark(c))
+	# Mata sipit tajam
+	_rect(p, -14*sc, -32*sc, 10*sc, 5*sc, Color(0.9, 0.7, 0.1))
+	_rect(p, 4*sc, -32*sc, 10*sc, 5*sc, Color(0.9, 0.7, 0.1))
+	_rect(p, -11*sc, -30*sc, 5*sc, 3*sc, Color(0.1,0.05,0.2))
+	_rect(p, 6*sc, -30*sc, 5*sc, 3*sc, Color(0.1,0.05,0.2))
+	# Moncong kecil
+	_rect(p, -6*sc, -22*sc, 12*sc, 8*sc, _light(c, 0.3))
+	# Kaki ramping
+	_rect(p, -14*sc, 20*sc, 8*sc, 18*sc, _dark(c))
+	_rect(p, 6*sc, 20*sc, 8*sc, 18*sc, _dark(c))
+	# Ekor berbentuk kunci USB emas
+	_rect(p, 16*sc, -4*sc, 6*sc, 28*sc, Color(1, 0.85, 0.2))
+	_rect(p, 12*sc, 20*sc, 14*sc, 8*sc, Color(1, 0.85, 0.2))
+	_rect(p, 20*sc, 28*sc, 6*sc, 6*sc, Color(1, 0.75, 0.1))
+	_rect(p, 14*sc, 28*sc, 4*sc, 4*sc, Color(0.8, 0.6, 0.1))
+	# Partikel kode di sekitar
+	_rect(p, -28*sc, -20*sc, 6*sc, 6*sc, Color(c.r, c.g, c.b, 0.5))
+	_rect(p, -32*sc, -8*sc, 4*sc, 4*sc, Color(c.r, c.g, c.b, 0.4))
+	# Shine
+	_rect(p, -16*sc, -34*sc, 10*sc, 4*sc, Color(1,1,1,0.2))
+
+func _draw_signal_snail(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan siput
+	_rect(p, -16*sc, 5*sc, 32*sc, 24*sc, c)
+	# Kepala
+	_rect(p, 10*sc, -10*sc, 24*sc, 20*sc, c)
+	# Antena
+	_rect(p, 16*sc, -26*sc, 4*sc, 18*sc, _dark(c))
+	_rect(p, 14*sc, -30*sc, 8*sc, 6*sc, Color(1,1,1,0.8))
+	_rect(p, 24*sc, -22*sc, 4*sc, 14*sc, _dark(c))
+	_rect(p, 22*sc, -26*sc, 8*sc, 6*sc, Color(1,1,1,0.7))
+	# Mata
+	_rect(p, 12*sc, -8*sc, 7*sc, 7*sc, Color(0.1,0.1,0.2))
+	_rect(p, 14*sc, -6*sc, 3*sc, 3*sc, Color(1,1,1,0.5))
+	# Cangkang spiral fiber optic
+	_rect(p, -28*sc, -20*sc, 36*sc, 36*sc, _dark(c, 0.1))
+	_rect(p, -24*sc, -16*sc, 28*sc, 28*sc, Color(c.r, c.g, c.b, 0.5))
+	_rect(p, -18*sc, -10*sc, 16*sc, 16*sc, _dark(c, 0.3))
+	_rect(p, -14*sc, -6*sc, 8*sc, 8*sc, c)
+	# Garis fiber di cangkang
+	_rect(p, -28*sc, -6*sc, 28*sc, 3*sc, Color(1,1,1,0.15))
+	_rect(p, -28*sc, 4*sc, 22*sc, 3*sc, Color(1,1,1,0.1))
+	_rect(p, -14*sc, -16*sc, 3*sc, 16*sc, Color(1,1,1,0.15))
+	# Kaki kecil
+	_rect(p, -14*sc, 26*sc, 8*sc, 10*sc, _dark(c))
+	_rect(p, -2*sc, 26*sc, 8*sc, 10*sc, _dark(c))
+	_rect(p, 10*sc, 24*sc, 8*sc, 10*sc, _dark(c))
+	# Shine
+	_rect(p, -26*sc, -18*sc, 12*sc, 4*sc, Color(1,1,1,0.2))
+# Warp-Wolf — serigala aerodinamis dari garis cahaya
+func _draw_warp_wolf(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan aerodinamis
+	_rect(p, -20*sc, -5*sc, 40*sc, 30*sc, c)
+	# Kepala runcing ke depan
+	_rect(p, -16*sc, -32*sc, 32*sc, 28*sc, c)
+	_rect(p, 10*sc, -28*sc, 22*sc, 14*sc, _dark(c, 0.1))
+	# Telinga runcing
+	_rect(p, -18*sc, -48*sc, 10*sc, 18*sc, c)
+	_rect(p, 8*sc, -48*sc, 10*sc, 18*sc, c)
+	# Mata sempit agresif
+	_rect(p, -12*sc, -28*sc, 10*sc, 5*sc, Color(0.2, 0.9, 1.0))
+	_rect(p, 2*sc, -28*sc, 10*sc, 5*sc, Color(0.2, 0.9, 1.0))
+	# Kaki streamline
+	_rect(p, -18*sc, 22*sc, 10*sc, 18*sc, _dark(c))
+	_rect(p, -4*sc, 22*sc, 10*sc, 18*sc, _dark(c))
+	_rect(p, 10*sc, 22*sc, 10*sc, 18*sc, _dark(c))
+	# Ekor speed trail
+	_rect(p, -38*sc, 5*sc, 20*sc, 6*sc, Color(c.r, c.g, c.b, 0.7))
+	_rect(p, -48*sc, 8*sc, 12*sc, 4*sc, Color(c.r, c.g, c.b, 0.5))
+	_rect(p, -55*sc, 10*sc, 8*sc, 3*sc, Color(c.r, c.g, c.b, 0.3))
+	# Garis cahaya di badan (Tron style)
+	_rect(p, -18*sc, 5*sc, 36*sc, 2*sc, Color(1,1,1,0.25))
+	_rect(p, -16*sc, -10*sc, 30*sc, 2*sc, Color(1,1,1,0.2))
+	_rect(p, 0*sc, -32*sc, 2*sc, 32*sc, Color(1,1,1,0.2))
+	# Motion blur particles
+	_rect(p, 22*sc, -8*sc, 8*sc, 3*sc, Color(c.r, c.g, c.b, 0.5))
+	_rect(p, 26*sc, -2*sc, 6*sc, 3*sc, Color(c.r, c.g, c.b, 0.4))
+	# Shine
+	_rect(p, -14*sc, -30*sc, 12*sc, 4*sc, Color(1,1,1,0.2))
+# Logic-Leech — lintah hitam seperti cairan
+func _draw_logic_leech(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan segmen lintah
+	_rect(p, -14*sc, -30*sc, 28*sc, 22*sc, c)
+	_rect(p, -16*sc, -10*sc, 32*sc, 22*sc, c)
+	_rect(p, -14*sc, 10*sc, 28*sc, 20*sc, _dark(c, 0.15))
+	_rect(p, -12*sc, 28*sc, 24*sc, 14*sc, _dark(c, 0.25))
+	# Garis segmen
+	_rect(p, -16*sc, -10*sc, 32*sc, 2*sc, _dark(c, 0.5))
+	_rect(p, -14*sc, 10*sc, 28*sc, 2*sc, _dark(c, 0.5))
+	_rect(p, -12*sc, 28*sc, 24*sc, 2*sc, _dark(c, 0.5))
+	# Kepala dengan mulut socket
+	_rect(p, -12*sc, -46*sc, 24*sc, 18*sc, c)
+	# Mulut socket
+	_rect(p, -8*sc, -44*sc, 16*sc, 6*sc, Color(0.05, 0.05, 0.1))
+	_rect(p, -10*sc, -40*sc, 4*sc, 4*sc, Color(1, 0.3, 0.3))
+	_rect(p, -2*sc, -40*sc, 4*sc, 4*sc, Color(1, 0.3, 0.3))
+	_rect(p, 6*sc, -40*sc, 4*sc, 4*sc, Color(1, 0.3, 0.3))
+	# Mata gelap
+	_rect(p, -8*sc, -46*sc, 8*sc, 6*sc, Color(0.8, 0.1, 0.1))
+	_rect(p, 2*sc, -46*sc, 8*sc, 6*sc, Color(0.8, 0.1, 0.1))
+	# Cairan oil effect
+	_rect(p, -6*sc, 40*sc, 4*sc, 10*sc, Color(c.r, c.g, c.b, 0.5))
+	_rect(p, 2*sc, 42*sc, 4*sc, 8*sc, Color(c.r, c.g, c.b, 0.4))
+	# Shine
+	_rect(p, -10*sc, -44*sc, 8*sc, 3*sc, Color(1,1,1,0.15))
+# Trojan-Taurus — banteng besar dengan rongga payload di dada
+func _draw_trojan_taurus(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan besar dan kuat
+	_rect(p, -28*sc, -5*sc, 56*sc, 44*sc, c)
+	# Kepala banteng
+	_rect(p, -22*sc, -40*sc, 44*sc, 36*sc, c)
+	# Tanduk
+	_rect(p, -28*sc, -52*sc, 8*sc, 14*sc, _dark(c, 0.2))
+	_rect(p, -32*sc, -58*sc, 8*sc, 8*sc, _dark(c, 0.3))
+	_rect(p, 20*sc, -52*sc, 8*sc, 14*sc, _dark(c, 0.2))
+	_rect(p, 24*sc, -58*sc, 8*sc, 8*sc, _dark(c, 0.3))
+	# Moncong lebar
+	_rect(p, -14*sc, -24*sc, 28*sc, 16*sc, _dark(c, 0.1))
+	_rect(p, -6*sc, -22*sc, 6*sc, 6*sc, Color(0.2, 0.1, 0.1))
+	_rect(p, 2*sc, -22*sc, 6*sc, 6*sc, Color(0.2, 0.1, 0.1))
+	# Mata merah
+	_rect(p, -16*sc, -36*sc, 10*sc, 8*sc, Color(0.9, 0.1, 0.1))
+	_rect(p, 6*sc, -36*sc, 10*sc, 8*sc, Color(0.9, 0.1, 0.1))
+	# Rongga payload di dada (bercahaya merah)
+	_rect(p, -16*sc, 2*sc, 32*sc, 28*sc, _dark(c, 0.4))
+	_rect(p, -12*sc, 6*sc, 24*sc, 20*sc, Color(0.9, 0.1, 0.1, 0.8))
+	_rect(p, -8*sc, 10*sc, 16*sc, 12*sc, Color(1, 0.3, 0.3, 0.9))
+	_rect(p, -4*sc, 13*sc, 8*sc, 6*sc, Color(1, 0.6, 0.6))
+	# Kaki besar
+	_rect(p, -24*sc, 38*sc, 16*sc, 16*sc, _dark(c))
+	_rect(p, 8*sc, 38*sc, 16*sc, 16*sc, _dark(c))
+	# Ekor
+	_rect(p, -38*sc, 8*sc, 12*sc, 8*sc, c)
+	_rect(p, -46*sc, 14*sc, 10*sc, 6*sc, _dark(c))
+	# Shine
+	_rect(p, -20*sc, -38*sc, 16*sc, 5*sc, Color(1,1,1,0.15))
+# Brick-Bear — beruang tersusun dari balok-balok data
+func _draw_brick_bear(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan tersusun dari balok
+	for row in 3:
+		for col in 3:
+			var bx = (-24 + col * 16)*sc
+			var by = (-5 + row * 16)*sc
+			var bright = 1.0 - (row * 0.1 + col * 0.05)
+			_rect(p, bx, by, 14*sc, 14*sc, Color(c.r*bright, c.g*bright, c.b*bright))
+			_rect(p, bx, by, 14*sc, 1*sc, Color(1,1,1,0.1))
+			_rect(p, bx, by, 1*sc, 14*sc, Color(1,1,1,0.1))
+	# Kepala balok
+	_rect(p, -22*sc, -38*sc, 44*sc, 34*sc, c)
+	# Telinga balok
+	_rect(p, -26*sc, -46*sc, 14*sc, 12*sc, c)
+	_rect(p, 12*sc, -46*sc, 14*sc, 12*sc, c)
+	_rect(p, -24*sc, -44*sc, 10*sc, 8*sc, _light(c, 0.15))
+	_rect(p, 14*sc, -44*sc, 10*sc, 8*sc, _light(c, 0.15))
+	# Wajah
+	_rect(p, -10*sc, -28*sc, 20*sc, 12*sc, _light(c, 0.2))
+	_rect(p, -14*sc, -34*sc, 8*sc, 8*sc, Color(0.1,0.1,0.15))
+	_rect(p, 6*sc, -34*sc, 8*sc, 8*sc, Color(0.1,0.1,0.15))
+	# Kaki balok
+	_rect(p, -22*sc, 44*sc, 16*sc, 12*sc, _dark(c))
+	_rect(p, 6*sc, 44*sc, 16*sc, 12*sc, _dark(c))
+	# Garis mortar antar balok
+	_rect(p, -24*sc, 10*sc, 48*sc, 2*sc, Color(0,0,0,0.3))
+	_rect(p, -24*sc, 26*sc, 48*sc, 2*sc, Color(0,0,0,0.3))
+	_rect(p, -8*sc, -5*sc, 2*sc, 46*sc, Color(0,0,0,0.3))
+	_rect(p, 8*sc, -5*sc, 2*sc, 46*sc, Color(0,0,0,0.3))
+	# Shine
+	_rect(p, -20*sc, -36*sc, 16*sc, 5*sc, Color(1,1,1,0.2))
+
+# Gate-Gorilla — gorilla besar dengan lengan seperti pintu brankas
+func _draw_gate_gorilla(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan besar
+	_rect(p, -30*sc, -5*sc, 60*sc, 48*sc, c)
+	# Kepala besar2
+	_rect(p, -24*sc, -40*sc, 48*sc, 36*sc, c)
+	# Dahi menonjol
+	_rect(p, -26*sc, -48*sc, 52*sc, 12*sc, _dark(c, 0.2))
+	# Mata kecil dalam
+	_rect(p, -14*sc, -38*sc, 10*sc, 8*sc, Color(0.1,0.1,0.15))
+	_rect(p, -10*sc, -36*sc, 5*sc, 5*sc, Color(0.2, 0.8, 0.3))
+	_rect(p, 4*sc, -38*sc, 10*sc, 8*sc, Color(0.1,0.1,0.15))
+	_rect(p, 8*sc, -36*sc, 5*sc, 5*sc, Color(0.2, 0.8, 0.3))
+	# Moncong
+	_rect(p, -12*sc, -26*sc, 24*sc, 16*sc, _dark(c, 0.1))
+	# Lengan seperti vault door (lebar dan rata)
+	_rect(p, -58*sc, -20*sc, 30*sc, 48*sc, _dark(c, 0.15))
+	_rect(p, -56*sc, -18*sc, 26*sc, 44*sc, c)
+	# Handle vault di lengan kiri
+	_rect(p, -52*sc, -8*sc, 18*sc, 18*sc, _dark(c, 0.4))
+	_rect(p, -50*sc, -6*sc, 14*sc, 14*sc, _light(c, 0.1))
+	_rect(p, -52*sc, 0*sc, 18*sc, 2*sc, _dark(c, 0.6))
+	_rect(p, -44*sc, -8*sc, 2*sc, 18*sc, _dark(c, 0.6))
+	# Lengan kanan
+	_rect(p, 28*sc, -20*sc, 30*sc, 48*sc, _dark(c, 0.15))
+	_rect(p, 30*sc, -18*sc, 26*sc, 44*sc, c)
+	# Engsel di lengan
+	_rect(p, 30*sc, -14*sc, 6*sc, 8*sc, _dark(c, 0.5))
+	_rect(p, 30*sc, 10*sc, 6*sc, 8*sc, _dark(c, 0.5))
+	# Kaki
+	_rect(p, -26*sc, 42*sc, 18*sc, 14*sc, _dark(c))
+	_rect(p, 8*sc, 42*sc, 18*sc, 14*sc, _dark(c))
+	# Shine
+	_rect(p, -22*sc, -38*sc, 20*sc, 6*sc, Color(1,1,1,0.15))
+
+# Phish-Falcon — elang dengan paruh kail pancing
+func _draw_phish_falcon(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan ramping
+	_rect(p, -14*sc, -10*sc, 28*sc, 30*sc, c)
+	# Kepala
+	_rect(p, -12*sc, -34*sc, 24*sc, 26*sc, c)
+	# Paruh berbentuk kail (hook)
+	_rect(p, 8*sc, -28*sc, 14*sc, 6*sc, Color(1, 0.8, 0.2))
+	_rect(p, 18*sc, -24*sc, 6*sc, 10*sc, Color(1, 0.7, 0.1))
+	_rect(p, 12*sc, -16*sc, 10*sc, 4*sc, Color(1, 0.7, 0.1))
+	# Mata tajam
+	_rect(p, -8*sc, -30*sc, 10*sc, 7*sc, Color(0.1,0.05,0.2))
+	_rect(p, -5*sc, -28*sc, 5*sc, 4*sc, Color(1, 0.9, 0.2))
+	# Sayap bermotif warna-warni (memancing perhatian)
+	_rect(p, -44*sc, -18*sc, 32*sc, 8*sc, c)
+	_rect(p, -50*sc, -10*sc, 24*sc, 6*sc, Color(c.r*0.8, c.g*0.8, c.b*0.8, 0.8))
+	_rect(p, -46*sc, -26*sc, 20*sc, 6*sc, Color(c.r*1.0, c.g*0.6, c.b*0.6, 0.9))
+	# Aksen warna cerah di sayap
+	_rect(p, -40*sc, -20*sc, 8*sc, 3*sc, Color(1, 0.9, 0.2, 0.8))
+	_rect(p, -36*sc, -14*sc, 6*sc, 3*sc, Color(1, 0.4, 0.8, 0.7))
+	# Sayap kanan
+	_rect(p, 12*sc, -18*sc, 32*sc, 8*sc, c)
+	_rect(p, 26*sc, -10*sc, 24*sc, 6*sc, Color(c.r*0.8, c.g*0.8, c.b*0.8, 0.8))
+	# Cakar
+	_rect(p, -12*sc, 18*sc, 10*sc, 14*sc, _dark(c))
+	_rect(p, 2*sc, 18*sc, 10*sc, 14*sc, _dark(c))
+	# Shine
+	_rect(p, -10*sc, -32*sc, 10*sc, 4*sc, Color(1,1,1,0.2))
+# Scam-Serpent — ular dengan kabut pop-up iklan
+func _draw_scam_serpent(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan ular bergelombang
+	_rect(p, -10*sc, -8*sc, 20*sc, 14*sc, c)
+	_rect(p, -14*sc, 4*sc, 20*sc, 12*sc, _dark(c, 0.1))
+	_rect(p, -8*sc, 14*sc, 20*sc, 12*sc, c)
+	_rect(p, -12*sc, 24*sc, 18*sc, 10*sc, _dark(c, 0.1))
+	_rect(p, -6*sc, 32*sc, 14*sc, 10*sc, c)
+	# Kepala
+	_rect(p, -16*sc, -32*sc, 32*sc, 26*sc, c)
+	# Pola sisik berkilau
+	_rect(p, -14*sc, -28*sc, 8*sc, 6*sc, _light(c, 0.2))
+	_rect(p, -2*sc, -24*sc, 8*sc, 6*sc, _light(c, 0.2))
+	_rect(p, 6*sc, -28*sc, 8*sc, 6*sc, _light(c, 0.2))
+	# Mata berbisa
+	_rect(p, -12*sc, -28*sc, 8*sc, 8*sc, Color(0.9, 0.1, 0.5))
+	_rect(p, -9*sc, -26*sc, 4*sc, 4*sc, Color(0.1, 0.1, 0.1))
+	_rect(p, 4*sc, -28*sc, 8*sc, 8*sc, Color(0.9, 0.1, 0.5))
+	_rect(p, 7*sc, -26*sc, 4*sc, 4*sc, Color(0.1, 0.1, 0.1))
+	# Lidah bercabang
+	_rect(p, -2*sc, -8*sc, 4*sc, 14*sc, Color(1, 0.3, 0.5))
+	_rect(p, -6*sc, 4*sc, 4*sc, 8*sc, Color(1, 0.2, 0.4))
+	_rect(p, 2*sc, 4*sc, 4*sc, 8*sc, Color(1, 0.2, 0.4))
+	# Pop-up notification di sekitar (kabut disinformasi)
+	_rect(p, 20*sc, -20*sc, 18*sc, 12*sc, Color(1, 0.9, 0.2, 0.7))
+	_rect(p, 22*sc, -18*sc, 6*sc, 6*sc, Color(0.9, 0.1, 0.1, 0.8))
+	_rect(p, 30*sc, -16*sc, 6*sc, 2*sc, Color(0.2, 0.2, 0.2, 0.7))
+	_rect(p, 30*sc, -12*sc, 4*sc, 2*sc, Color(0.2, 0.2, 0.2, 0.5))
+	_rect(p, -36*sc, -14*sc, 16*sc, 10*sc, Color(1, 0.9, 0.2, 0.6))
+	_rect(p, -34*sc, -12*sc, 5*sc, 5*sc, Color(0.2, 0.8, 0.3, 0.8))
+	# Shine
+	_rect(p, -14*sc, -30*sc, 10*sc, 4*sc, Color(1,1,1,0.15))
+
+# Sentry-Stinger — tawon dengan banyak lensa kamera
+func _draw_sentry_stinger(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan tawon tersegmen
+	_rect(p, -14*sc, -8*sc, 28*sc, 20*sc, c)
+	_rect(p, -10*sc, 10*sc, 20*sc, 18*sc, _dark(c, 0.15))
+	# Segmen abdomen dengan garis kuning
+	_rect(p, -8*sc, 26*sc, 16*sc, 12*sc, Color(c.r, c.g, c.b, 0.8))
+	_rect(p, -10*sc, 28*sc, 20*sc, 2*sc, Color(1, 0.9, 0.2, 0.6))
+	_rect(p, -10*sc, 32*sc, 20*sc, 2*sc, Color(1, 0.9, 0.2, 0.6))
+	# Kepala dengan banyak mata
+	_rect(p, -16*sc, -34*sc, 32*sc, 28*sc, c)
+	# Array mata kamera (compound eye)
+	for row in 2:
+		for col in 3:
+			var ex = (-12 + col * 8)*sc
+			var ey = (-32 + row * 8)*sc
+			_rect(p, ex, ey, 7*sc, 7*sc, Color(0.05, 0.05, 0.1))
+			_rect(p, ex + 2*sc, ey + 2*sc, 3*sc, 3*sc, Color(0.2, 0.8, 0.3))
+	# Sengat di bawah
+	_rect(p, -4*sc, 36*sc, 8*sc, 18*sc, _dark(c, 0.2))
+	_rect(p, -2*sc, 50*sc, 4*sc, 8*sc, _dark(c, 0.5))
+	# Sayap transparan
+	_rect(p, -36*sc, -14*sc, 22*sc, 8*sc, Color(c.r, c.g, c.b, 0.35))
+	_rect(p, -34*sc, -6*sc, 18*sc, 5*sc, Color(c.r, c.g, c.b, 0.25))
+	_rect(p, 14*sc, -14*sc, 22*sc, 8*sc, Color(c.r, c.g, c.b, 0.35))
+	_rect(p, 16*sc, -6*sc, 18*sc, 5*sc, Color(c.r, c.g, c.b, 0.25))
+	# Antena sensor
+	_rect(p, -10*sc, -44*sc, 3*sc, 12*sc, _dark(c))
+	_rect(p, 8*sc, -44*sc, 3*sc, 12*sc, _dark(c))
+	_rect(p, -14*sc, -46*sc, 8*sc, 4*sc, Color(0.2, 0.9, 0.3))
+	_rect(p, 8*sc, -46*sc, 8*sc, 4*sc, Color(0.2, 0.9, 0.3))
+	# Shin
+	_rect(p, -14*sc, -32*sc, 12*sc, 4*sc, Color(1,1,1,0.2))
+
+# Radar-Rhino — badak dengan cula antena parabola
+func _draw_radar_rhino(p: Node, c: Color, s: float, _flip: bool):
+	var sc = s / 80.0
+	# Badan besar badak
+	_rect(p, -30*sc, -5*sc, 60*sc, 44*sc, c)
+	# Kepala
+	_rect(p, -24*sc, -38*sc, 48*sc, 34*sc, c)
+	# Moncong tebal
+	_rect(p, 10*sc, -30*sc, 32*sc, 18*sc, _dark(c, 0.1))
+	# Cula antena parabola
+	_rect(p, -8*sc, -56*sc, 16*sc, 20*sc, _dark(c, 0.3))
+	# Dish parabola
+	_rect(p, -20*sc, -72*sc, 40*sc, 18*sc, _dark(c, 0.2))
+	_rect(p, -16*sc, -68*sc, 32*sc, 12*sc, Color(c.r, c.g, c.b, 0.6))
+	_rect(p, -12*sc, -64*sc, 24*sc, 8*sc, Color(c.r, c.g, c.b, 0.8))
+	# Sinyal dari dish
+	_rect(p, -22*sc, -76*sc, 44*sc, 2*sc, Color(c.r, c.g, c.b, 0.3))
+	_rect(p, -26*sc, -80*sc, 52*sc, 2*sc, Color(c.r, c.g, c.b, 0.2))
+	# Mata kecil
+	_rect(p, -18*sc, -34*sc, 10*sc, 8*sc, Color(0.1,0.1,0.15))
+	_rect(p, -14*sc, -32*sc, 5*sc, 5*sc, Color(0.2, 0.9, 0.3))
+	_rect(p, 8*sc, -34*sc, 10*sc, 8*sc, Color(0.1,0.1,0.15))
+	_rect(p, 12*sc, -32*sc, 5*sc, 5*sc, Color(0.2, 0.9, 0.3))
+	# Telinga kecil
+	_rect(p, -28*sc, -32*sc, 8*sc, 12*sc, _dark(c, 0.2))
+	# Kaki tebal
+	_rect(p, -26*sc, 38*sc, 16*sc, 16*sc, _dark(c))
+	_rect(p, -4*sc, 38*sc, 16*sc, 16*sc, _dark(c))
+	_rect(p, 14*sc, 38*sc, 16*sc, 16*sc, _dark(c))
+	# Ekor pendek
+	_rect(p, -34*sc, 8*sc, 6*sc, 10*sc, _dark(c))
+	# Circuit lines di badan (monitoring feel)
+	_rect(p, -28*sc, 15*sc, 56*sc, 2*sc, Color(c.r, c.g, c.b, 0.3))
+	_rect(p, 0*sc, -5*sc, 2*sc, 44*sc, Color(c.r, c.g, c.b, 0.2))
+	# Shine
+	_rect(p, -22*sc, -36*sc, 18*sc, 5*sc, Color(1,1,1,0.15))
 
 func _draw_default(p: Node, c: Color, s: float):
 	_rect(p, -s/2, -s/2, s, s, c)
