@@ -259,6 +259,146 @@ var monsters_data = [
 			{"name": "Click Bait", "edu_log": "Clickbait menggunakan konten menarik atau mengejutkan untuk memancing klik yang mengarah ke halaman berbahaya atau mengunduh malware."},
 			{"name": "Drive-by Download", "edu_log": "Drive-by download menginfeksi perangkat hanya dengan mengunjungi halaman web tanpa interaksi apapun dari pengguna."}
 		]
+	},
+	{
+		"id": "hash_hound", "name": "Hash-Hound", "number": "019",
+		"type": "Data", "color": Color(0.2, 0.8, 0.9),
+		"hp": 100, "speed": 65, "role": "Scout",
+		"desc": "Anjing pelacak integritas data yang tak tertandingi. Setiap perubahan sekecil apapun pada sebuah bit tidak bisa luput dari penciumannya. Ia adalah garis pertahanan pertama melawan manipulasi data diam-diam.",
+		"passive": "Verificator — Accuracy naik 1 stage permanen di awal pertarungan.",
+		"advantage": "Kuat vs Malware\nLemah vs Connection",
+		"moves": [
+			{"name": "Hash Bite", "edu_log": "Hashing menghasilkan nilai unik untuk setiap input — bahkan perubahan 1 bit menghasilkan hash yang sama sekali berbeda, memudahkan deteksi manipulasi."},
+			{"name": "Checksum", "edu_log": "Checksum adalah nilai ringkasan data yang digunakan untuk memverifikasi integritas file setelah transmisi atau penyimpanan."},
+			{"name": "Integrity Scan", "edu_log": "File integrity monitoring secara terus-menerus memverifikasi bahwa file sistem tidak dimodifikasi oleh malware atau attacker."},
+			{"name": "SHA Strike", "edu_log": "SHA-256 adalah algoritma hashing kriptografis yang digunakan luas untuk memverifikasi integritas data dan menyimpan password secara aman."}
+		]
+	},
+	{
+		"id": "key_lynx", "name": "Key-Lynx", "number": "020",
+		"type": "Data", "color": Color(0.4, 1.0, 0.9),
+		"hp": 95, "speed": 90, "role": "Breaker",
+		"desc": "Lynx liar penguasa kriptografi asimetris. Ia bergerak dengan lincah di antara kunci publik dan privat, memotong celah enkripsi lemah dengan cakarnya yang tajam seperti bilah RSA.",
+		"passive": "Master Key — Kebal terhadap efek status dari tipe Social Engineering.",
+		"advantage": "Kuat vs Malware\nLemah vs Connection",
+		"moves": [
+			{"name": "Key Exchange", "edu_log": "Diffie-Hellman Key Exchange memungkinkan dua pihak berbagi kunci enkripsi secara aman meski komunikasi mereka disadap."},
+			{"name": "PKI Slash", "edu_log": "Public Key Infrastructure (PKI) mengelola sertifikat digital untuk memverifikasi identitas entitas di jaringan."},
+			{"name": "Asymmetric Guard", "edu_log": "Enkripsi asimetris menggunakan pasangan kunci publik-privat — data dienkripsi dengan kunci publik, hanya bisa dibuka dengan kunci privat yang sesuai."},
+			{"name": "Cipher Claw", "edu_log": "Cipher suite menentukan algoritma enkripsi yang digunakan dalam koneksi TLS — pemilihan cipher suite yang lemah bisa menjadi celah keamanan."}
+		]
+	},
+	{
+		"id": "signal_snail", "name": "Signal-Snail", "number": "021",
+		"type": "Connection", "color": Color(1.0, 0.75, 0.1),
+		"hp": 95, "speed": 45, "role": "Support",
+		"desc": "Siput fiber optik yang lambat tapi memiliki ketahanan koneksi paling stabil di seluruh Aether-Net. Tidak ada satu pun paketnya yang pernah hilang di perjalanan, bahkan saat badai data paling dahsyat.",
+		"passive": "Stable Ping — Serangan tidak pernah miss meski accuracy diturunkan.",
+		"advantage": "Kuat vs Data\nLemah vs Malware",
+		"moves": [
+			{"name": "Fiber Tackle", "edu_log": "Fiber optik mengirimkan data sebagai pulsa cahaya, menawarkan bandwidth jauh lebih tinggi dan latensi lebih rendah dibanding kabel tembaga."},
+			{"name": "Packet Preserve", "edu_log": "Error correction dalam protokol jaringan memastikan data yang rusak atau hilang bisa dideteksi dan diperbaiki secara otomatis."},
+			{"name": "Latency Shell", "edu_log": "Latency adalah waktu yang dibutuhkan data untuk bepergian dari sumber ke tujuan — faktor kritis dalam performa aplikasi real-time."},
+			{"name": "QoS Pulse", "edu_log": "Quality of Service (QoS) memprioritaskan jenis trafik tertentu untuk memastikan layanan kritis mendapat bandwidth yang dibutuhkan."}
+		]
+	},
+	{
+		"id": "warp_wolf", "name": "Warp-Wolf", "number": "022",
+		"type": "Connection", "color": Color(1.0, 0.6, 0.0),
+		"hp": 85, "speed": 110, "role": "Speedster",
+		"desc": "Serigala broadband yang bergerak lebih cepat dari sinyal itu sendiri. Ia adalah manifestasi dari koneksi ultra-low-latency yang memangsa sistem lambat dengan kecepatan yang tidak bisa diantisipasi lawan.",
+		"passive": "Overclock — 20% chance menyerang dua kali dalam satu giliran.",
+		"advantage": "Kuat vs Data\nLemah vs Malware",
+		"moves": [
+			{"name": "Bandwidth Burst", "edu_log": "Burst traffic terjadi saat penggunaan bandwidth melonjak tiba-tiba melebihi kapasitas normal jaringan, menyebabkan kongesti dan penurunan performa."},
+			{"name": "Warp Dash", "edu_log": "Content Delivery Network (CDN) mempercepat pengiriman konten dengan mendistribusikannya ke server yang dekat dengan pengguna."},
+			{"name": "CDN Strike", "edu_log": "CDN caching menyimpan konten di tepi jaringan untuk mengurangi beban server asal dan mempercepat waktu respons secara signifikan."},
+			{"name": "Protocol Override", "edu_log": "Protocol downgrade attack memaksa koneksi menggunakan protokol lama yang lebih lemah, membuka celah untuk serangan man-in-the-middle."}
+		]
+	},
+	{
+		"id": "scam_serpent", "name": "Scam-Serpent", "number": "023",
+		"type": "Social Engineering", "color": Color(0.9, 0.45, 0.0),
+		"hp": 92, "speed": 82, "role": "Debuffer",
+		"desc": "Ular maestro disinformasi yang menguasai seni kebohongan digital. Ia tidak menyerang dengan kekuatan, melainkan dengan informasi palsu yang disebarkan dengan presisi untuk membuat lawan kebingungan sebelum terkena serangan mematikan.",
+		"passive": "Disinformation — 25% chance memberikan status Confused ke lawan saat serangan mengenai.",
+		"advantage": "Kuat vs System\nLemah vs Connection",
+		"moves": [
+			{"name": "Pretext Strike", "edu_log": "Pretexting membangun skenario palsu yang meyakinkan untuk memanipulasi korban agar menyerahkan akses atau informasi sensitif."},
+			{"name": "Deepfake Venom", "edu_log": "Deepfake menggunakan AI untuk membuat media palsu yang sangat meyakinkan — ancaman baru dalam social engineering dan disinformasi."},
+			{"name": "Impersonation", "edu_log": "Impersonation attack menyamar sebagai seseorang yang dipercaya korban — seorang atasan, IT support, atau institusi resmi."},
+			{"name": "Serpent's Charm", "edu_log": "Influence operations menggunakan psikologi massa untuk menyebarkan narasi palsu secara luas, mengubah persepsi publik terhadap suatu isu."}
+		]
+	},
+	{
+		"id": "sentry_stinger", "name": "Sentry-Stinger", "number": "024",
+		"type": "Defensive", "color": Color(0.15, 0.95, 0.45),
+		"hp": 98, "speed": 78, "role": "Scout",
+		"desc": "Tawon pengintai dengan ratusan lensa sensor yang mampu mendeteksi anomali sekecil perubahan satu byte dalam log sistem. Ia adalah sistem peringatan dini yang tidak pernah tidur.",
+		"passive": "Deep Scan — Selalu melihat HP lawan secara akurat, accuracy naik 10% permanen.",
+		"advantage": "Kuat vs Social Engineering\nLemah vs System",
+		"moves": [
+			{"name": "Log Sting", "edu_log": "Security logging mencatat semua aktivitas sistem untuk analisis forensik dan deteksi ancaman — log yang baik adalah fondasi investigasi insiden."},
+			{"name": "Anomaly Alert", "edu_log": "Anomaly detection menggunakan baseline perilaku normal untuk mengidentifikasi aktivitas mencurigakan yang mungkin mengindikasikan serangan."},
+			{"name": "IDS Pulse", "edu_log": "Intrusion Detection System (IDS) memantau trafik jaringan dan aktivitas sistem untuk mendeteksi tanda-tanda serangan atau pelanggaran kebijakan."},
+			{"name": "Threat Hunt", "edu_log": "Threat hunting adalah pendekatan proaktif mencari ancaman tersembunyi yang sudah masuk ke dalam sistem sebelum menimbulkan kerusakan."}
+		]
+	},
+	{
+		"id": "radar_rhino", "name": "Radar-Rhino", "number": "025",
+		"type": "Defensive", "color": Color(0.1, 0.75, 0.35),
+		"hp": 130, "speed": 50, "role": "Controller",
+		"desc": "Badak raksasa dengan cula antena parabola yang mampu menangkap sinyal anomali dari seluruh penjuru jaringan. Ia adalah komandan pusat monitoring yang tak pernah melewatkan satu pun pergerakan mencurigakan.",
+		"passive": "Auto-Alert — Setiap kali lawan menggunakan buff, Attack Radar-Rhino naik 1 stage.",
+		"advantage": "Kuat vs Social Engineering\nLemah vs System",
+		"moves": [
+			{"name": "SIEM Sweep", "edu_log": "Security Information and Event Management (SIEM) mengumpulkan dan menganalisis log dari seluruh infrastruktur untuk memberikan visibilitas keamanan terpusat."},
+			{"name": "Radar Lock", "edu_log": "Threat intelligence platform mengumpulkan, menganalisis, dan mendistribusikan informasi tentang ancaman siber untuk meningkatkan respons keamanan."},
+			{"name": "Horn Charge", "edu_log": "Incident response yang cepat dan terstruktur dapat meminimalkan dampak pelanggaran keamanan dan mempercepat pemulihan sistem."},
+			{"name": "Full Spectrum Scan", "edu_log": "Full-spectrum cyber monitoring mencakup pemantauan jaringan, endpoint, aplikasi, dan cloud secara bersamaan untuk deteksi ancaman komprehensif."}
+		]
+	},
+	{
+		"id": "phish_falcon", "name": "Phish-Falcon", "number": "026",
+		"type": "Social Engineering", "color": Color(1.0, 0.55, 0.05),
+		"hp": 88, "speed": 92, "role": "Speedster",
+		"desc": "Elang pemburu yang mengincar target spesifik dengan presisi mematikan. Ia tidak membuang energi menyerang sembarang orang — setiap serangannya adalah spear phishing yang dirancang khusus untuk menembus pertahanan individu tertentu.",
+		"passive": "Lure — Menurunkan Defense lawan 1 stage saat pertama kali masuk arena.",
+		"advantage": "Kuat vs System\nLemah vs Connection",
+		"moves": [
+			{"name": "Spear Dive", "edu_log": "Spear phishing menargetkan individu spesifik dengan pesan yang dipersonalisasi menggunakan informasi yang dikumpulkan dari sumber publik."},
+			{"name": "Credential Hook", "edu_log": "Credential harvesting menggunakan halaman login palsu untuk mencuri username dan password korban tanpa sepengetahuan mereka."},
+			{"name": "Whaling Strike", "edu_log": "Whaling attack adalah spear phishing yang menargetkan eksekutif senior atau pejabat tinggi yang memiliki akses ke aset bernilai tinggi."},
+			{"name": "Clone Attack", "edu_log": "Clone phishing menduplikasi email legitimate yang pernah diterima korban, mengganti lampiran atau link dengan versi berbahaya."}
+		]
+	},
+	{
+		"id": "brick_bear", "name": "Brick-Bear", "number": "027",
+		"type": "Defensive", "color": Color(0.15, 0.45, 0.9),
+		"hp": 145, "speed": 40, "role": "Tank",
+		"desc": "Beruang yang tersusun dari balok-balok aturan keamanan. Setiap balok adalah satu rule firewall yang tidak bisa dilanggar. Ia menerima semua serangan dengan dada bidang dan memastikan semuanya memantul kembali.",
+		"passive": "Hardened — Menerima 10% lebih sedikit damage dari semua serangan.",
+		"advantage": "Kuat vs Social Engineering\nLemah vs System",
+		"moves": [
+			{"name": "Packet Filter", "edu_log": "Packet filtering memeriksa header setiap paket data dan memblokir atau mengizinkan berdasarkan aturan keamanan yang telah ditetapkan."},
+			{"name": "Rule Block", "edu_log": "Firewall rules mendefinisikan trafik mana yang diizinkan atau diblokir — konfigurasi yang tepat adalah kunci keamanan perimeter."},
+			{"name": "Fortify", "edu_log": "System hardening mengurangi attack surface dengan menonaktifkan layanan yang tidak perlu dan menerapkan principle of least privilege."},
+			{"name": "Bear Slam", "edu_log": "Stateful packet inspection menganalisis konteks koneksi penuh, bukan hanya header paket individual, untuk deteksi ancaman yang lebih akurat."}
+		]
+	},
+	{
+		"id": "gate_gorilla", "name": "Gate-Gorilla", "number": "028",
+		"type": "Defensive", "color": Color(0.1, 0.35, 0.85),
+		"hp": 170, "speed": 30, "role": "Pure Tank",
+		"desc": "Gorilla raksasa penjaga gerbang utama Elysium — benteng terakhir sebelum core sistem bisa disentuh. Ia adalah embodiment dari Zero Trust Architecture yang tidak mempercayai siapapun tanpa verifikasi.",
+		"passive": "Port Blocker — 15% chance membatalkan serangan berikutnya lawan setelah setiap benturan.",
+		"advantage": "Kuat vs Social Engineering\nLemah vs System",
+		"moves": [
+			{"name": "WAF Strike", "edu_log": "Web Application Firewall (WAF) memfilter dan memantau trafik HTTP untuk melindungi aplikasi web dari serangan seperti SQL injection dan XSS."},
+			{"name": "Zero Trust Lock", "edu_log": "Zero Trust Security tidak mempercayai siapapun secara default, bahkan pengguna internal — setiap akses harus diverifikasi secara eksplisit."},
+			{"name": "Perimeter Crush", "edu_log": "Defense in depth menggunakan lapisan pertahanan berlapis sehingga jika satu lapisan gagal, lapisan berikutnya tetap melindungi sistem."},
+			{"name": "Gate Slam", "edu_log": "Network Access Control (NAC) memastikan hanya perangkat yang memenuhi kebijakan keamanan yang diizinkan masuk ke jaringan."}
+		]
 	}
 ]
 
@@ -314,23 +454,7 @@ func build_ui():
 	sprite_area.name = "sprite_area"
 	add_child(sprite_area)
 
-	var sprite_glow = ColorRect.new()
-	sprite_glow.size = Vector2(140, 140)
-	sprite_glow.position = Vector2(170, 75)
-	sprite_glow.name = "sprite_glow"
-	add_child(sprite_glow)
-
-	var sprite = ColorRect.new()
-	sprite.size = Vector2(110, 110)
-	sprite.position = Vector2(185, 90)
-	sprite.name = "monster_sprite"
-	add_child(sprite)
-
-	var sprite_shine = ColorRect.new()
-	sprite_shine.color = Color(1, 1, 1, 0.15)
-	sprite_shine.size = Vector2(35, 15)
-	sprite_shine.position = Vector2(190, 95)
-	add_child(sprite_shine)
+	# sprite_area tetap ada sebagai background, sprite-nya diisi oleh show_monster() via SentinelSprites
 
 	# ── LEFT PANEL — scrollable detail ──
 	var detail_scroll_container = ScrollContainer.new()
@@ -555,17 +679,7 @@ func build_monster_grid(parent: Node):
 		cell_panel.add_theme_stylebox_override("panel", cell_style)
 		parent.add_child(cell_panel)
 
-		var icon_glow = ColorRect.new()
-		icon_glow.color = Color(m["color"].r, m["color"].g, m["color"].b, 0.2)
-		icon_glow.size = Vector2(56, 56)
-		icon_glow.position = pos + Vector2(16, 4)
-		parent.add_child(icon_glow)
-
-		var icon = ColorRect.new()
-		icon.color = m["color"]
-		icon.size = Vector2(44, 44)
-		icon.position = pos + Vector2(22, 10)
-		parent.add_child(icon)
+		SentinelSprites.draw(parent, m["id"], pos + Vector2(44, 36), m["color"], 32)
 
 		var num = create_label("#" + m["number"], pos + Vector2(4, 58), 9, Color(0.5, 0.5, 0.7))
 		parent.add_child(num)
@@ -591,12 +705,15 @@ func show_monster(m: Dictionary):
 	selected_monster = m
 	var col = m["color"]
 
-	var sprite = find_child("monster_sprite", true, false)
-	var glow = find_child("sprite_glow", true, false)
+	# Update background area color
 	var area = find_child("sprite_area", true, false)
-	if sprite: sprite.color = col
-	if glow: glow.color = Color(col.r, col.g, col.b, 0.15)
 	if area: area.color = Color(col.r * 0.25, col.g * 0.25, col.b * 0.25, 1.0)
+
+	# Hapus sprite lama, ganti dengan sprite baru dari SentinelSprites
+	var old_sprite = find_child("sentinel_display", true, false)
+	if old_sprite: old_sprite.queue_free()
+	var new_sprite = SentinelSprites.draw(self, m["id"], Vector2(240, 148), col, 90)
+	new_sprite.name = "sentinel_display"
 
 	detail_labels["number"].text = "#" + m["number"]
 	detail_labels["name"].text = m["name"]

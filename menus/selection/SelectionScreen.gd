@@ -527,23 +527,7 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 	top_accent.size = Vector2(card_w, 3)
 	card.add_child(top_accent)
 
-	var glow = ColorRect.new()
-	glow.color = Color(col.r, col.g, col.b, 0.2)
-	glow.size = Vector2(90, 90)
-	glow.position = Vector2((card_w - 90) / 2, 25)
-	card.add_child(glow)
-
-	var sprite = ColorRect.new()
-	sprite.color = col
-	sprite.size = Vector2(68, 68)
-	sprite.position = Vector2((card_w - 68) / 2, 37)
-	card.add_child(sprite)
-
-	var shine = ColorRect.new()
-	shine.color = Color(1, 1, 1, 0.18)
-	shine.size = Vector2(20, 9)
-	shine.position = Vector2((card_w - 68) / 2 + 4, 42)
-	card.add_child(shine)
+	SentinelSprites.draw(card, info["id"], Vector2(card_w / 2, 75), col, 55)
 
 	var role_bg = ColorRect.new()
 	role_bg.color = Color(col.r * 0.3, col.g * 0.3, col.b * 0.3)
