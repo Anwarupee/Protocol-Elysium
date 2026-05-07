@@ -6,6 +6,7 @@ var detail_labels = {}
 var move_labels = []
 var detail_scroll: ScrollContainer
 var detail_vbox: VBoxContainer
+var current_sprite_node: Node2D = null
 
 var monsters_data = [
 	{
@@ -712,11 +713,13 @@ func show_monster(m: Dictionary):
 	var area = find_child("sprite_area", true, false)
 	if area: area.color = Color(col.r * 0.25, col.g * 0.25, col.b * 0.25, 1.0)
 
-	# Hapus sprite lama, ganti dengan sprite baru dari SentinelSprites
-	var old_sprite = find_child("sentinel_display", true, false)
-	if old_sprite: old_sprite.queue_free()
-	var new_sprite = SentinelSprites.draw(self, m["id"], Vector2(240, 148), col, 90)
-	new_sprite.name = "sentinel_display"
+	# Hapus sprite lama via referensi langsung (aman dan tidak rusak scroll)
+	if current_sprite_node != null and is_instance_valid(current_sprite_node):
+		current_sprite_node.queue_free()
+		current_sprite_node = null
+
+	# Draw sprite baru, simpan referensinya
+	current_sprite_node = SentinelSprites.draw(self, m["id"], Vector2(240, 148), col, 90)
 
 	detail_labels["number"].text = "#" + m["number"]
 	detail_labels["name"].text = m["name"]
