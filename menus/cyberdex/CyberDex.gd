@@ -555,9 +555,12 @@ func build_ui():
 	grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	add_child(grid_scroll)
 
-	# Control wrapper agar ScrollContainer bisa detect ukuran konten
+	# Control wrapper — tinggi dihitung dinamis dari jumlah sentinel
+	var cols_count = 6
+	var rows_count = ceili(float(monsters_data.size()) / cols_count)
+	var grid_h = rows_count * (88 + 8) + 16
 	var grid_wrapper = Control.new()
-	grid_wrapper.custom_minimum_size = Vector2(620, 300)
+	grid_wrapper.custom_minimum_size = Vector2(620, grid_h)
 	grid_scroll.add_child(grid_wrapper)
 
 	var grid_container = Node2D.new()
@@ -756,7 +759,7 @@ func show_monster(m: Dictionary):
 		g["panel"].add_theme_stylebox_override("panel", g["style"])
 
 func go_back():
-	var scene = load("res://menus/main_menu/MainMenu.tscn").instantiate()
+	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	get_tree().current_scene = scene
 	queue_free()

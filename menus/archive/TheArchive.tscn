@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dkkmew2btv35l"]
+
+[ext_resource type="Script" uid="uid://c2rxp7ry65p7a" path="res://menus/archive/TheArchive.gd" id="1_04yao"]
+
+[node name="TheArchive" type="Node2D" unique_id=1711379179]
+script = ExtResource("1_04yao")

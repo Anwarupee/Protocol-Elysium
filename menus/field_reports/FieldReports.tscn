@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bv6866go6emlh"]
+
+[ext_resource type="Script" uid="uid://bfcwkwshp44vj" path="res://menus/field_reports/FieldReports.gd" id="1_klqds"]
+
+[node name="FieldReports" type="Node2D" unique_id=1810419864]
+script = ExtResource("1_klqds")

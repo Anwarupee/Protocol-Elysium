@@ -143,8 +143,8 @@ func build_ui():
 	play_btn.pressed.connect(go_to_selection)
 	add_child(play_btn)
 
-	var dex_btn = create_menu_button("◈   PROTOCOL-LINK", Vector2(426, 405), Color(0.08, 0.25, 0.5))
-	dex_btn.pressed.connect(go_to_cyberdex)
+	var dex_btn = create_menu_button("◈   The Archive", Vector2(426, 405), Color(0.08, 0.25, 0.5))
+	dex_btn.pressed.connect(go_to_thearchive)
 	add_child(dex_btn)
 
 	var quit_btn = create_menu_button("✕   QUIT", Vector2(426, 480), Color(0.35, 0.08, 0.08))
@@ -296,8 +296,8 @@ func go_to_selection():
 	get_tree().current_scene = scene
 	queue_free()
 
-func go_to_cyberdex():
-	var scene = load("res://menus/cyberdex/CyberDex.tscn").instantiate()
+func go_to_thearchive():
+	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	get_tree().current_scene = scene
 	queue_free()

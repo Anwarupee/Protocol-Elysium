@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dgd387trrvpuq"]
+
+[ext_resource type="Script" uid="uid://ck48xb82xdikg" path="res://menus/knowledge/KnowledgeBase.gd" id="1_o3n7i"]
+
+[node name="KnowledgeBase" type="Node2D" unique_id=963235539]
+script = ExtResource("1_o3n7i")
