@@ -1,6 +1,8 @@
 class_name MoveEffects
 extends RefCounted
 
+const BASE_DEFENSE = 12
+
 static func execute(move: Dictionary, attacker: Monster, defender: Monster, battle_manager: Node) -> void:
 	var multiplier = 1.0
 	if move.get("power", 0) > 0:
@@ -41,7 +43,7 @@ static func execute(move: Dictionary, attacker: Monster, defender: Monster, batt
 		# ── BASIC ATTACK — was missing, causing no damage! ──
 		"attack":
 			var dmg = int(move.get("power", 0) * multiplier)
-			dmg = max(1, dmg - defender.defense_stage * 5)
+			dmg = max(1, dmg - BASE_DEFENSE - defender.defense_stage * 5)
 			defender.take_damage(dmg)
 
 		"defense_buff":
@@ -91,7 +93,7 @@ static func execute(move: Dictionary, attacker: Monster, defender: Monster, batt
 
 		"guaranteed_hit":
 			var dmg = int(move.get("power", 0) * multiplier)
-			dmg = max(1, dmg - defender.defense_stage * 5)
+			dmg = max(1, dmg - BASE_DEFENSE - defender.defense_stage * 5)
 			defender.take_damage(dmg)
 			battle_manager.emit_signal("battle_log", "Guaranteed hit!")
 
@@ -358,14 +360,14 @@ static func execute(move: Dictionary, attacker: Monster, defender: Monster, batt
 
 		"guaranteed_hit":
 			var dmg = int(move.get("power", 0) * multiplier)
-			dmg = max(1, dmg - defender.defense_stage * 5)
+			dmg = max(1, dmg - BASE_DEFENSE - defender.defense_stage * 5)
 			defender.take_damage(dmg)
 
 		_:
 			# Fallback — jika effect tidak dikenali, lakukan basic damage
 			if move.get("power", 0) > 0:
 				var dmg = int(move["power"] * multiplier)
-				dmg = max(1, dmg - defender.defense_stage * 5)
+				dmg = max(1, dmg - BASE_DEFENSE - defender.defense_stage * 5)
 				defender.take_damage(dmg)
 				battle_manager.emit_signal("battle_log", "Attack connected!")
 
@@ -377,7 +379,7 @@ static func execute_damage_only(move: Dictionary, attacker: Monster, defender: M
 
 	var multiplier = battle_manager.get_type_multiplier(attacker.type, defender.type)
 	var damage = int(power * multiplier)
-	var defense_reduction = defender.defense_stage * 5
+	var defense_reduction = BASE_DEFENSE + defender.defense_stage * 5
 	damage = max(1, damage - defense_reduction)
 
 	defender.hp = max(0, defender.hp - damage)
