@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://41s8771k0ijc"]
+
+[ext_resource type="Script" uid="uid://o4ck1lmibcer" path="res://entities/player.gd" id="1_b0kkn"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_merdl"]
+load_path = "res://.godot/imported/Warrior_Run.png-935fdfa2bc1bc9c5ef48beaf34af28b0.ctex"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b0kkn"]
+radius = 18.027756
+
+[sub_resource type="Animation" id="Animation_merdl"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_b0kkn"]
+resource_name = "run"
+length = 0.5
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e4p34"]
+_data = {
+&"RESET": SubResource("Animation_merdl"),
+&"run": SubResource("Animation_b0kkn")
+}
+
+[node name="Player" type="CharacterBody2D" unique_id=902728389]
+collision_layer = 2
+script = ExtResource("1_b0kkn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=381281951]
+position = Vector2(0, -32)
+texture = SubResource("CompressedTexture2D_merdl")
+hframes = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1684568578]
+shape = SubResource("CircleShape2D_b0kkn")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=43628371]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1520063462]
+libraries/ = SubResource("AnimationLibrary_e4p34")
