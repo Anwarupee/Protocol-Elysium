@@ -7,6 +7,7 @@ extends "res://battle/Battle.gd"
 
 var tutorial_active: bool = false
 var tutorial_step: int = 0
+var dialog_open: bool = false  # Flag pause ringan — tidak ganggu timer
 const STEP_FREE_BATTLE = 99
 
 var p_data: Dictionary = {}
@@ -43,11 +44,102 @@ func _ready():
 
 	build_ui(p_data, enemy_data)
 	connect_signals()
+	_add_escape_button()
 	battle_manager.start_battle(player_choice, enemy_choice)
+	battle_manager.tutorial_locked = true
 	await play_intro_animation()
 	await start_tutorial_flow()
 
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		_confirm_exit()
+
+func _add_escape_button():
+	var btn = Button.new()
+	btn.text = "✕ KELUAR"
+	btn.position = Vector2(16, 16)
+	btn.size = Vector2(100, 28)
+	btn.z_index = 10
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.25, 0.06, 0.06, 0.85)
+	style.border_color = Color(0.8, 0.3, 0.3, 0.6)
+	style.border_width_left = 1; style.border_width_right = 1
+	style.border_width_top = 1; style.border_width_bottom = 1
+	style.corner_radius_top_left = 4; style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4; style.corner_radius_bottom_right = 4
+	btn.add_theme_stylebox_override("normal", style)
+	var hover = style.duplicate()
+	hover.bg_color = Color(0.4, 0.1, 0.1, 0.95)
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_font_size_override("font_size", 11)
+	btn.add_theme_color_override("font_color", Color(1, 0.5, 0.5))
+	btn.pressed.connect(_confirm_exit)
+	add_child(btn)
+
+func _confirm_exit():
+	# Jangan tampilkan konfirmasi kalau dialog lain sedang terbuka
+	if dialog_open:
+		return
+	dialog_open = true
+
+	var overlay = ColorRect.new()
+	overlay.color = Color(0, 0, 0, 0.8)
+	overlay.size = Vector2(1152, 648)
+	overlay.z_index = 20
+	add_child(overlay)
+
+	var panel = ColorRect.new()
+	panel.color = Color(0.1, 0.05, 0.05)
+	panel.size = Vector2(420, 160)
+	panel.position = Vector2(366, 244)
+	overlay.add_child(panel)
+
+	var border = ColorRect.new()
+	border.color = Color(0.8, 0.3, 0.3)
+	border.size = Vector2(420, 3)
+	panel.add_child(border)
+
+	var lbl_title = _add_label(panel, "Keluar dari Battle?", Vector2(20, 16), 16, Color(1, 0.6, 0.6))
+	var lbl_body = _add_label(panel, "Progress tutorial akan hilang.\nKamu akan kembali ke Main Menu.", Vector2(20, 48), 12, Color(0.8, 0.75, 0.75))
+	lbl_body.size = Vector2(380, 50)
+	lbl_body.autowrap_mode = TextServer.AUTOWRAP_WORD
+
+	var btn_cancel = _make_button("Lanjut Battle", Vector2(20, 112), Vector2(180, 36), Color(0.08, 0.25, 0.12))
+	panel.add_child(btn_cancel)
+
+	var btn_exit = _make_button("Keluar", Vector2(218, 112), Vector2(180, 36), Color(0.35, 0.08, 0.08))
+	panel.add_child(btn_exit)
+
+	overlay.modulate.a = 0.0
+	var tw = create_tween()
+	tw.tween_property(overlay, "modulate:a", 1.0, 0.15)
+	await tw.finished
+
+	var choice = await _wait_for_either(btn_cancel, btn_exit)
+
+	var tw2 = create_tween()
+	tw2.tween_property(overlay, "modulate:a", 0.0, 0.15)
+	await tw2.finished
+	overlay.queue_free()
+	dialog_open = false
+
+	if choice == "exit":
+		var scene = load("res://menus/main_menu/MainMenu.tscn").instantiate()
+		get_tree().root.add_child(scene)
+		get_tree().current_scene = scene
+		queue_free()
+
+func _wait_for_either(btn_a: Button, btn_b: Button) -> String:
+	var result = ""
+	var done = false
+	btn_a.pressed.connect(func(): result = "cancel"; done = true)
+	btn_b.pressed.connect(func(): result = "exit"; done = true)
+	while not done:
+		await get_tree().process_frame
+	return result
+
 func _categorize_moves():
+	# Pass 1: assign buff, heal, attack berdasarkan effect
 	for i in p_moves.size():
 		var effect = p_moves[i].get("effect", "")
 		if move_buff_idx == -1 and effect in BUFF_EFFECTS:
@@ -56,12 +148,43 @@ func _categorize_moves():
 			move_heal_idx = i
 		elif move_attack_idx == -1 and effect in ATTACK_EFFECTS:
 			move_attack_idx = i
-		elif move_extra_idx == -1:
-			move_extra_idx = i
-	if move_attack_idx == -1: move_attack_idx = 0
-	if move_buff_idx   == -1: move_buff_idx   = 1
-	if move_heal_idx   == -1: move_heal_idx   = 2
-	if move_extra_idx  == -1: move_extra_idx  = 3
+
+	# Pass 2: isi move_extra dari yang belum dipakai
+	for i in p_moves.size():
+		if i != move_buff_idx and i != move_heal_idx and i != move_attack_idx:
+			if move_extra_idx == -1:
+				move_extra_idx = i
+
+	# Fallback jika sentinel tidak punya heal:
+	# Gunakan move_extra sebagai "heal step" (tetap diajarkan, hanya beda label)
+	# Pastikan tidak ada collision — tiap index harus unik
+	if move_attack_idx == -1:
+		move_attack_idx = _first_unused([move_buff_idx, move_heal_idx, move_extra_idx])
+	if move_buff_idx == -1:
+		move_buff_idx = _first_unused([move_attack_idx, move_heal_idx, move_extra_idx])
+	if move_heal_idx == -1:
+		# Pakai move_extra sebagai heal step kalau ada
+		if move_extra_idx != -1 and move_extra_idx != move_buff_idx and move_extra_idx != move_attack_idx:
+			move_heal_idx = move_extra_idx
+			move_extra_idx = _first_unused([move_buff_idx, move_attack_idx, move_heal_idx])
+		else:
+			move_heal_idx = _first_unused([move_buff_idx, move_attack_idx, move_extra_idx])
+	if move_extra_idx == -1:
+		move_extra_idx = _first_unused([move_buff_idx, move_attack_idx, move_heal_idx])
+
+	# Final safety — pastikan semua berbeda
+	var used = [move_buff_idx, move_attack_idx, move_heal_idx]
+	if move_extra_idx in used:
+		move_extra_idx = _first_unused(used)
+
+	print("Tutorial categorize — buff:%d attack:%d heal:%d extra:%d" % [
+		move_buff_idx, move_attack_idx, move_heal_idx, move_extra_idx])
+
+func _first_unused(used: Array) -> int:
+	for i in p_moves.size():
+		if i not in used:
+			return i
+	return 0  # fallback absolut
 
 func on_move_pressed(index: int):
 	if tutorial_active and tutorial_step != STEP_FREE_BATTLE:
@@ -109,43 +232,53 @@ func start_tutorial_flow():
 	tutorial_step = 1
 	set_buttons_disabled(false)
 	var bm = p_moves[move_buff_idx]
-	await show_dialog("Move: " + bm["name"].to_upper() + "  [BUFF — Perkuat Pertahanan]",
-		bm.get("edu_popup", bm.get("edu_log", "Move ini memperkuat pertahananmu.")),
+	var buff_dialog = _get_move_gameplay_dialog(bm)
+	await show_dialog(
+		buff_dialog["title"],
+		buff_dialog["body"],
 		"Sekarang klik  " + bm["name"].to_upper() + "  di daftar move!", "🛡")
+	highlight_move_button(move_buff_idx)
 	await wait_for_move_used(move_buff_idx)
 	set_buttons_disabled(true)
 	await show_dialog("Bagus! " + bm["name"] + " berhasil!",
-		"Move ini merepresentasikan pertahanan nyata di dunia siber.\nPertahanan berlapis adalah kunci — jangan tunggu diserang baru bertahan.",
+		buff_dialog["after"],
 		"Lanjut ke move serangan!", "✓")
 
 	# Step attack
 	tutorial_step = 2
 	set_buttons_disabled(false)
 	var am = p_moves[move_attack_idx]
-	await show_dialog("Move: " + am["name"].to_upper() + "  [SERANGAN]",
-		am.get("edu_popup", am.get("edu_log", "Move ini menyerang lawan.")),
+	var atk_dialog = _get_move_gameplay_dialog(am)
+	await show_dialog(
+		atk_dialog["title"],
+		atk_dialog["body"],
 		"Klik  " + am["name"].to_upper() + "  untuk menyerang Biti!", "⚔")
+	highlight_move_button(move_attack_idx)
 	await wait_for_move_used(move_attack_idx)
 	set_buttons_disabled(true)
 	await show_dialog("Serangan berhasil!",
-		"Di dunia siber, pertahanan aktif berarti memblokir dan melawan ancaman sebelum mereka merusak lebih jauh.",
-		"Lanjut ke move pemulihan!", "✓")
+		atk_dialog["after"],
+		"Lanjut ke move berikutnya!", "✓")
 
-	# Step heal
+	# Step heal/special
 	tutorial_step = 3
 	set_buttons_disabled(false)
 	var hm = p_moves[move_heal_idx]
-	await show_dialog("Move: " + hm["name"].to_upper() + "  [PULIHKAN HP]",
-		hm.get("edu_popup", hm.get("edu_log", "Move ini memulihkan HP.")),
-		"Gunakan  " + hm["name"].to_upper() + "  untuk memulihkan HP!", "💾")
+	var heal_dialog = _get_move_gameplay_dialog(hm)
+	await show_dialog(
+		heal_dialog["title"],
+		heal_dialog["body"],
+		"Gunakan  " + hm["name"].to_upper() + "  sekarang!", "💾")
+	highlight_move_button(move_heal_idx)
 	await wait_for_move_used(move_heal_idx)
 	set_buttons_disabled(true)
-	await show_dialog("HP pulih!",
-		"Di dunia nyata, pemulihan sistem berarti restore dari backup dan incident response yang cepat.\nSemakin siap kamu sebelum serangan, semakin cepat pemulihannya.",
+	await show_dialog("Move " + hm["name"] + " berhasil!",
+		heal_dialog["after"],
 		"Sekarang kamu bebas gunakan semua move!", "✓")
 
-	# Free battle
+	# Free battle — unlock battle_ended
 	tutorial_step = STEP_FREE_BATTLE
+	battle_manager.tutorial_locked = false
 	set_buttons_disabled(false)
 	var em_name = p_moves[move_extra_idx]["name"] if move_extra_idx >= 0 else "move ke-4"
 	await show_dialog("Sekarang kamu siap!",
@@ -163,6 +296,153 @@ func _get_type_description(type: String) -> String:
 		"Monitor":            return "Monitor mewakili sistem pemantauan yang mendeteksi ancaman sebelum berkembang."
 		"Social Engineering": return "Social Engineering mewakili serangan yang memanipulasi manusia — bukan sistem."
 	return "Sentinel ini mewakili konsep penting dalam keamanan siber."
+
+func _get_move_gameplay_dialog(move: Dictionary) -> Dictionary:
+	var name = move["name"]
+	var effect = move.get("effect", "")
+	var power = move.get("power", 0)
+
+	match effect:
+		# ── BUFF ──
+		"defense_buff", "super_defense":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Tingkatkan Defense]",
+				"body": name + " akan meningkatkan Defense-mu.\nSemakin tinggi Defense, semakin kecil damage yang kamu terima dari serangan Biti.",
+				"after": "Defense-mu sekarang lebih tinggi!\nCoba lihat — serangan Biti berikutnya akan memberikan damage lebih kecil dari sebelumnya."
+			}
+		"accuracy_buff":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Tingkatkan Akurasi]",
+				"body": name + " akan meningkatkan Accuracy-mu.\nSerangan dengan accuracy tinggi lebih jarang miss — setiap hit pasti mengenai.",
+				"after": "Accuracy-mu sekarang lebih tinggi!\nSerangan berikutnya akan lebih konsisten mengenai Biti."
+			}
+		"speed_buff":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Tingkatkan Speed]",
+				"body": name + " akan meningkatkan Speed-mu.\nDengan speed lebih tinggi, kamu berpeluang menyerang duluan di ronde berikutnya.",
+				"after": "Speed-mu sekarang lebih tinggi!\nDalam battle, menyerang duluan bisa jadi perbedaan antara menang dan kalah."
+			}
+		"evasion_buff":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Tingkatkan Evasion]",
+				"body": name + " akan meningkatkan Evasion-mu.\nDengan evasion tinggi, ada kemungkinan serangan Biti meleset dan tidak mengenai.",
+				"after": "Evasion-mu sekarang lebih tinggi!\nBiti mungkin akan kesulitan mengenaimu di beberapa ronde ke depan."
+			}
+		"zero_day_shield", "decoy_payload":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Perisai Khusus]",
+				"body": name + " akan memberikan perisai khusus yang memblokir serangan berikutnya.\nSerangan pertama Biti setelah ini akan dibatalkan sepenuhnya.",
+				"after": "Perisai aktif!\nSerangan berikutnya dari Biti akan terblokir — gunakan waktu ini untuk menyerang."
+			}
+		"overclock", "pretexting":
+			return {
+				"title": "Move: " + name.to_upper() + "  [BUFF — Efek Khusus]",
+				"body": name + " memberikan buff khusus pada Sentinel-mu.\nEfek lengkapnya akan muncul di EDU-LOG — baca untuk tahu lebih detail.",
+				"after": "Buff aktif!\nPerhatikan bagaimana statsmu berubah di ronde-ronde berikutnya."
+			}
+
+		# ── ATTACK ──
+		"attack", "ssl_handshake", "shell_slam", "cipher_strike":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — " + str(power) + " Power]",
+				"body": name + " adalah serangan langsung dengan power " + str(power) + ".\nSemakin tinggi power, semakin besar damage yang diterima Biti.",
+				"after": "Damage masuk ke Biti!\nLihat HP bar Biti — setiap serangan yang mengenai mengurangi HP-nya."
+			}
+		"block_move":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN + BLOKIR]",
+				"body": name + " menyerang Biti sekaligus memblokir move Biti di ronde berikutnya.\nDua keuntungan sekaligus — damage masuk dan serangan balik dicegah.",
+				"after": "Serangan masuk dan blokir aktif!\nBiti tidak bisa menggunakan satu move-nya di ronde berikutnya."
+			}
+		"double_hit":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN GANDA]",
+				"body": name + " menyerang dua kali dalam satu ronde.\nTotal damage bisa mencapai " + str(power * 2) + " jika kedua hit mengenai.",
+				"after": "Dua serangan sekaligus!\nSerangan ganda efektif untuk mengurangi HP lawan dengan cepat."
+			}
+		"defense_debuff":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Turunkan Defense Lawan]",
+				"body": name + " menyerang sekaligus menurunkan Defense Biti.\nDefense Biti yang lebih rendah berarti serangan-seranganmu berikutnya lebih sakit.",
+				"after": "Defense Biti turun!\nSerangan berikutnya akan memberikan damage lebih besar dari sebelumnya."
+			}
+		"speed_debuff":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Turunkan Speed Lawan]",
+				"body": name + " menyerang sekaligus memperlambat Biti.\nBiti yang lebih lambat mungkin akan menyerang setelah kamu di beberapa ronde.",
+				"after": "Biti melambat!\nKalau speed-mu lebih tinggi dari Biti, kamu akan selalu menyerang duluan."
+			}
+		"guaranteed_hit":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Pasti Kena]",
+				"body": name + " adalah serangan yang tidak bisa meleset.\nBahkan jika Biti punya passive evasion, serangan ini tetap mengenai.",
+				"after": "Hit confirmed!\nSerangan yang guaranteed hit sangat efektif melawan lawan dengan evasion tinggi."
+			}
+		"ping_flood", "fork_bomb", "lure_strike", "syn_flood", "polymorphic":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN KHUSUS]",
+				"body": name + " adalah serangan dengan efek tambahan unik.\nSelain damage, ada efek khusus yang mempengaruhi jalannya battle.",
+				"after": "Serangan khusus berhasil!\nBaca EDU-LOG di bawah untuk tahu efek lengkap dari move ini."
+			}
+
+		# ── HEAL ──
+		"heal", "restore_point":
+			return {
+				"title": "Move: " + name.to_upper() + "  [PULIHKAN HP]",
+				"body": name + " akan memulihkan sebagian HP-mu.\nGunakan saat HP mulai menipis — jangan tunggu sampai hampir 0!",
+				"after": "HP kamu pulih!\nPenting: move ini punya cooldown, jadi tidak bisa dipakai setiap ronde."
+			}
+		"patch_deploy":
+			return {
+				"title": "Move: " + name.to_upper() + "  [PULIHKAN HP]",
+				"body": name + " akan memulihkan HP-mu seperti men-deploy patch keamanan.\nSemakin cepat kamu patch, semakin banyak HP yang bisa diselamatkan.",
+				"after": "HP kamu pulih!\nDi dunia nyata, patch cepat adalah salah satu cara terbaik mencegah kerusakan lebih lanjut."
+			}
+		"failover":
+			return {
+				"title": "Move: " + name.to_upper() + "  [PULIHKAN HP — Failover]",
+				"body": name + " mengaktifkan sistem cadangan untuk memulihkan HP.\nSeperti failover server — sistem backup langsung mengambil alih saat sistem utama bermasalah.",
+				"after": "Sistem cadangan aktif!\nHP kamu pulih berkat failover. Ingat cooldown-nya — rencanakan penggunaannya."
+			}
+
+		# ── DEBUFF / SPECIAL ──
+		"heal_lock":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Kunci Heal Lawan]",
+				"body": name + " menyerang Biti sekaligus mengunci kemampuan heal-nya.\nBiti tidak bisa memulihkan HP selama beberapa ronde ke depan.",
+				"after": "Heal Biti terkunci!\nIni saat yang tepat untuk menyerang habis-habisan — Biti tidak bisa pulih."
+			}
+		"confuse":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Buat Lawan Bingung]",
+				"body": name + " menyerang sekaligus membuat Biti kebingungan.\nBiti yang confused punya chance menyakiti dirinya sendiri.",
+				"after": "Biti kebingungan!\nPerhatikan battle log — Biti mungkin akan menyerang dirinya sendiri di ronde berikutnya."
+			}
+		"reset_buffs":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN — Reset Buff Lawan]",
+				"body": name + " menyerang sekaligus mereset semua buff yang dimiliki Biti.\nSemua peningkatan stat Biti akan kembali ke nilai awal.",
+				"after": "Buff Biti direset!\nSemua keuntungan yang dikumpulkan Biti hilang seketika."
+			}
+		"trojan":
+			return {
+				"title": "Move: " + name.to_upper() + "  [SERANGAN TERTUNDA]",
+				"body": name + " menanam bom waktu di dalam sistem Biti.\nBeberapa ronde lagi, bom ini meledak dan memberikan damage besar.",
+				"after": "Trojan tertanam!\nTunggu beberapa ronde — ledakan damage besar akan datang secara otomatis."
+			}
+		"copy_move":
+			return {
+				"title": "Move: " + name.to_upper() + "  [TIRU MOVE LAWAN]",
+				"body": name + " meniru move terakhir yang digunakan Biti.\nDamage dan efeknya sama persis dengan move yang ditiru.",
+				"after": "Move Biti berhasil ditiru!\nStrategi ini efektif saat lawan punya move powerful yang ingin kamu balik ke mereka."
+			}
+
+	# Default fallback
+	return {
+		"title": "Move: " + name.to_upper(),
+		"body": name + " akan memberikan efek pada pertarungan ini.\nPerhatikan battle log untuk melihat apa yang terjadi.",
+		"after": "Move berhasil!\nBaca EDU-LOG di bawah untuk penjelasan lebih detail tentang move ini."
+	}
 
 func wait_for_move_used(expected_index: int) -> void:
 	var move_name = p_moves[expected_index]["name"]
@@ -290,6 +570,8 @@ func show_type_advantage_tutorial(player_type: String) -> void:
 	overlay.queue_free()
 
 func show_dialog(title: String, body: String, tip: String, icon: String) -> void:
+	dialog_open = true
+
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.75)
 	overlay.size = Vector2(1152, 648)
@@ -297,12 +579,12 @@ func show_dialog(title: String, body: String, tip: String, icon: String) -> void
 
 	var panel = ColorRect.new()
 	panel.color = Color(0.07, 0.08, 0.26)
-	panel.size = Vector2(720, 220)
-	panel.position = Vector2(216, 214)
+	panel.size = Vector2(720, 270)
+	panel.position = Vector2(216, 189)
 	overlay.add_child(panel)
 
 	var bt = ColorRect.new(); bt.color = Color(0.4, 0.9, 1); bt.size = Vector2(720, 3); panel.add_child(bt)
-	var bl = ColorRect.new(); bl.color = Color(0.4, 0.9, 1, 0.5); bl.size = Vector2(3, 220); panel.add_child(bl)
+	var bl = ColorRect.new(); bl.color = Color(0.4, 0.9, 1, 0.5); bl.size = Vector2(3, 270); panel.add_child(bl)
 
 	_add_label(panel, "[ ELYSIUM INTEL ]", Vector2(12, 10), 11, Color(0.4, 0.9, 1))
 	_add_label(panel, icon, Vector2(682, 8), 22, Color(0.4, 0.9, 1, 0.7))
@@ -310,14 +592,27 @@ func show_dialog(title: String, body: String, tip: String, icon: String) -> void
 
 	var sep = ColorRect.new(); sep.color = Color(1,1,1,0.08); sep.size = Vector2(696, 1); sep.position = Vector2(12, 52); panel.add_child(sep)
 
-	var bl2 = _add_label(panel, body, Vector2(12, 60), 12, Color(0.85, 0.92, 1))
-	bl2.size = Vector2(696, 100); bl2.autowrap_mode = TextServer.AUTOWRAP_WORD
+	# Body — max 2 baris, ~68 karakter per baris
+	# autowrap dimatikan — _fit_text yang handle, clip container mencegah overflow
+	var body_display = _fit_text(body, 68, 2)
+	var body_clip = Control.new()
+	body_clip.position = Vector2(12, 60)
+	body_clip.size = Vector2(696, 80)
+	body_clip.clip_contents = true
+	panel.add_child(body_clip)
+	var bl2 = _add_label(body_clip, body_display, Vector2(0, 0), 12, Color(0.85, 0.92, 1))
+	bl2.custom_minimum_size = Vector2(696, 0)
+	bl2.autowrap_mode = TextServer.AUTOWRAP_WORD
 
-	var tb = ColorRect.new(); tb.color = Color(0.1, 0.3, 0.15, 0.8); tb.size = Vector2(696, 30); tb.position = Vector2(12, 168); panel.add_child(tb)
-	var tl = _add_label(panel, "💡  " + tip, Vector2(18, 174), 11, Color(0.5, 1, 0.6))
-	tl.size = Vector2(540, 24); tl.autowrap_mode = TextServer.AUTOWRAP_WORD
+	# Tip — 1 baris, ~58 karakter (font 11, ada prefix 💡  = ~4 char)
+	var tip_display = _fit_text(tip, 58, 1)
+	var tb = ColorRect.new(); tb.color = Color(0.1, 0.3, 0.15, 0.8)
+	tb.size = Vector2(696, 28); tb.position = Vector2(12, 148); panel.add_child(tb)
+	var tl = _add_label(panel, "💡  " + tip_display, Vector2(18, 153), 11, Color(0.5, 1, 0.6))
+	tl.custom_minimum_size = Vector2(690, 0)
 
-	var btn = _make_button("Mengerti  ▶", Vector2(540, 176), Vector2(168, 36), Color(0.1, 0.4, 0.2))
+	# Tombol — y=222, jelas di bawah tip
+	var btn = _make_button("Mengerti  ▶", Vector2(540, 222), Vector2(168, 36), Color(0.1, 0.4, 0.2))
 	panel.add_child(btn)
 
 	overlay.modulate.a = 0.0
@@ -325,6 +620,8 @@ func show_dialog(title: String, body: String, tip: String, icon: String) -> void
 	await btn.pressed
 	var tw2 = create_tween(); tw2.tween_property(overlay, "modulate:a", 0.0, 0.15); await tw2.finished
 	overlay.queue_free()
+
+	dialog_open = false
 
 func show_tutorial_hint(msg: String) -> void:
 	var hint = ColorRect.new()
@@ -340,18 +637,46 @@ func show_tutorial_hint(msg: String) -> void:
 	hint.queue_free()
 
 func highlight_element(node_name: String) -> void:
-	var target = find_child(node_name, true, false)
+	var target: Node = null
+	if node_name == "player_hp_bar":
+		target = player_hp_bar
+	elif node_name == "enemy_hp_bar":
+		target = enemy_hp_bar
+	else:
+		target = find_child(node_name, true, false)
 	if not target: return
-	var glow = ColorRect.new()
-	glow.color = Color(0.4, 0.9, 1, 0.25)
-	glow.size = (target.size + Vector2(12,12)) if target is Control else Vector2(90, 90)
-	glow.position = (target.position - Vector2(6,6)) if target is Control else (target.position - Vector2(45,45))
-	add_child(glow)
-	var t = create_tween(); t.set_loops(3)
-	t.tween_property(glow, "modulate:a", 0.3, 0.4)
-	t.tween_property(glow, "modulate:a", 1.0, 0.4)
+
+	# Tunggu satu frame agar global_position valid
+	await get_tree().process_frame
+
+	var glow_outer = ColorRect.new()
+	glow_outer.color = Color(0.4, 0.9, 1, 0.6)
+	var glow_inner = ColorRect.new()
+	glow_inner.color = Color(0.4, 0.9, 1, 0.25)
+
+	if target is Control:
+		var pos = target.global_position
+		var sz = target.size
+		glow_outer.size = sz + Vector2(10, 10)
+		glow_outer.position = pos - Vector2(5, 5)
+		glow_inner.size = sz
+		glow_inner.position = pos
+	else:
+		glow_outer.size = Vector2(110, 110)
+		glow_outer.position = target.position - Vector2(55, 55)
+		glow_inner.size = Vector2(80, 80)
+		glow_inner.position = target.position - Vector2(40, 40)
+
+	add_child(glow_outer)
+	add_child(glow_inner)
+
+	var t = create_tween()
+	t.set_loops(4)
+	t.tween_property(glow_outer, "modulate:a", 0.15, 0.3)
+	t.tween_property(glow_outer, "modulate:a", 1.0, 0.3)
 	await t.finished
-	glow.queue_free()
+	glow_outer.queue_free()
+	glow_inner.queue_free()
 
 func on_battle_ended(player_won: bool):
 	battle_active = false
@@ -399,3 +724,55 @@ func _make_button(text: String, pos: Vector2, sz: Vector2, color: Color) -> Butt
 	btn.add_theme_font_size_override("font_size", 14)
 	btn.add_theme_color_override("font_color", Color.WHITE)
 	return btn
+
+func highlight_move_button(index: int) -> void:
+	if index < 0 or index >= move_buttons.size():
+		return
+	var btn = move_buttons[index]
+	var hs = StyleBoxFlat.new()
+	hs.bg_color = btn.get_theme_stylebox("normal").bg_color.lightened(0.15)
+	hs.border_color = Color(0.4, 0.9, 1)
+	hs.border_width_left = 3; hs.border_width_right = 3
+	hs.border_width_top = 3; hs.border_width_bottom = 3
+	hs.corner_radius_top_left = 8; hs.corner_radius_top_right = 8
+	hs.corner_radius_bottom_left = 8; hs.corner_radius_bottom_right = 8
+	var ns = btn.get_theme_stylebox("normal").duplicate()
+	for _i in 3:
+		btn.add_theme_stylebox_override("normal", hs)
+		await get_tree().create_timer(0.3).timeout
+		btn.add_theme_stylebox_override("normal", ns)
+		await get_tree().create_timer(0.2).timeout
+	btn.add_theme_stylebox_override("normal", hs)  # Tetap highlight sampai diklik
+
+func _fit_text(text: String, max_chars: int, max_lines: int) -> String:
+	# Split dulu berdasarkan \n
+	var raw_lines = text.split("\n")
+	var all_lines: Array = []
+
+	# Tiap baris yang terlalu panjang, potong di word boundary
+	for raw in raw_lines:
+		if raw.length() <= max_chars:
+			all_lines.append(raw)
+		else:
+			var remaining = raw
+			while remaining.length() > max_chars:
+				var cut = max_chars
+				# Cari spasi terdekat ke kiri dari posisi cut
+				while cut > 0 and remaining[cut] != " ":
+					cut -= 1
+				if cut == 0:
+					cut = max_chars  # Tidak ada spasi, potong paksa
+				all_lines.append(remaining.substr(0, cut))
+				remaining = remaining.substr(cut).strip_edges()
+			if remaining.length() > 0:
+				all_lines.append(remaining)
+
+	# Ambil max_lines baris pertama
+	var result: Array = []
+	for i in min(all_lines.size(), max_lines):
+		result.append(all_lines[i])
+	if all_lines.size() > max_lines and result.size() > 0:
+		var last = result[result.size() - 1]
+		if not last.ends_with("…"):
+			result[result.size() - 1] = last.substr(0, min(last.length(), max_chars - 1)) + "…"
+	return "\n".join(result)

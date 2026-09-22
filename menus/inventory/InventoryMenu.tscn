@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://di4mb8an5ajyp"]
+
+[ext_resource type="Script" uid="uid://cp3m58talg2t1" path="res://menus/inventory/InventoryMenu.gd" id="1_454rg"]
+
+[node name="InventoryMenu" type="Node2D" unique_id=649950257]
+script = ExtResource("1_454rg")

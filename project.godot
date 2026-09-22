@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Protocol: Elysium"
-run/main_scene="uid://bcjkky85fugh1"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 GlobalData="*uid://h4jjq8io41g0"
 SentinelSprites="*uid://dypccjxjeaf07"
+InteractionManager="*uid://2txw6mhvp1dx"
+SceneManager="*uid://id858nqiac2b"
 
 [display]
 

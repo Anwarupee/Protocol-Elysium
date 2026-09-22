@@ -4,6 +4,8 @@ var particles: Array = []
 var time: float = 0.0
 
 func _ready():
+	if GlobalData.is_first_time:
+		GlobalData.mark_played()
 	build_ui()
 	spawn_particles()
 	animate_title()
@@ -13,193 +15,171 @@ func _process(delta):
 	update_particles(delta)
 
 func build_ui():
-	# ── BACKGROUND ──
 	var bg = ColorRect.new()
 	bg.color = Color(0.03, 0.03, 0.12)
-	bg.size = Vector2(1152, 648)
+	bg.size = Vector2(1920, 1080)
 	add_child(bg)
 
-	# Radial glow center
-	for i in range(5, 0, -1):
-		var glow = ColorRect.new()
-		var s = i * 180.0
-		glow.color = Color(0.1, 0.2, 0.5, 0.04 * i)
-		glow.size = Vector2(s, s)
-		glow.position = Vector2(576 - s/2, 324 - s/2)
-		add_child(glow)
-
-	# Grid lines horizontal
-	for i in range(0, 648, 60):
+	for i in range(0, 1920, 100):
 		var line = ColorRect.new()
 		line.color = Color(0.2, 0.3, 0.6, 0.04)
-		line.size = Vector2(1152, 1)
+		line.size = Vector2(1, 1080)
+		line.position = Vector2(i, 0)
+		add_child(line)
+	for i in range(0, 1080, 100):
+		var line = ColorRect.new()
+		line.color = Color(0.2, 0.3, 0.6, 0.04)
+		line.size = Vector2(1920, 1)
 		line.position = Vector2(0, i)
 		add_child(line)
 
-	# Grid lines vertical
-	for i in range(0, 1152, 60):
-		var line = ColorRect.new()
-		line.color = Color(0.2, 0.3, 0.6, 0.04)
-		line.size = Vector2(1, 648)
-		line.position = Vector2(i, 0)
-		add_child(line)
-
-	# Scanline overlay
-	for i in range(0, 648, 4):
+	for i in range(0, 1080, 7):
 		var scan = ColorRect.new()
 		scan.color = Color(0, 0, 0, 0.03)
-		scan.size = Vector2(1152, 2)
+		scan.size = Vector2(1920, 3)
 		scan.position = Vector2(0, i)
 		add_child(scan)
 
-	# ── LOGO ──
-	var logo_glow = ColorRect.new()
-	logo_glow.color = Color(0.2, 0.6, 1, 0.08)
-	logo_glow.size = Vector2(180, 180)
-	logo_glow.position = Vector2(486, 40)
-	logo_glow.name = "logo_glow"
-	add_child(logo_glow)
-
+	# ── LOGO (centered) ──
 	var logo_outer = ColorRect.new()
 	logo_outer.color = Color(0.1, 0.2, 0.5)
-	logo_outer.size = Vector2(130, 130)
-	logo_outer.position = Vector2(511, 55)
+	logo_outer.size = Vector2(217, 217)
+	logo_outer.position = Vector2(852, 92)
 	add_child(logo_outer)
 
 	var logo_border_top = ColorRect.new()
 	logo_border_top.color = Color(0.4, 0.9, 1)
-	logo_border_top.size = Vector2(130, 3)
-	logo_border_top.position = Vector2(511, 55)
+	logo_border_top.size = Vector2(217, 5)
+	logo_border_top.position = Vector2(852, 92)
 	add_child(logo_border_top)
 
 	var logo_border_left = ColorRect.new()
 	logo_border_left.color = Color(0.4, 0.9, 1, 0.5)
-	logo_border_left.size = Vector2(3, 130)
-	logo_border_left.position = Vector2(511, 55)
+	logo_border_left.size = Vector2(5, 217)
+	logo_border_left.position = Vector2(852, 92)
 	add_child(logo_border_left)
 
 	var logo_inner = ColorRect.new()
 	logo_inner.color = Color(0.3, 0.8, 1)
-	logo_inner.size = Vector2(80, 80)
-	logo_inner.position = Vector2(536, 80)
+	logo_inner.size = Vector2(133, 133)
+	logo_inner.position = Vector2(894, 133)
 	logo_inner.name = "logo_inner"
 	add_child(logo_inner)
 
 	var logo_shine = ColorRect.new()
 	logo_shine.color = Color(1, 1, 1, 0.25)
-	logo_shine.size = Vector2(28, 12)
-	logo_shine.position = Vector2(541, 85)
+	logo_shine.size = Vector2(47, 20)
+	logo_shine.position = Vector2(902, 142)
 	add_child(logo_shine)
 
-	# PE monogram di dalam logo
-	var logo_text = create_label("PE", Vector2(548, 88), 28, Color(0.05, 0.1, 0.3))
+	var logo_text = create_label("PE", Vector2(913, 147), 47, Color(0.05, 0.1, 0.3))
 	add_child(logo_text)
 
 	# ── TITLE ──
-	var title_shadow = create_label("Protocol: Elysium", Vector2(2, 202), 54, Color(0.1, 0.3, 0.6, 0.5))
+	var title_shadow = create_label("Protocol: Elysium", Vector2(3, 337), 90, Color(0.1, 0.3, 0.6, 0.5))
 	title_shadow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title_shadow.custom_minimum_size = Vector2(1152, 70)
+	title_shadow.custom_minimum_size = Vector2(1920, 117)
 	add_child(title_shadow)
 
-	var title = create_label("Protocol: Elysium", Vector2(0, 200), 54, Color(0.4, 0.9, 1))
+	var title = create_label("Protocol: Elysium", Vector2(0, 333), 90, Color(0.4, 0.9, 1))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.custom_minimum_size = Vector2(1152, 70)
+	title.custom_minimum_size = Vector2(1920, 117)
 	title.name = "title_label"
 	add_child(title)
 
-	var subtitle = create_label("C Y B E R S E C U R I T Y  B A T T L E  S I M U L A T O R", Vector2(0, 264), 13, Color(0.4, 0.5, 0.7))
+	var subtitle = create_label("C Y B E R S E C U R I T Y   B A T T L E   S I M U L A T O R", Vector2(0, 440), 22, Color(0.4, 0.5, 0.7))
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.custom_minimum_size = Vector2(1152, 25)
+	subtitle.custom_minimum_size = Vector2(1920, 40)
 	add_child(subtitle)
 
-	# Accent lines kiri kanan subtitle
 	var line_left = ColorRect.new()
 	line_left.color = Color(0.3, 0.4, 0.7, 0.6)
-	line_left.size = Vector2(180, 1)
-	line_left.position = Vector2(200, 276)
+	line_left.size = Vector2(300, 2)
+	line_left.position = Vector2(300, 460)
 	add_child(line_left)
-
 	var line_right = ColorRect.new()
 	line_right.color = Color(0.3, 0.4, 0.7, 0.6)
-	line_right.size = Vector2(180, 1)
-	line_right.position = Vector2(772, 276)
+	line_right.size = Vector2(300, 2)
+	line_right.position = Vector2(1287, 460)
 	add_child(line_right)
-
-	# ── DIVIDER ──
-	var div_glow = ColorRect.new()
-	div_glow.color = Color(0.3, 0.5, 0.9, 0.15)
-	div_glow.size = Vector2(400, 6)
-	div_glow.position = Vector2(376, 303)
-	add_child(div_glow)
 
 	var div = ColorRect.new()
 	div.color = Color(0.4, 0.6, 1, 0.5)
-	div.size = Vector2(400, 1)
-	div.position = Vector2(376, 306)
+	div.size = Vector2(667, 2)
+	div.position = Vector2(627, 505)
 	add_child(div)
 
-	# ── BUTTONS ──
-	var play_btn = create_menu_button("▶   PLAY", Vector2(426, 330), Color(0.08, 0.4, 0.15))
+	# ── MENU BUTTONS (centered) ──
+	var btn_x = 710
+	var play_btn = create_menu_button("▶   PLAY", Vector2(btn_x, 530), Color(0.08, 0.4, 0.15))
 	play_btn.pressed.connect(go_to_selection)
 	add_child(play_btn)
 
-	var dex_btn = create_menu_button("◈   The Archive", Vector2(426, 405), Color(0.08, 0.25, 0.5))
+	var dex_btn = create_menu_button("◈   The Archive", Vector2(btn_x, 630), Color(0.08, 0.25, 0.5))
 	dex_btn.pressed.connect(go_to_thearchive)
 	add_child(dex_btn)
 
-	var quit_btn = create_menu_button("✕   QUIT", Vector2(426, 480), Color(0.35, 0.08, 0.08))
+	var inv_btn = create_menu_button("🎒  Inventory", Vector2(btn_x, 730), Color(0.2, 0.2, 0.45))
+	inv_btn.pressed.connect(go_to_inventory)
+	add_child(inv_btn)
+
+	var quit_btn = create_menu_button("✕   QUIT", Vector2(btn_x, 830), Color(0.35, 0.08, 0.08))
 	quit_btn.pressed.connect(quit_game)
 	add_child(quit_btn)
-	
+
+	# ── RESET SAVE (pojok kiri bawah) ──
 	var reset_btn = Button.new()
-	reset_btn.text = "↺ RESET TUTORIAL"
-	reset_btn.position = Vector2(20, 560)
-	reset_btn.size = Vector2(180, 28)
-	reset_btn.add_theme_font_size_override("font_size", 11)
-	reset_btn.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+	reset_btn.text = "↺ RESET SAVE"
+	reset_btn.position = Vector2(30, 1030)
+	reset_btn.size = Vector2(200, 35)
+	reset_btn.add_theme_font_size_override("font_size", 14)
+	reset_btn.add_theme_color_override("font_color", Color(0.4, 0.4, 0.5))
 	reset_btn.flat = true
-	reset_btn.pressed.connect(
-		func():
-		if FileAccess.file_exists("user://savedata.cfg"):
-			DirAccess.remove_absolute(
-			ProjectSettings.globalize_path("user://savedata.cfg")
-		)
+	reset_btn.pressed.connect(func():
+		for path in ["user://savedata_v2.cfg", "user://savedata.cfg"]:
+			if FileAccess.file_exists(path):
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 		GlobalData.is_first_time = true
-		print("Tutorial reset!")
+		GlobalData.active_team = []
+		GlobalData.caught_sentinels = []
+		GlobalData.items = {}
+		GlobalData.battles_won = 0
+		print("Save reset!")
 	)
 	add_child(reset_btn)
 
-	# ── BOTTOM INFO ──
+	# ── ITEM COUNT INDICATOR (pojok kanan bawah) ──
+	var item_info = create_label(
+		"💊 ×" + str(GlobalData.get_item_count("heal_potion")) +
+		"   🔑 ×" + str(GlobalData.get_item_count("capture_key")),
+		Vector2(1600, 1038), 20, Color(0.5, 0.7, 0.5)
+	)
+	add_child(item_info)
+
+	# ── BOTTOM BAR ──
 	var bottom_bar = ColorRect.new()
 	bottom_bar.color = Color(0.06, 0.06, 0.18)
-	bottom_bar.size = Vector2(1152, 30)
-	bottom_bar.position = Vector2(0, 618)
+	bottom_bar.size = Vector2(1920, 45)
+	bottom_bar.position = Vector2(0, 1035)
 	add_child(bottom_bar)
-
 	var bottom_border = ColorRect.new()
 	bottom_border.color = Color(0.2, 0.3, 0.6, 0.5)
-	bottom_border.size = Vector2(1152, 1)
-	bottom_border.position = Vector2(0, 618)
+	bottom_border.size = Vector2(1920, 2)
+	bottom_border.position = Vector2(0, 1035)
 	add_child(bottom_border)
-
-	var version = create_label("v0.2  —  Protocol: Elysium  —  Made with Godot", Vector2(0, 623), 11, Color(0.3, 0.3, 0.5))
+	var version = create_label("v0.3  —  Protocol: Elysium  —  Made with Godot", Vector2(0, 1046), 17, Color(0.3, 0.3, 0.5))
 	version.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	version.custom_minimum_size = Vector2(1152, 20)
+	version.custom_minimum_size = Vector2(1920, 30)
 	add_child(version)
 
 func spawn_particles():
-	for i in 40:
+	for i in 55:
 		var p = ColorRect.new()
-		var size = randf_range(1.5, 4.0)
+		var size = randf_range(2.0, 6.0)
 		p.size = Vector2(size, size)
-		p.position = Vector2(randf_range(0, 1152), randf_range(0, 648))
+		p.position = Vector2(randf_range(0, 1920), randf_range(0, 1080))
 		var brightness = randf_range(0.3, 0.8)
-		p.color = Color(
-			brightness * randf_range(0.3, 0.6),
-			brightness * randf_range(0.5, 0.9),
-			brightness,
-			randf_range(0.3, 0.7)
-		)
+		p.color = Color(brightness * randf_range(0.3, 0.6), brightness * randf_range(0.5, 0.9), brightness, randf_range(0.3, 0.7))
 		p.name = "particle_" + str(i)
 		add_child(p)
 		particles.append({
@@ -212,24 +192,20 @@ func spawn_particles():
 func update_particles(delta: float):
 	for p in particles:
 		p["node"].position += p["vel"] * delta
-		# Wrap around
 		if p["node"].position.y < -10:
-			p["node"].position.y = 658
-			p["node"].position.x = randf_range(0, 1152)
+			p["node"].position.y = 1090
+			p["node"].position.x = randf_range(0, 1920)
 		if p["node"].position.x < -10:
-			p["node"].position.x = 1162
-		if p["node"].position.x > 1162:
+			p["node"].position.x = 1930
+		if p["node"].position.x > 1930:
 			p["node"].position.x = -10
-		# Twinkle
 		var alpha = p["base_alpha"] + sin(time * 2.0 + p["phase"]) * 0.2
 		p["node"].color.a = clamp(alpha, 0.1, 0.9)
-
-	# Logo pulse
 	var logo = get_node_or_null("logo_inner")
 	if logo:
 		var pulse = 0.85 + sin(time * 1.5) * 0.08
 		logo.scale = Vector2(pulse, pulse)
-		logo.position = Vector2(536 + (1 - pulse) * 40, 80 + (1 - pulse) * 40)
+		logo.position = Vector2(894 + (1 - pulse) * 67, 133 + (1 - pulse) * 67)
 
 func animate_title():
 	var title = get_node_or_null("title_label")
@@ -238,41 +214,34 @@ func animate_title():
 	title.modulate.a = 0.0
 	var tween = create_tween()
 	tween.tween_property(title, "modulate:a", 1.0, 1.5).set_ease(Tween.EASE_OUT)
-	tween.parallel().tween_property(title, "position:y", 200, 1.5).set_trans(Tween.TRANS_BACK).from(180)
+	tween.parallel().tween_property(title, "position:y", 333, 1.5).set_trans(Tween.TRANS_BACK).from(300)
 
 func create_menu_button(text: String, pos: Vector2, color: Color) -> Button:
 	var btn = Button.new()
 	btn.text = text
 	btn.position = pos
-	btn.size = Vector2(300, 58)
-
+	btn.size = Vector2(500, 83)
 	var style = StyleBoxFlat.new()
 	style.bg_color = color
-	style.corner_radius_top_left = 6
-	style.corner_radius_top_right = 6
-	style.corner_radius_bottom_left = 6
-	style.corner_radius_bottom_right = 6
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
 	style.border_color = Color(0.4, 0.6, 1, 0.3)
-	style.border_width_left = 1
-	style.border_width_right = 1
-	style.border_width_top = 1
-	style.border_width_bottom = 1
+	style.border_width_left = 2
+	style.border_width_right = 2
+	style.border_width_top = 2
+	style.border_width_bottom = 2
 	btn.add_theme_stylebox_override("normal", style)
-
 	var hover_style = style.duplicate()
 	hover_style.bg_color = color.lightened(0.2)
 	hover_style.border_color = Color(0.5, 0.8, 1, 0.8)
-	hover_style.border_width_left = 2
-	hover_style.border_width_right = 2
-	hover_style.border_width_top = 2
-	hover_style.border_width_bottom = 2
+	hover_style.border_width_left = 3
+	hover_style.border_width_right = 3
+	hover_style.border_width_top = 3
+	hover_style.border_width_bottom = 3
 	btn.add_theme_stylebox_override("hover", hover_style)
-
-	var pressed_style = style.duplicate()
-	pressed_style.bg_color = color.darkened(0.2)
-	btn.add_theme_stylebox_override("pressed", pressed_style)
-
-	btn.add_theme_font_size_override("font_size", 18)
+	btn.add_theme_font_size_override("font_size", 27)
 	btn.add_theme_color_override("font_color", Color.WHITE)
 	return btn
 
@@ -283,24 +252,18 @@ func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> L
 	label.add_theme_font_size_override("font_size", font_size)
 	label.add_theme_color_override("font_color", color)
 	return label
-	
-func go_to_tutorial():
-	var battle_scene = load("res://battle/TutorialBattle.tscn").instantiate()
-	get_tree().root.add_child(battle_scene)
-	get_tree().current_scene = battle_scene
-	queue_free()
 
 func go_to_selection():
-	var scene = load("res://menus/selection/SelectionScreen.tscn").instantiate()
-	get_tree().root.add_child(scene)
-	get_tree().current_scene = scene
-	queue_free()
+	# PLAY selalu ke SlotSelectScreen
+	# SlotSelectScreen yang handle load/new game dan routing setelahnya
+	SceneManager.goto_menu("res://menus/slot_select/SlotSelectScreen.tscn")
 
 func go_to_thearchive():
-	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	get_tree().root.add_child(scene)
-	get_tree().current_scene = scene
-	queue_free()
+	SceneManager.goto_menu("res://menus/archive/TheArchive.tscn")
+
+func go_to_inventory():
+	GlobalData.inventory_return_path = "res://menus/main_menu/MainMenu.tscn"
+	SceneManager.goto_menu("res://menus/inventory/InventoryMenu.tscn")
 
 func quit_game():
 	get_tree().quit()

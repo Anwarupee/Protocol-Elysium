@@ -400,6 +400,20 @@ var monsters_data = [
 			{"name": "Perimeter Crush", "edu_log": "Defense in depth menggunakan lapisan pertahanan berlapis sehingga jika satu lapisan gagal, lapisan berikutnya tetap melindungi sistem."},
 			{"name": "Gate Slam", "edu_log": "Network Access Control (NAC) memastikan hanya perangkat yang memenuhi kebijakan keamanan yang diizinkan masuk ke jaringan."}
 		]
+	},
+	{
+		"id": "gate_gorilla", "name": "Gate-Gorilla", "number": "029",
+		"type": "Defensive", "color": Color(0.1, 0.35, 0.85),
+		"hp": 170, "speed": 30, "role": "Pure Tank",
+		"desc": "Gorilla raksasa penjaga gerbang utama Elysium — benteng terakhir sebelum core sistem bisa disentuh. Ia adalah embodiment dari Zero Trust Architecture yang tidak mempercayai siapapun tanpa verifikasi.",
+		"passive": "Port Blocker — 15% chance membatalkan serangan berikutnya lawan setelah setiap benturan.",
+		"advantage": "Kuat vs Social Engineering\nLemah vs System",
+		"moves": [
+			{"name": "WAF Strike", "edu_log": "Web Application Firewall (WAF) memfilter dan memantau trafik HTTP untuk melindungi aplikasi web dari serangan seperti SQL injection dan XSS."},
+			{"name": "Zero Trust Lock", "edu_log": "Zero Trust Security tidak mempercayai siapapun secara default, bahkan pengguna internal — setiap akses harus diverifikasi secara eksplisit."},
+			{"name": "Perimeter Crush", "edu_log": "Defense in depth menggunakan lapisan pertahanan berlapis sehingga jika satu lapisan gagal, lapisan berikutnya tetap melindungi sistem."},
+			{"name": "Gate Slam", "edu_log": "Network Access Control (NAC) memastikan hanya perangkat yang memenuhi kebijakan keamanan yang diizinkan masuk ke jaringan."}
+		]
 	}
 ]
 
@@ -411,47 +425,47 @@ func build_ui():
 	# Background
 	var bg = ColorRect.new()
 	bg.color = Color(0.05, 0.05, 0.15)
-	bg.size = Vector2(1152, 648)
+	bg.size = Vector2(3200, 1800)
 	add_child(bg)
 
-	for i in range(0, 1152, 80):
+	for i in range(0, 1920, 80):
 		var line = ColorRect.new()
 		line.color = Color(1, 1, 1, 0.015)
-		line.size = Vector2(1, 648)
+		line.size = Vector2(2, 1080)
 		line.position = Vector2(i, 0)
 		add_child(line)
 
 	# Header
 	var header_bg = ColorRect.new()
 	header_bg.color = Color(0.08, 0.08, 0.22)
-	header_bg.size = Vector2(1152, 48)
+	header_bg.size = Vector2(1920, 80)
 	add_child(header_bg)
 
 	var header_border = ColorRect.new()
 	header_border.color = Color(0.4, 0.9, 1, 0.5)
-	header_border.size = Vector2(1152, 2)
-	header_border.position = Vector2(0, 48)
+	header_border.size = Vector2(1920, 3)
+	header_border.position = Vector2(0, 80)
 	add_child(header_border)
 
-	var title = create_label("◈  Protocol-Link", Vector2(20, 12), 20, Color(0.4, 0.9, 1))
+	var title = create_label("◈  Protocol-Link", Vector2(33, 20), 20, Color(0.4, 0.9, 1))
 	add_child(title)
 
-	var count = create_label(str(monsters_data.size()) + " Sentinels Registered", Vector2(0, 15), 13, Color(0.5, 0.5, 0.7))
+	var count = create_label(str(monsters_data.size()) + " Sentinels Registered", Vector2(0, 25), 13, Color(0.5, 0.5, 0.7))
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	count.custom_minimum_size = Vector2(1132, 20)
+	count.custom_minimum_size = Vector2(1887, 33)
 	add_child(count)
 
 	# ── LEFT PANEL — sprite area (fixed) ──
 	var left_bg = ColorRect.new()
 	left_bg.color = Color(0.07, 0.07, 0.2, 0.95)
-	left_bg.size = Vector2(480, 598)
-	left_bg.position = Vector2(0, 50)
+	left_bg.size = Vector2(800, 997)
+	left_bg.position = Vector2(0, 83)
 	add_child(left_bg)
 
 	var sprite_area = ColorRect.new()
 	sprite_area.color = Color(0.1, 0.1, 0.28)
-	sprite_area.size = Vector2(480, 190)
-	sprite_area.position = Vector2(0, 50)
+	sprite_area.size = Vector2(800, 317)
+	sprite_area.position = Vector2(0, 83)
 	sprite_area.name = "sprite_area"
 	add_child(sprite_area)
 
@@ -460,8 +474,8 @@ func build_ui():
 	# ── LEFT PANEL — scrollable detail ──
 	var detail_scroll_container = ScrollContainer.new()
 	detail_scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	detail_scroll_container.position = Vector2(15, 242)
-	detail_scroll_container.size = Vector2(463, 406)
+	detail_scroll_container.position = Vector2(25, 403)
+	detail_scroll_container.size = Vector2(772, 677)
 	detail_scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(detail_scroll_container)
 	detail_scroll_container.follow_focus = true
@@ -469,8 +483,8 @@ func build_ui():
 
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	vbox.custom_minimum_size = Vector2(440, 0)
-	vbox.add_theme_constant_override("separation", 6)
+	vbox.custom_minimum_size = Vector2(733, 0)
+	vbox.add_theme_constant_override("separation", 10)
 	detail_scroll_container.add_child(vbox)
 	detail_vbox = vbox
 
@@ -488,7 +502,7 @@ func build_ui():
 	detail_labels["type_badge"] = create_label("[ Data ]", Vector2(0, 0), 12, Color(0.6, 0.6, 0.9))
 	type_role.add_child(detail_labels["type_badge"])
 	var sp = Control.new()
-	sp.custom_minimum_size = Vector2(10, 0)
+	sp.custom_minimum_size = Vector2(17, 0)
 	type_role.add_child(sp)
 	detail_labels["role"] = create_label("Defender", Vector2(0, 0), 12, Color(1, 0.8, 0.3))
 	type_role.add_child(detail_labels["role"])
@@ -498,7 +512,7 @@ func build_ui():
 	# Desc
 	detail_labels["desc"] = create_label("", Vector2(0, 0), 11, Color(0.75, 0.75, 0.85))
 	detail_labels["desc"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["desc"].custom_minimum_size = Vector2(440, 0)
+	detail_labels["desc"].custom_minimum_size = Vector2(733, 0)
 	vbox.add_child(detail_labels["desc"])
 
 	vbox.add_child(_divider())
@@ -510,7 +524,7 @@ func build_ui():
 	detail_labels["hp"] = create_label("HP: 120", Vector2(0, 0), 12, Color(0.3, 1, 0.4))
 	stats_box.add_child(detail_labels["hp"])
 	var sp2 = Control.new()
-	sp2.custom_minimum_size = Vector2(20, 0)
+	sp2.custom_minimum_size = Vector2(33, 0)
 	stats_box.add_child(sp2)
 	detail_labels["speed"] = create_label("SPD: 60", Vector2(0, 0), 12, Color(1, 0.8, 0.3))
 	stats_box.add_child(detail_labels["speed"])
@@ -521,7 +535,7 @@ func build_ui():
 	vbox.add_child(create_label("PASSIVE", Vector2(0, 0), 11, Color(1, 0.8, 0.3)))
 	detail_labels["passive"] = create_label("", Vector2(0, 0), 11, Color(0.9, 0.85, 0.6))
 	detail_labels["passive"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["passive"].custom_minimum_size = Vector2(440, 0)
+	detail_labels["passive"].custom_minimum_size = Vector2(733, 0)
 	vbox.add_child(detail_labels["passive"])
 
 	vbox.add_child(_divider())
@@ -530,28 +544,28 @@ func build_ui():
 	vbox.add_child(create_label("Domain Advantage", Vector2(0, 0), 11, Color(0.4, 1, 0.4)))
 	detail_labels["advantage"] = create_label("", Vector2(0, 0), 11, Color(0.7, 1, 0.7))
 	detail_labels["advantage"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["advantage"].custom_minimum_size = Vector2(440, 0)
+	detail_labels["advantage"].custom_minimum_size = Vector2(733, 0)
 	vbox.add_child(detail_labels["advantage"])
 
 	# ── RIGHT PANEL ──
 	var right_bg = ColorRect.new()
 	right_bg.color = Color(0.06, 0.06, 0.18, 0.95)
-	right_bg.size = Vector2(660, 598)
-	right_bg.position = Vector2(492, 50)
+	right_bg.size = Vector2(1100, 997)
+	right_bg.position = Vector2(820, 83)
 	add_child(right_bg)
 
 	var right_border = ColorRect.new()
 	right_border.color = Color(0.2, 0.2, 0.4)
-	right_border.size = Vector2(2, 598)
-	right_border.position = Vector2(492, 50)
+	right_border.size = Vector2(3, 997)
+	right_border.position = Vector2(820, 83)
 	add_child(right_border)
 
-	add_child(create_label("All Sentinels", Vector2(510, 88), 13, Color(0.5, 0.6, 0.8)))
+	add_child(create_label("All Sentinels", Vector2(850, 147), 13, Color(0.5, 0.6, 0.8)))
 
 	# Grid scroll container
 	var grid_scroll = ScrollContainer.new()
-	grid_scroll.position = Vector2(494, 110)
-	grid_scroll.size = Vector2(648, 192)
+	grid_scroll.position = Vector2(823, 183)
+	grid_scroll.size = Vector2(1080, 320)
 	grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	add_child(grid_scroll)
@@ -572,29 +586,29 @@ func build_ui():
 	# Move section header — dengan background jelas
 	var move_header_bg = ColorRect.new()
 	move_header_bg.color = Color(0.12, 0.15, 0.3, 0.95)
-	move_header_bg.size = Vector2(650, 28)
-	move_header_bg.position = Vector2(494, 308)
+	move_header_bg.size = Vector2(1083, 47)
+	move_header_bg.position = Vector2(823, 513)
 	add_child(move_header_bg)
 
 	var move_header_border = ColorRect.new()
 	move_header_border.color = Color(0.4, 0.6, 1, 0.8)
-	move_header_border.size = Vector2(650, 2)
-	move_header_border.position = Vector2(494, 293)
+	move_header_border.size = Vector2(1083, 3)
+	move_header_border.position = Vector2(823, 488)
 	add_child(move_header_border)
 
-	add_child(create_label("MOVE SET & EDU-LOG", Vector2(510, 314), 12, Color(0.6, 0.8, 1)))
+	add_child(create_label("MOVE SET & EDU-LOG", Vector2(850, 523), 12, Color(0.6, 0.8, 1)))
 
 	# 4 Move slots
 	for i in 4:
 		var move_bg = ColorRect.new()
 		move_bg.color = Color(0.1, 0.12, 0.28, 0.95)
-		move_bg.size = Vector2(648, 76)
+		move_bg.size = Vector2(1080, 127)
 		move_bg.position = Vector2(494, 338 + i * 80)
 		add_child(move_bg)
 
 		var move_accent = ColorRect.new()
 		move_accent.color = Color(0.4, 0.6, 1, 0.5)
-		move_accent.size = Vector2(3, 76)
+		move_accent.size = Vector2(5, 127)
 		move_accent.position = Vector2(494, 323 + i * 80)
 		add_child(move_accent)
 
@@ -604,7 +618,7 @@ func build_ui():
 
 		var move_edu_lbl = create_label("", Vector2(503, 347 + i * 80), 11, Color(0.55, 0.8, 0.6))
 		move_edu_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-		move_edu_lbl.custom_minimum_size = Vector2(630, 42)
+		move_edu_lbl.custom_minimum_size = Vector2(1050, 70)
 		move_edu_lbl.name = "move_edu_" + str(i)
 		add_child(move_edu_lbl)
 
@@ -618,26 +632,26 @@ func build_ui():
 	# Back button — terakhir agar di atas semua
 	var back_btn = Button.new()
 	back_btn.text = "← BACK"
-	back_btn.position = Vector2(1022, 608)
-	back_btn.size = Vector2(110, 30)
+	back_btn.position = Vector2(1703, 1013)
+	back_btn.size = Vector2(183, 50)
 
 	var back_style = StyleBoxFlat.new()
 	back_style.bg_color = Color(0.25, 0.15, 0.45)
-	back_style.corner_radius_top_left = 5
-	back_style.corner_radius_top_right = 5
-	back_style.corner_radius_bottom_left = 5
-	back_style.corner_radius_bottom_right = 5
+	back_style.corner_radius_top_left = 8
+	back_style.corner_radius_top_right = 8
+	back_style.corner_radius_bottom_left = 8
+	back_style.corner_radius_bottom_right = 8
 	back_style.border_color = Color(0.5, 0.3, 0.8)
-	back_style.border_width_left = 1
-	back_style.border_width_right = 1
-	back_style.border_width_top = 1
-	back_style.border_width_bottom = 1
+	back_style.border_width_left = 2
+	back_style.border_width_right = 2
+	back_style.border_width_top = 2
+	back_style.border_width_bottom = 2
 
 	var back_hover = back_style.duplicate()
 	back_hover.bg_color = Color(0.35, 0.2, 0.6)
 	back_btn.add_theme_stylebox_override("normal", back_style)
 	back_btn.add_theme_stylebox_override("hover", back_hover)
-	back_btn.add_theme_font_size_override("font_size", 12)
+	back_btn.add_theme_font_size_override("font_size", 20)
 	back_btn.add_theme_color_override("font_color", Color(0.8, 0.7, 1))
 	back_btn.pressed.connect(go_back)
 	add_child(back_btn)
@@ -645,13 +659,13 @@ func build_ui():
 func _divider() -> ColorRect:
 	var d = ColorRect.new()
 	d.color = Color(0.3, 0.3, 0.5, 0.4)
-	d.custom_minimum_size = Vector2(440, 1)
+	d.custom_minimum_size = Vector2(733, 2)
 	return d
 
 func build_monster_grid(parent: Node):
 	var cols = 6
-	var cell_size = Vector2(88, 88)
-	var start = Vector2(5, 5)
+	var cell_size = Vector2(147, 147)
+	var start = Vector2(8, 8)
 
 	for i in monsters_data.size():
 		var m = monsters_data[i]
@@ -668,14 +682,14 @@ func build_monster_grid(parent: Node):
 		var cell_style = StyleBoxFlat.new()
 		cell_style.bg_color = Color(0.1, 0.1, 0.28)
 		cell_style.border_color = Color(m["color"].r, m["color"].g, m["color"].b, 0.4)
-		cell_style.border_width_left = 1
-		cell_style.border_width_right = 1
-		cell_style.border_width_top = 1
-		cell_style.border_width_bottom = 1
-		cell_style.corner_radius_top_left = 6
-		cell_style.corner_radius_top_right = 6
-		cell_style.corner_radius_bottom_left = 6
-		cell_style.corner_radius_bottom_right = 6
+		cell_style.border_width_left = 2
+		cell_style.border_width_right = 2
+		cell_style.border_width_top = 2
+		cell_style.border_width_bottom = 2
+		cell_style.corner_radius_top_left = 10
+		cell_style.corner_radius_top_right = 10
+		cell_style.corner_radius_bottom_left = 10
+		cell_style.corner_radius_bottom_right = 10
 
 		var cell_panel = PanelContainer.new()
 		cell_panel.size = cell_size
@@ -683,13 +697,13 @@ func build_monster_grid(parent: Node):
 		cell_panel.add_theme_stylebox_override("panel", cell_style)
 		parent.add_child(cell_panel)
 
-		SentinelSprites.draw(parent, m["id"], pos + Vector2(44, 36), m["color"], 32)
+		SentinelSprites.draw(parent, m["id"], pos + Vector2(73, 60), m["color"], 32)
 
-		var num = create_label("#" + m["number"], pos + Vector2(4, 58), 9, Color(0.5, 0.5, 0.7))
+		var num = create_label("#" + m["number"], pos + Vector2(7, 97), 9, Color(0.5, 0.5, 0.7))
 		parent.add_child(num)
 
 		var short_name = m["name"].split("-")[0]
-		var name_lbl = create_label(short_name, pos + Vector2(0, 72), 10, m["color"])
+		var name_lbl = create_label(short_name, pos + Vector2(0, 120), 10, m["color"])
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_lbl.custom_minimum_size = Vector2(cell_size.x, 14)
 		parent.add_child(name_lbl)
@@ -719,7 +733,7 @@ func show_monster(m: Dictionary):
 		current_sprite_node = null
 
 	# Draw sprite baru, simpan referensinya
-	current_sprite_node = SentinelSprites.draw(self, m["id"], Vector2(240, 148), col, 90)
+	current_sprite_node = SentinelSprites.draw(self, m["id"], Vector2(400, 247), col, 90)
 
 	detail_labels["number"].text = "#" + m["number"]
 	detail_labels["name"].text = m["name"]
@@ -755,17 +769,15 @@ func show_monster(m: Dictionary):
 			g["monster"]["color"].b,
 			1.0 if is_selected else 0.4
 		)
-		g["style"].border_width_left = 3 if is_selected else 1
-		g["style"].border_width_right = 3 if is_selected else 1
-		g["style"].border_width_top = 3 if is_selected else 1
-		g["style"].border_width_bottom = 3 if is_selected else 1
+		g["style"].border_width_left = 5 if is_selected else 1
+		g["style"].border_width_right = 5 if is_selected else 1
+		g["style"].border_width_top = 5 if is_selected else 1
+		g["style"].border_width_bottom = 5 if is_selected else 1
 		g["panel"].add_theme_stylebox_override("panel", g["style"])
 
 func go_back():
 	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	get_tree().root.add_child(scene)
-	get_tree().current_scene = scene
-	queue_free()
+	get_tree().change_scene_to_file("res://menus/main_menu/MainMenu.tscn")
 
 func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var label = Label.new()

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cmc72y8odglcv"]
+
+[ext_resource type="Script" uid="uid://b25mqsoh5wipi" path="res://menus/slot_select/SlotSelectScreen.gd" id="1_slotselect"]
+
+[node name="SlotSelectScreen" type="Node2D"]
+script = ExtResource("1_slotselect")

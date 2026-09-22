@@ -8,7 +8,11 @@ var trojan_turns_left: int = 0
 var trojan_power: int = 0
 var last_enemy_move: Dictionary = {}
 var tutorial_mode: bool = false
+var tutorial_locked: bool = false  # Saat true, battle_ended tidak di-emit sampai tutorial selesai
 var moves_used_this_battle: Array = []
+
+# ── FLEE / CATCH / ITEM STATE ──
+var player_action_locked: bool = false  # Diset true saat animasi/aksi sedang berjalan
 
 # ── EDU POPUP SYSTEM ──
 var move_popup_count: Dictionary = {}
@@ -21,6 +25,9 @@ signal battle_ended(player_won: bool)
 signal hp_updated(player_hp: int, player_max: int, enemy_hp: int, enemy_max: int)
 signal enemy_attacking
 signal cooldown_updated(cooldowns: Array)
+signal fled_battle                          # Player berhasil kabur
+signal catch_result(success: bool, monster_id: String, monster_name: String)  # Hasil catch
+signal item_used_log(message: String)       # Feedback item di battle log
 
 func _ready():
 	load_monsters()
@@ -44,6 +51,7 @@ func start_battle(player_id: String, enemy_id: String):
 	player_monster = create_monster(player_id)
 	enemy_monster = create_monster(enemy_id)
 	move_popup_count.clear()
+	player_action_locked = false
 
 	# ── Trigger on-entry passives ──
 	_apply_entry_passives(player_monster, enemy_monster)
@@ -108,7 +116,145 @@ func try_show_edu_popup(move: Dictionary, attacker: Monster) -> bool:
 	emit_signal("edu_popup", move_name, edu_text, attacker.type)
 	return true
 
+# ════════════════════════════════════════════
+# ── FLEE SYSTEM ──
+# ════════════════════════════════════════════
+# Chance kabur = 50% + bonus jika player lebih cepat dari lawan
+# Gagal flee = lawan dapat 1 serangan gratis
+
+func player_flee() -> void:
+	if player_action_locked:
+		return
+	player_action_locked = true
+
+	var player_spd = player_monster.get_effective_speed()
+	var enemy_spd = enemy_monster.get_effective_speed()
+
+	# Base 50%, naik jika lebih cepat, turun jika lebih lambat
+	var flee_chance: float = 0.5
+	if player_spd > enemy_spd:
+		flee_chance = 0.75
+	elif player_spd < enemy_spd:
+		flee_chance = 0.3
+
+	if randf() < flee_chance:
+		emit_signal("battle_log", "📡 Berhasil kabur dari battle!")
+		await get_tree().create_timer(1.0).timeout
+		emit_signal("fled_battle")
+	else:
+		emit_signal("battle_log", "❌ Gagal kabur! " + enemy_monster.monster_name + " menghadang!")
+		await get_tree().create_timer(0.8).timeout
+		emit_signal("enemy_attacking")
+		await get_tree().create_timer(0.3).timeout
+		enemy_turn()
+		emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+		emit_signal("cooldown_updated", get_cooldown_states())
+		check_battle_end()
+		player_action_locked = false
+
+# ════════════════════════════════════════════
+# ── CATCH SYSTEM ──
+# ════════════════════════════════════════════
+# Catch chance = base 30% + bonus besar jika HP lawan di bawah 30%
+# Catch GAGAL = lawan dapat giliran menyerang
+# Catch tidak bisa dilakukan jika lawan sudah ditangkap sebelumnya
+
+func player_catch() -> void:
+	if player_action_locked:
+		return
+	if GlobalData.has_caught(enemy_monster.id):
+		emit_signal("battle_log", "📋 " + enemy_monster.monster_name + " sudah ada di database-mu!")
+		return
+
+	player_action_locked = true
+
+	var enemy_hp_ratio = float(enemy_monster.hp) / float(enemy_monster.max_hp)
+	var catch_chance: float
+
+	if enemy_hp_ratio <= 0.15:
+		catch_chance = 0.80
+	elif enemy_hp_ratio <= 0.30:
+		catch_chance = 0.55
+	elif enemy_hp_ratio <= 0.50:
+		catch_chance = 0.35
+	else:
+		catch_chance = 0.15
+
+	emit_signal("battle_log", "🔑 Melempar Capture Key ke " + enemy_monster.monster_name + "...")
+	await get_tree().create_timer(1.2).timeout
+
+	if randf() < catch_chance:
+		# SUCCESS
+		emit_signal("battle_log", "✅ " + enemy_monster.monster_name + " berhasil ditangkap!")
+		GlobalData.catch_sentinel(enemy_monster.id)
+		await get_tree().create_timer(0.8).timeout
+		emit_signal("catch_result", true, enemy_monster.id, enemy_monster.monster_name)
+	else:
+		# FAIL — lawan menyerang balik
+		emit_signal("battle_log", "💨 " + enemy_monster.monster_name + " meloloskan diri! Lawan menyerang!")
+		await get_tree().create_timer(0.6).timeout
+		emit_signal("enemy_attacking")
+		await get_tree().create_timer(0.3).timeout
+		enemy_turn()
+		emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+		emit_signal("cooldown_updated", get_cooldown_states())
+		check_battle_end()
+		player_action_locked = false
+
+# ════════════════════════════════════════════
+# ── ITEM USE IN BATTLE ──
+# ════════════════════════════════════════════
+
+func player_use_item(item_id: String) -> void:
+	if player_action_locked:
+		return
+
+	var item_data = GlobalData.ITEM_DATA.get(item_id, {})
+	if item_data.is_empty():
+		emit_signal("battle_log", "❓ Item tidak dikenal.")
+		return
+	if not item_data.get("usable_in_battle", false):
+		emit_signal("battle_log", "⛔ " + item_data["name"] + " tidak bisa dipakai saat battle.")
+		return
+	if GlobalData.get_item_count(item_id) <= 0:
+		emit_signal("battle_log", "📦 " + item_data["name"] + " habis!")
+		return
+
+	player_action_locked = true
+	GlobalData.use_item(item_id)
+
+	match item_id:
+		"heal_potion":
+			var heal_amt = item_data.get("heal_amount", 40)
+			var old_hp = player_monster.hp
+			player_monster.heal(heal_amt)
+			var actual_heal = player_monster.hp - old_hp
+			emit_signal("battle_log", "💊 Heal Potion! +" + str(actual_heal) + " HP!")
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			# Pakai item = lawan dapat giliran
+			await get_tree().create_timer(0.8).timeout
+			if enemy_monster.is_alive():
+				emit_signal("enemy_attacking")
+				await get_tree().create_timer(0.3).timeout
+				enemy_turn()
+				emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+				emit_signal("cooldown_updated", get_cooldown_states())
+				check_battle_end()
+		"capture_key":
+			# Delegate ke catch system
+			player_action_locked = false
+			player_catch()
+			return
+
+	player_action_locked = false
+
+# ════════════════════════════════════════════
+# ── MOVE SYSTEM (unchanged) ──
+# ════════════════════════════════════════════
+
 func player_use_move(move_index: int):
+	if player_action_locked:
+		return
 	if not player_monster.is_alive() or not enemy_monster.is_alive():
 		return
 
@@ -119,6 +265,7 @@ func player_use_move(move_index: int):
 		emit_signal("cooldown_updated", get_cooldown_states())
 		return
 
+	player_action_locked = true
 	execute_move(player_monster, enemy_monster, move, true)
 	player_monster.tick_cooldowns()
 	player_monster.tick_status()
@@ -165,6 +312,7 @@ func player_use_move(move_index: int):
 	emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 	emit_signal("cooldown_updated", get_cooldown_states())
 	check_battle_end()
+	player_action_locked = false
 
 func enemy_turn():
 	var available_moves = []
@@ -187,7 +335,7 @@ func enemy_turn():
 
 	execute_move(enemy_monster, player_monster, move, false)
 
-func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_player: bool):
+func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_player: bool, is_copy: bool = false):
 	var who = "You used" if is_player else (attacker.monster_name + " used")
 
 	# ── Confused check (Disinformation passive) ──
@@ -232,7 +380,6 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		var social_effects = ["confuse", "defense_debuff", "speed_debuff", "heal_lock", "guaranteed_hit"]
 		if move.get("effect", "") in social_effects:
 			emit_signal("battle_log", "Master Key! " + defender.monster_name + " resists " + move["name"] + "!")
-			# Tetap kena damage, tapi efek statusnya diblokir
 			MoveEffects.execute_damage_only(move, attacker, defender, self)
 			emit_signal("edu_log", move["edu_log"])
 			if is_player:
@@ -267,11 +414,11 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		attacker.defense_stage += 1
 		emit_signal("battle_log", "AES-256 encrypted attacker! Defense +1!")
 
-	MoveEffects.execute(move, attacker, defender, self)
+	MoveEffects.execute(move, attacker, defender, self, is_copy)
 
 	# ── Post-attack passive triggers ──
 
-	# Drainer — serap 5 HP setelah serang
+	# Drainer
 	if attacker.drainer_active and move.get("power", 0) > 0:
 		var drain = 5
 		attacker.hp = min(attacker.max_hp, attacker.hp + drain)
@@ -280,7 +427,7 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 	# Warp Overclock — 20% double hit
 	if attacker.warp_overclock_active and move.get("power", 0) > 0 and randf() < 0.2:
 		emit_signal("battle_log", "Overclock triggered! " + attacker.monster_name + " attacks again!")
-		MoveEffects.execute(move, attacker, defender, self)
+		MoveEffects.execute(move, attacker, defender, self, is_copy)
 
 	# Disinformation — 25% chance Confused
 	if attacker.disinformation_active and move.get("power", 0) > 0 and randf() < 0.25:
@@ -288,7 +435,7 @@ func execute_move(attacker: Monster, defender: Monster, move: Dictionary, is_pla
 		defender.confused_turns = 2
 		emit_signal("battle_log", "Disinformation! " + defender.monster_name + " is confused!")
 
-	# Auto-Alert — attack naik jika lawan pakai buff
+	# Auto-Alert
 	var buff_effects = ["defense_buff", "speed_buff", "accuracy_buff", "evasion_buff"]
 	if defender.auto_alert_active and move.get("effect", "") in buff_effects:
 		defender.accuracy_stage += 1
@@ -324,14 +471,36 @@ func get_type_multiplier(attacker_type: String, defender_type: String) -> float:
 func get_moves_used() -> Array:
 	return moves_used_this_battle
 
+func get_enemy_id() -> String:
+	if enemy_monster:
+		return enemy_monster.id
+	return ""
+
+func get_enemy_name() -> String:
+	if enemy_monster:
+		return enemy_monster.monster_name
+	return ""
+
 func check_battle_end():
 	if player_monster == null or enemy_monster == null:
 		return
 	if player_monster.max_hp == 0 or enemy_monster.max_hp == 0:
 		return
 
+	# Tutorial lock
+	if tutorial_locked:
+		if not enemy_monster.is_alive():
+			enemy_monster.hp = max(1, int(enemy_monster.max_hp * 0.15))
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			emit_signal("battle_log", enemy_monster.monster_name + " bertahan dengan sisa tenaga…")
+		if not player_monster.is_alive():
+			player_monster.hp = max(1, int(player_monster.max_hp * 0.15))
+			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
+			emit_signal("battle_log", "Sistem darurat aktif! HP dipulihkan sedikit…")
+		return
+
 	if not enemy_monster.is_alive():
-		# Last Payload passive (Trojan-Taurus)
+		# Last Payload passive
 		if enemy_monster.last_payload_active and not enemy_monster.last_payload_triggered:
 			enemy_monster.last_payload_triggered = true
 			player_monster.hp = max(0, player_monster.hp - 30)
@@ -353,14 +522,12 @@ func check_battle_end():
 			emit_signal("battle_ended", true)
 
 	elif not player_monster.is_alive():
-		# Last Payload passive (player side)
 		if player_monster.last_payload_active and not player_monster.last_payload_triggered:
 			player_monster.last_payload_triggered = true
 			enemy_monster.hp = max(0, enemy_monster.hp - 30)
 			emit_signal("battle_log", "LAST PAYLOAD detonated! 30 damage to " + enemy_monster.monster_name + "!")
 			emit_signal("hp_updated", player_monster.hp, player_monster.max_hp, enemy_monster.hp, enemy_monster.max_hp)
 			await get_tree().create_timer(0.8).timeout
-			# Re-check setelah Last Payload
 			if not enemy_monster.is_alive():
 				emit_signal("battle_log", "You won!")
 				emit_signal("battle_ended", true)

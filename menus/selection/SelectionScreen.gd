@@ -6,6 +6,7 @@ var card_nodes = []
 var tab_buttons = {}
 var cards_container: Node2D
 var confirm_btn: Button
+var map_btn:Button
 var detail_labels = {}
 var detail_panel: Node2D
 var particles: Array = []
@@ -288,50 +289,47 @@ func build_ui():
 	# ── BACKGROUND ──
 	var bg = ColorRect.new()
 	bg.color = Color(0.03, 0.03, 0.12)
-	bg.size = Vector2(1152, 648)
+	bg.size = Vector2(1920, 1080)
 	add_child(bg)
 
-	for i in range(0, 648, 60):
+	for i in range(0, 1080, 100):
 		var line = ColorRect.new()
 		line.color = Color(0.2, 0.3, 0.6, 0.04)
-		line.size = Vector2(1152, 1)
+		line.size = Vector2(1920, 1)
 		line.position = Vector2(0, i)
 		add_child(line)
-
-	for i in range(0, 1152, 60):
+	for i in range(0, 1920, 100):
 		var line = ColorRect.new()
 		line.color = Color(0.2, 0.3, 0.6, 0.04)
-		line.size = Vector2(1, 648)
+		line.size = Vector2(1, 1080)
 		line.position = Vector2(i, 0)
 		add_child(line)
-
-	for i in range(0, 648, 4):
+	for i in range(0, 1080, 7):
 		var scan = ColorRect.new()
 		scan.color = Color(0, 0, 0, 0.025)
-		scan.size = Vector2(1152, 2)
+		scan.size = Vector2(1920, 3)
 		scan.position = Vector2(0, i)
 		add_child(scan)
 
 	# ── HEADER ──
 	var header_bg = ColorRect.new()
 	header_bg.color = Color(0.06, 0.06, 0.18, 0.95)
-	header_bg.size = Vector2(1152, 95)
+	header_bg.size = Vector2(1920, 130)
 	add_child(header_bg)
-
 	var header_border = ColorRect.new()
 	header_border.color = Color(0.3, 0.5, 0.9, 0.5)
-	header_border.size = Vector2(1152, 2)
-	header_border.position = Vector2(0, 95)
+	header_border.size = Vector2(1920, 3)
+	header_border.position = Vector2(0, 130)
 	add_child(header_border)
 
-	var title = create_label("SELECT YOUR SENTINEL", Vector2(0, 18), 30, Color(0.4, 0.9, 1))
+	var title = create_label("SELECT YOUR SENTINEL", Vector2(0, 22), 46, Color(0.4, 0.9, 1))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.custom_minimum_size = Vector2(1152, 40)
+	title.custom_minimum_size = Vector2(1920, 60)
 	add_child(title)
 
-	var subtitle = create_label("Pilih domain lalu pilih Sentinel untuk melawan ancaman siber!", Vector2(0, 58), 13, Color(0.5, 0.6, 0.8))
+	var subtitle = create_label("Pilih domain lalu pilih Sentinel untuk melawan ancaman siber!", Vector2(0, 82), 20, Color(0.5, 0.6, 0.8))
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.custom_minimum_size = Vector2(1152, 20)
+	subtitle.custom_minimum_size = Vector2(1920, 30)
 	add_child(subtitle)
 
 	# ── TABS ──
@@ -339,7 +337,7 @@ func build_ui():
 
 	# ── CARDS AREA ──
 	cards_container = Node2D.new()
-	cards_container.position = Vector2(0, 185)
+	cards_container.position = Vector2(0, 265)
 	add_child(cards_container)
 
 	# ── DETAIL PANEL ──
@@ -347,39 +345,44 @@ func build_ui():
 	add_child(detail_panel)
 	detail_panel.visible = false
 
-	# ── CONFIRM BUTTON ──
-	confirm_btn = create_styled_button("⚔  START BATTLE!", Vector2(380, 606), Vector2(390, 38), Color(0.08, 0.4, 0.15))
+	# ── BOTTOM BAR background ──
+	var bottom_bg = ColorRect.new()
+	bottom_bg.color = Color(0.05, 0.05, 0.16, 0.97)
+	bottom_bg.size = Vector2(1920, 90)
+	bottom_bg.position = Vector2(0, 990)
+	add_child(bottom_bg)
+	var bottom_border = ColorRect.new()
+	bottom_border.color = Color(0.3, 0.5, 0.9, 0.4)
+	bottom_border.size = Vector2(1920, 2)
+	bottom_border.position = Vector2(0, 990)
+	add_child(bottom_border)
+
+	# ── BACK BUTTON (pojok kiri bawah) ──
+	var back_btn = _make_bottom_btn("← BACK", Vector2(30, 1003), Vector2(160, 52), Color(0.12, 0.12, 0.28))
+	back_btn.pressed.connect(func():
+		SceneManager.goto_menu("res://menus/main_menu/MainMenu.tscn")
+	)
+	add_child(back_btn)
+
+	# ── INVENTORY BUTTON ──
+	var inv_btn = _make_bottom_btn("🎒 INVENTORY", Vector2(205, 1003), Vector2(200, 52), Color(0.15, 0.35, 0.55))
+	inv_btn.pressed.connect(func():
+		GlobalData.inventory_return_path = "res://menus/selection/SelectionScreen.tscn"
+		SceneManager.goto_menu("res://menus/inventory/InventoryMenu.tscn")
+	)
+	add_child(inv_btn)
+
+	# ── BATTLE BUTTON (tengah, muncul setelah pilih sentinel) ──
+	confirm_btn = create_styled_button("⚔  START BATTLE!", Vector2(760, 1000), Vector2(400, 58), Color(0.08, 0.4, 0.15))
 	confirm_btn.pressed.connect(start_battle)
 	confirm_btn.visible = false
 	add_child(confirm_btn)
 
-	# ── BACK BUTTON ──
-	var back_btn = Button.new()
-	back_btn.text = "← BACK"
-	back_btn.position = Vector2(20, 608)
-	back_btn.size = Vector2(110, 34)
-
-	var back_style = StyleBoxFlat.new()
-	back_style.bg_color = Color(0.12, 0.12, 0.28)
-	back_style.corner_radius_top_left = 6
-	back_style.corner_radius_top_right = 6
-	back_style.corner_radius_bottom_left = 6
-	back_style.corner_radius_bottom_right = 6
-	back_style.border_color = Color(0.3, 0.3, 0.6, 0.5)
-	back_style.border_width_left = 1
-	back_style.border_width_right = 1
-	back_style.border_width_top = 1
-	back_style.border_width_bottom = 1
-	back_btn.add_theme_stylebox_override("normal", back_style)
-	back_btn.add_theme_font_size_override("font_size", 13)
-	back_btn.add_theme_color_override("font_color", Color(0.7, 0.7, 0.9))
-	back_btn.pressed.connect(func():
-		var scene = load("res://menus/main_menu/MainMenu.tscn").instantiate()
-		get_tree().root.add_child(scene)
-		get_tree().current_scene = scene
-		queue_free()
-	)
-	add_child(back_btn)
+	# ── ENTER MAP BUTTON (kanan battle button, muncul setelah pilih sentinel) ──
+	map_btn = create_styled_button("🗺  ENTER MAP", Vector2(1175, 1000), Vector2(400, 58), Color(0.1, 0.3, 0.5))
+	map_btn.pressed.connect(enter_map)
+	map_btn.visible = false
+	add_child(map_btn)
 
 	show_tab("Crypto")
 
@@ -388,7 +391,7 @@ func build_tabs():
 	var tab_width = 158
 	var spacing = 6
 	var total_w = types.size() * tab_width + (types.size() - 1) * spacing
-	var start_x = (1152 - total_w) / 2
+	var start_x = (1920 - total_w) / 2
 
 	for i in types.size():
 		var t = types[i]
@@ -414,7 +417,7 @@ func build_tabs():
 		btn.size = Vector2(tab_width, 44)
 		btn.position = Vector2(x, 100)
 		btn.flat = true
-		btn.add_theme_font_size_override("font_size", 12)
+		btn.add_theme_font_size_override("font_size", 20)
 		btn.add_theme_color_override("font_color", col)
 		btn.pressed.connect(func(): show_tab(t))
 		add_child(btn)
@@ -423,8 +426,8 @@ func build_tabs():
 
 	var divider = ColorRect.new()
 	divider.color = Color(0.2, 0.2, 0.4, 0.5)
-	divider.size = Vector2(1152, 1)
-	divider.position = Vector2(0, 144)
+	divider.size = Vector2(1920, 2)
+	divider.position = Vector2(0, 240)
 	add_child(divider)
 
 func show_tab(type_name: String):
@@ -459,28 +462,28 @@ func show_tab(type_name: String):
 
 	var domain_bar = ColorRect.new()
 	domain_bar.color = Color(type_col.r, type_col.g, type_col.b, 0.08)
-	domain_bar.size = Vector2(1152, 38)
+	domain_bar.size = Vector2(1920, 63)
 	domain_bar.position = Vector2(0, 0)
 	cards_container.add_child(domain_bar)
 
 	var domain_accent = ColorRect.new()
 	domain_accent.color = Color(type_col.r, type_col.g, type_col.b, 0.5)
-	domain_accent.size = Vector2(4, 38)
+	domain_accent.size = Vector2(7, 63)
 	domain_accent.position = Vector2(0, 0)
 	cards_container.add_child(domain_accent)
 
-	var header = create_label(type_name.to_upper() + " DOMAIN  —  " + str(filtered.size()) + " Sentinels", Vector2(15, 8), 14, type_col)
+	var header = create_label(type_name.to_upper() + " DOMAIN  —  " + str(filtered.size()) + " Sentinels", Vector2(25, 13), 14, type_col)
 	cards_container.add_child(header)
 
-	var adv_label = create_label(adv_map[type_name], Vector2(0, 12), 11, Color(type_col.r, type_col.g, type_col.b, 0.7))
+	var adv_label = create_label(adv_map[type_name], Vector2(0, 20), 11, Color(type_col.r, type_col.g, type_col.b, 0.7))
 	adv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	adv_label.custom_minimum_size = Vector2(1132, 18)
+	adv_label.custom_minimum_size = Vector2(1887, 30)
 	cards_container.add_child(adv_label)
 
 	# Cards — 5 per tab, scroll container jika overflow
 	var spacing = 15
 	var total_w = filtered.size() * card_w + (filtered.size() - 1) * spacing
-	var start_x = (1152 - total_w) / 2
+	var start_x = (1920 - total_w) / 2
 
 	for i in filtered.size():
 		var card = build_monster_card(filtered[i], Vector2(start_x + i * (card_w + spacing), 48))
@@ -503,14 +506,14 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.07, 0.07, 0.2, 0.95)
 	style.border_color = Color(col.r, col.g, col.b, 0.5)
-	style.border_width_left = 2
-	style.border_width_right = 2
-	style.border_width_top = 2
-	style.border_width_bottom = 2
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
+	style.border_width_left = 3
+	style.border_width_right = 3
+	style.border_width_top = 3
+	style.border_width_bottom = 3
+	style.corner_radius_top_left = 17
+	style.corner_radius_top_right = 17
+	style.corner_radius_bottom_left = 17
+	style.corner_radius_bottom_right = 17
 
 	var panel = PanelContainer.new()
 	panel.size = Vector2(card_w, 360)
@@ -532,15 +535,15 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 	var role_bg = ColorRect.new()
 	role_bg.color = Color(col.r * 0.3, col.g * 0.3, col.b * 0.3)
 	role_bg.size = Vector2(card_w, 22)
-	role_bg.position = Vector2(0, 128)
+	role_bg.position = Vector2(0, 213)
 	card.add_child(role_bg)
 
-	var role_lbl = create_label(info["role"].to_upper(), Vector2(0, 131), 10, col)
+	var role_lbl = create_label(info["role"].to_upper(), Vector2(0, 218), 10, col)
 	role_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	role_lbl.custom_minimum_size = Vector2(card_w, 16)
 	card.add_child(role_lbl)
 
-	var name_lbl = create_label(info["name"], Vector2(0, 158), 14, col)
+	var name_lbl = create_label(info["name"], Vector2(0, 263), 14, col)
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_lbl.custom_minimum_size = Vector2(card_w, 22)
 	card.add_child(name_lbl)
@@ -548,40 +551,40 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 	var div = ColorRect.new()
 	div.color = Color(col.r, col.g, col.b, 0.25)
 	div.size = Vector2(card_w - 20, 1)
-	div.position = Vector2(10, 184)
+	div.position = Vector2(17, 307)
 	card.add_child(div)
 
-	var hp_label = create_label("HP", Vector2(10, 190), 9, Color(0.5, 0.7, 0.5))
+	var hp_label = create_label("HP", Vector2(17, 317), 9, Color(0.5, 0.7, 0.5))
 	card.add_child(hp_label)
 
 	var hp_bar_bg = ColorRect.new()
 	hp_bar_bg.color = Color(0.1, 0.1, 0.1)
 	hp_bar_bg.size = Vector2(card_w - 38, 7)
-	hp_bar_bg.position = Vector2(28, 193)
+	hp_bar_bg.position = Vector2(47, 322)
 	card.add_child(hp_bar_bg)
 
 	var hp_fill = ColorRect.new()
 	hp_fill.color = Color(0.2, 0.8, 0.3)
 	hp_fill.size = Vector2((card_w - 38) * (info["hp"] / 170.0), 7)
-	hp_fill.position = Vector2(28, 193)
+	hp_fill.position = Vector2(47, 322)
 	card.add_child(hp_fill)
 
 	var hp_val = create_label(str(info["hp"]), Vector2(card_w - 30, 190), 9, Color(0.6, 0.9, 0.6))
 	card.add_child(hp_val)
 
-	var spd_label = create_label("SPD", Vector2(10, 205), 9, Color(0.7, 0.6, 0.3))
+	var spd_label = create_label("SPD", Vector2(17, 342), 9, Color(0.7, 0.6, 0.3))
 	card.add_child(spd_label)
 
 	var spd_bar_bg = ColorRect.new()
 	spd_bar_bg.color = Color(0.1, 0.1, 0.1)
 	spd_bar_bg.size = Vector2(card_w - 38, 7)
-	spd_bar_bg.position = Vector2(28, 208)
+	spd_bar_bg.position = Vector2(47, 347)
 	card.add_child(spd_bar_bg)
 
 	var spd_fill = ColorRect.new()
 	spd_fill.color = Color(0.9, 0.7, 0.2)
 	spd_fill.size = Vector2((card_w - 38) * (info["speed"] / 110.0), 7)
-	spd_fill.position = Vector2(28, 208)
+	spd_fill.position = Vector2(47, 347)
 	card.add_child(spd_fill)
 
 	var spd_val = create_label(str(info["speed"]), Vector2(card_w - 30, 205), 9, Color(0.9, 0.8, 0.4))
@@ -590,16 +593,16 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 	var div2 = ColorRect.new()
 	div2.color = Color(col.r, col.g, col.b, 0.2)
 	div2.size = Vector2(card_w - 20, 1)
-	div2.position = Vector2(10, 220)
+	div2.position = Vector2(17, 367)
 	card.add_child(div2)
 
-	var moves_header = create_label("MOVES", Vector2(10, 226), 9, Color(0.5, 0.7, 0.9))
+	var moves_header = create_label("MOVES", Vector2(17, 377), 9, Color(0.5, 0.7, 0.9))
 	card.add_child(moves_header)
 
 	for j in info["moves"].size():
 		var move_dot = ColorRect.new()
 		move_dot.color = col
-		move_dot.size = Vector2(3, 3)
+		move_dot.size = Vector2(5, 5)
 		move_dot.position = Vector2(10, 243 + j * 24)
 		card.add_child(move_dot)
 
@@ -623,72 +626,72 @@ func build_monster_card(info: Dictionary, pos: Vector2) -> Node2D:
 
 func build_detail_panel() -> Node2D:
 	var panel = Node2D.new()
-	panel.position = Vector2(800, 190)
+	panel.position = Vector2(1333, 317)
 
 	var bg = ColorRect.new()
 	bg.color = Color(0.07, 0.07, 0.2, 0.97)
-	bg.size = Vector2(340, 400)
+	bg.size = Vector2(567, 667)
 	panel.add_child(bg)
 
 	var border_top = ColorRect.new()
 	border_top.color = Color(0.4, 0.6, 1)
-	border_top.size = Vector2(340, 3)
+	border_top.size = Vector2(567, 5)
 	panel.add_child(border_top)
 
 	var border_left = ColorRect.new()
 	border_left.color = Color(0.4, 0.6, 1, 0.4)
-	border_left.size = Vector2(3, 400)
+	border_left.size = Vector2(5, 667)
 	panel.add_child(border_left)
 
-	var selected_title = create_label("— SELECTED SENTINEL —", Vector2(0, 12), 11, Color(0.5, 0.6, 0.8))
+	var selected_title = create_label("— SELECTED SENTINEL —", Vector2(0, 20), 11, Color(0.5, 0.6, 0.8))
 	selected_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	selected_title.custom_minimum_size = Vector2(340, 18)
+	selected_title.custom_minimum_size = Vector2(567, 30)
 	panel.add_child(selected_title)
 
-	detail_labels["title"] = create_label("???", Vector2(0, 32), 20, Color(0.4, 0.9, 1))
+	detail_labels["title"] = create_label("???", Vector2(0, 53), 20, Color(0.4, 0.9, 1))
 	detail_labels["title"].horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	detail_labels["title"].custom_minimum_size = Vector2(340, 28)
+	detail_labels["title"].custom_minimum_size = Vector2(567, 47)
 	panel.add_child(detail_labels["title"])
 
-	detail_labels["desc"] = create_label("", Vector2(15, 68), 11, Color(0.75, 0.75, 0.85))
+	detail_labels["desc"] = create_label("", Vector2(25, 113), 11, Color(0.75, 0.75, 0.85))
 	detail_labels["desc"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["desc"].custom_minimum_size = Vector2(310, 55)
+	detail_labels["desc"].custom_minimum_size = Vector2(517, 92)
 	panel.add_child(detail_labels["desc"])
 
 	var div1 = ColorRect.new()
 	div1.color = Color(0.3, 0.3, 0.5, 0.4)
-	div1.size = Vector2(310, 1)
-	div1.position = Vector2(15, 128)
+	div1.size = Vector2(517, 2)
+	div1.position = Vector2(25, 213)
 	panel.add_child(div1)
 
-	panel.add_child(create_label("PASSIVE", Vector2(15, 135), 11, Color(1, 0.8, 0.3)))
-	detail_labels["passive"] = create_label("", Vector2(15, 153), 11, Color(0.9, 0.85, 0.6))
+	panel.add_child(create_label("PASSIVE", Vector2(25, 225), 11, Color(1, 0.8, 0.3)))
+	detail_labels["passive"] = create_label("", Vector2(25, 255), 11, Color(0.9, 0.85, 0.6))
 	detail_labels["passive"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["passive"].custom_minimum_size = Vector2(310, 55)
+	detail_labels["passive"].custom_minimum_size = Vector2(517, 92)
 	panel.add_child(detail_labels["passive"])
 
 	var div2 = ColorRect.new()
 	div2.color = Color(0.3, 0.3, 0.5, 0.4)
-	div2.size = Vector2(310, 1)
-	div2.position = Vector2(15, 213)
+	div2.size = Vector2(517, 2)
+	div2.position = Vector2(25, 355)
 	panel.add_child(div2)
 
-	panel.add_child(create_label("DOMAIN ADVANTAGE", Vector2(15, 220), 11, Color(0.4, 1, 0.4)))
-	detail_labels["advantage"] = create_label("", Vector2(15, 238), 12, Color(0.7, 1, 0.7))
+	panel.add_child(create_label("DOMAIN ADVANTAGE", Vector2(25, 367), 11, Color(0.4, 1, 0.4)))
+	detail_labels["advantage"] = create_label("", Vector2(25, 397), 12, Color(0.7, 1, 0.7))
 	detail_labels["advantage"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["advantage"].custom_minimum_size = Vector2(310, 45)
+	detail_labels["advantage"].custom_minimum_size = Vector2(517, 75)
 	panel.add_child(detail_labels["advantage"])
 
 	var div3 = ColorRect.new()
 	div3.color = Color(0.3, 0.3, 0.5, 0.4)
-	div3.size = Vector2(310, 1)
-	div3.position = Vector2(15, 288)
+	div3.size = Vector2(517, 2)
+	div3.position = Vector2(25, 480)
 	panel.add_child(div3)
 
-	panel.add_child(create_label("TIPS", Vector2(15, 295), 11, Color(0.5, 0.7, 1)))
-	detail_labels["tips"] = create_label("", Vector2(15, 313), 11, Color(0.6, 0.7, 0.8))
+	panel.add_child(create_label("TIPS", Vector2(25, 492), 11, Color(0.5, 0.7, 1)))
+	detail_labels["tips"] = create_label("", Vector2(25, 522), 11, Color(0.6, 0.7, 0.8))
 	detail_labels["tips"].autowrap_mode = TextServer.AUTOWRAP_WORD
-	detail_labels["tips"].custom_minimum_size = Vector2(310, 75)
+	detail_labels["tips"].custom_minimum_size = Vector2(517, 125)
 	panel.add_child(detail_labels["tips"])
 
 	return panel
@@ -732,19 +735,19 @@ func select_monster(card: Node2D, info: Dictionary):
 	for c in card_nodes:
 		var p = c.get_child(0)
 		var s = p.get_theme_stylebox("panel").duplicate()
-		s.border_width_top = 2
-		s.border_width_bottom = 2
-		s.border_width_left = 2
-		s.border_width_right = 2
+		s.border_width_top = 3
+		s.border_width_bottom = 3
+		s.border_width_left = 3
+		s.border_width_right = 3
 		s.border_color = Color(info["color"].r, info["color"].g, info["color"].b, 0.5)
 		p.add_theme_stylebox_override("panel", s)
 
 	var sel_panel = card.get_child(0)
 	var sel_style = sel_panel.get_theme_stylebox("panel").duplicate()
-	sel_style.border_width_top = 4
-	sel_style.border_width_bottom = 4
-	sel_style.border_width_left = 4
-	sel_style.border_width_right = 4
+	sel_style.border_width_top = 7
+	sel_style.border_width_bottom = 7
+	sel_style.border_width_left = 7
+	sel_style.border_width_right = 7
 	sel_style.border_color = info["color"]
 	sel_panel.add_theme_stylebox_override("panel", sel_style)
 
@@ -757,33 +760,37 @@ func select_monster(card: Node2D, info: Dictionary):
 
 	detail_panel.visible = true
 	confirm_btn.visible = true
+	map_btn.visible = true
 	confirm_btn.text = "⚔  Battle with " + info["name"] + "!"
 
 func start_battle():
 	if selected_monster == "":
 		return
-	print("is_first_time: ", GlobalData.is_first_time)
-	print("Loading: ", "TutorialBattle" if GlobalData.is_first_time else "Battle")
+	GlobalData.set_active_team([selected_monster])
+	GlobalData.save_current_slot()
+	GlobalData.pending_sentinel = selected_monster
+
 	if GlobalData.is_first_time:
 		GlobalData.mark_played()
-		var battle_scene = load("res://battle/TutorialBattle.tscn").instantiate()
-		battle_scene.set_meta("player_monster", selected_monster)
-		get_tree().root.add_child(battle_scene)
-		get_tree().current_scene = battle_scene
-		queue_free()
+		SceneManager.goto_menu("res://battle/TutorialBattle.tscn")
 	else:
-		var battle_scene = load("res://battle/Battle.tscn").instantiate()
-		battle_scene.set_meta("player_monster", selected_monster)
-		get_tree().root.add_child(battle_scene)
-		get_tree().current_scene = battle_scene
-		queue_free()
+		GlobalData.clear_encounter()
+		SceneManager.goto_menu("res://battle/Battle.tscn")
+
+func enter_map():
+	if selected_monster == "":
+		return
+	GlobalData.set_active_team([selected_monster])
+	GlobalData.clear_encounter()
+	# Load map — posisi player akan di-restore dari GlobalData.player_position
+	SceneManager.load_map(GlobalData.current_map)
 
 func spawn_particles():
-	for i in 30:
+	for i in 50:
 		var p = ColorRect.new()
-		var sz = randf_range(1.5, 3.5)
+		var sz = randf_range(2.0, 5.0)
 		p.size = Vector2(sz, sz)
-		p.position = Vector2(randf_range(0, 1152), randf_range(0, 648))
+		p.position = Vector2(randf_range(0, 1920), randf_range(0, 1080))
 		var brightness = randf_range(0.3, 0.7)
 		p.color = Color(brightness * 0.4, brightness * 0.7, brightness, randf_range(0.2, 0.6))
 		add_child(p)
@@ -798,12 +805,10 @@ func update_particles(delta: float):
 	for p in particles:
 		p["node"].position += p["vel"] * delta
 		if p["node"].position.y < -10:
-			p["node"].position.y = 658
-			p["node"].position.x = randf_range(0, 1152)
-		if p["node"].position.x < -10:
-			p["node"].position.x = 1162
-		if p["node"].position.x > 1162:
-			p["node"].position.x = -10
+			p["node"].position.y = 1090
+			p["node"].position.x = randf_range(0, 1920)
+		if p["node"].position.x < -10:  p["node"].position.x = 1930
+		if p["node"].position.x > 1930: p["node"].position.x = -10
 		var alpha = p["base_alpha"] + sin(time * 2.0 + p["phase"]) * 0.15
 		p["node"].color.a = clamp(alpha, 0.05, 0.8)
 
@@ -815,6 +820,22 @@ func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> L
 	label.add_theme_color_override("font_color", color)
 	return label
 
+func _make_bottom_btn(text: String, pos: Vector2, sz: Vector2, color: Color) -> Button:
+	var btn = Button.new()
+	btn.text = text; btn.position = pos; btn.size = sz
+	var s = StyleBoxFlat.new()
+	s.bg_color = color
+	s.corner_radius_top_left = 8; s.corner_radius_top_right = 8
+	s.corner_radius_bottom_left = 8; s.corner_radius_bottom_right = 8
+	s.border_color = Color(0.3, 0.3, 0.6, 0.5)
+	s.set_border_width_all(1)
+	btn.add_theme_stylebox_override("normal", s)
+	var h = s.duplicate(); h.bg_color = color.lightened(0.2)
+	btn.add_theme_stylebox_override("hover", h)
+	btn.add_theme_font_size_override("font_size", 19)
+	btn.add_theme_color_override("font_color", Color(0.8, 0.9, 1.0))
+	return btn
+
 func create_styled_button(text: String, pos: Vector2, size: Vector2, color: Color) -> Button:
 	var btn = Button.new()
 	btn.text = text
@@ -823,15 +844,15 @@ func create_styled_button(text: String, pos: Vector2, size: Vector2, color: Colo
 
 	var style = StyleBoxFlat.new()
 	style.bg_color = color
-	style.corner_radius_top_left = 8
-	style.corner_radius_top_right = 8
-	style.corner_radius_bottom_left = 8
-	style.corner_radius_bottom_right = 8
+	style.corner_radius_top_left = 13
+	style.corner_radius_top_right = 13
+	style.corner_radius_bottom_left = 13
+	style.corner_radius_bottom_right = 13
 	style.border_color = Color(0.3, 0.8, 0.4, 0.5)
-	style.border_width_left = 1
-	style.border_width_right = 1
-	style.border_width_top = 1
-	style.border_width_bottom = 1
+	style.border_width_left = 2
+	style.border_width_right = 2
+	style.border_width_top = 2
+	style.border_width_bottom = 2
 	btn.add_theme_stylebox_override("normal", style)
 
 	var hover_style = style.duplicate()
@@ -839,6 +860,6 @@ func create_styled_button(text: String, pos: Vector2, size: Vector2, color: Colo
 	hover_style.border_color = Color(0.4, 1, 0.5, 0.8)
 	btn.add_theme_stylebox_override("hover", hover_style)
 
-	btn.add_theme_font_size_override("font_size", 16)
+	btn.add_theme_font_size_override("font_size", 27)
 	btn.add_theme_color_override("font_color", Color.WHITE)
 	return btn

@@ -205,44 +205,44 @@ func build_ui():
 	# ── BACKGROUND ──
 	var bg = ColorRect.new()
 	bg.color = Color(0.04, 0.06, 0.04)
-	bg.size = Vector2(1152, 648)
+	bg.size = Vector2(3200, 1800)
 	add_child(bg)
 
-	for i in range(0, 1152, 48):
+	for i in range(0, 1920, 48):
 		var vl = ColorRect.new()
 		vl.color = Color(0.2, 1.0, 0.4, 0.012)
-		vl.size = Vector2(1, 648)
+		vl.size = Vector2(2, 1080)
 		vl.position = Vector2(i, 0)
 		add_child(vl)
-	for i in range(0, 648, 48):
+	for i in range(0, 1080, 48):
 		var hl = ColorRect.new()
 		hl.color = Color(0.2, 1.0, 0.4, 0.012)
-		hl.size = Vector2(1152, 1)
+		hl.size = Vector2(1920, 2)
 		hl.position = Vector2(0, i)
 		add_child(hl)
 
 	# Scanlines
-	for i in range(0, 648, 3):
+	for i in range(0, 1080, 3):
 		var sl = ColorRect.new()
 		sl.color = Color(0, 0, 0, 0.035)
-		sl.size = Vector2(1152, 1)
+		sl.size = Vector2(1920, 2)
 		sl.position = Vector2(0, i)
 		add_child(sl)
 
 	# ── HEADER ──
 	var hdr = ColorRect.new()
 	hdr.color = Color(0.05, 0.08, 0.05, 0.98)
-	hdr.size = Vector2(1152, 50)
+	hdr.size = Vector2(1920, 83)
 	add_child(hdr)
 	var hdr_line = ColorRect.new()
 	hdr_line.color = Color(0.3, 0.9, 0.4, 0.6)
-	hdr_line.size = Vector2(1152, 1)
-	hdr_line.position = Vector2(0, 50)
+	hdr_line.size = Vector2(1920, 2)
+	hdr_line.position = Vector2(0, 83)
 	add_child(hdr_line)
 
-	var title = _mk_label("◉  KNOWLEDGE BASE", Vector2(20, 12), 22, Color(0.4, 1.0, 0.55))
+	var title = _mk_label("◉  KNOWLEDGE BASE", Vector2(33, 20), 22, Color(0.4, 1.0, 0.55))
 	add_child(title)
-	var sub = _mk_label("CYBER INTELLIGENCE  //  AETHER-NET TECHNICAL REPOSITORY", Vector2(240, 18), 10, Color(0.3, 0.6, 0.35))
+	var sub = _mk_label("CYBER INTELLIGENCE  //  AETHER-NET TECHNICAL REPOSITORY", Vector2(400, 30), 10, Color(0.3, 0.6, 0.35))
 	add_child(sub)
 
 	# Back button
@@ -252,31 +252,31 @@ func build_ui():
 	# ── LEFT: Article List ──
 	var list_bg = ColorRect.new()
 	list_bg.color = Color(0.04, 0.07, 0.045, 0.98)
-	list_bg.size = Vector2(280, 598)
-	list_bg.position = Vector2(0, 50)
+	list_bg.size = Vector2(467, 997)
+	list_bg.position = Vector2(0, 83)
 	add_child(list_bg)
 	var list_border = ColorRect.new()
 	list_border.color = Color(0.2, 0.5, 0.25, 0.5)
-	list_border.size = Vector2(1, 598)
-	list_border.position = Vector2(280, 50)
+	list_border.size = Vector2(2, 997)
+	list_border.position = Vector2(467, 83)
 	add_child(list_border)
 
 	var list_header = ColorRect.new()
 	list_header.color = Color(0.06, 0.12, 0.07)
-	list_header.size = Vector2(280, 32)
-	list_header.position = Vector2(0, 50)
+	list_header.size = Vector2(467, 53)
+	list_header.position = Vector2(0, 83)
 	add_child(list_header)
-	add_child(_mk_label("  ARTIKEL  (" + str(articles.size()) + ")", Vector2(8, 58), 10, Color(0.4, 0.8, 0.45)))
+	add_child(_mk_label("  ARTIKEL  (" + str(articles.size()) + ")", Vector2(13, 97), 10, Color(0.4, 0.8, 0.45)))
 
 	var list_scroll = ScrollContainer.new()
-	list_scroll.position = Vector2(0, 82)
-	list_scroll.size = Vector2(280, 566)
+	list_scroll.position = Vector2(0, 137)
+	list_scroll.size = Vector2(467, 943)
 	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(list_scroll)
 
 	var list_vbox = VBoxContainer.new()
-	list_vbox.custom_minimum_size = Vector2(270, 0)
-	list_vbox.add_theme_constant_override("separation", 2)
+	list_vbox.custom_minimum_size = Vector2(450, 0)
+	list_vbox.add_theme_constant_override("separation", 3)
 	list_scroll.add_child(list_vbox)
 
 	for i in articles.size():
@@ -288,19 +288,19 @@ func build_ui():
 	# ── RIGHT: Article Content ──
 	var content_bg = ColorRect.new()
 	content_bg.color = Color(0.04, 0.07, 0.045, 0.96)
-	content_bg.size = Vector2(868, 598)
-	content_bg.position = Vector2(284, 50)
+	content_bg.size = Vector2(1447, 997)
+	content_bg.position = Vector2(473, 83)
 	add_child(content_bg)
 
 	content_scroll = ScrollContainer.new()
-	content_scroll.position = Vector2(300, 58)
-	content_scroll.size = Vector2(840, 582)
+	content_scroll.position = Vector2(500, 97)
+	content_scroll.size = Vector2(1400, 970)
 	content_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(content_scroll)
 
 	var content_vbox = VBoxContainer.new()
-	content_vbox.custom_minimum_size = Vector2(810, 0)
-	content_vbox.add_theme_constant_override("separation", 8)
+	content_vbox.custom_minimum_size = Vector2(1350, 0)
+	content_vbox.add_theme_constant_override("separation", 13)
 	content_scroll.add_child(content_vbox)
 
 	# Placeholder
@@ -310,14 +310,14 @@ func _build_article_entry(a: Dictionary, idx: int) -> PanelContainer:
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.05, 0.09, 0.055)
 	style.border_color = Color(a["color"].r, a["color"].g, a["color"].b, 0.0)
-	style.border_width_left = 3
+	style.border_width_left = 5
 	var panel = PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", style)
-	panel.custom_minimum_size = Vector2(270, 56)
+	panel.custom_minimum_size = Vector2(450, 93)
 	panel.name = "entry_" + a["id"]
 
 	var inner = VBoxContainer.new()
-	inner.add_theme_constant_override("separation", 2)
+	inner.add_theme_constant_override("separation", 3)
 
 	var cat_lbl = _mk_label("  " + a["category"], Vector2(0, 0), 9, Color(a["color"].r, a["color"].g, a["color"].b, 0.7))
 	inner.add_child(cat_lbl)
@@ -330,7 +330,7 @@ func _build_article_entry(a: Dictionary, idx: int) -> PanelContainer:
 	var btn = Button.new()
 	btn.flat = true
 	btn.modulate = Color(1, 1, 1, 0)
-	btn.custom_minimum_size = Vector2(270, 56)
+	btn.custom_minimum_size = Vector2(450, 93)
 	var a_ref = a
 	var style_ref = style
 	btn.mouse_entered.connect(func():
@@ -362,34 +362,34 @@ func show_article(a: Dictionary):
 	# Article header
 	var art_header = ColorRect.new()
 	art_header.color = Color(col.r * 0.08, col.g * 0.08, col.b * 0.08)
-	art_header.custom_minimum_size = Vector2(810, 80)
+	art_header.custom_minimum_size = Vector2(1350, 133)
 	vbox.add_child(art_header)
 
 	var cat_top = _mk_label(a["category"] + "  //  AETHER-NET KNOWLEDGE BASE", Vector2(0, 0), 10, Color(col.r, col.g, col.b, 0.7))
-	cat_top.custom_minimum_size = Vector2(810, 20)
+	cat_top.custom_minimum_size = Vector2(1350, 33)
 	vbox.add_child(cat_top)
 
 	var art_title = _mk_label(a["title"], Vector2(0, 0), 28, Color(0.9, 0.95, 1.0))
-	art_title.custom_minimum_size = Vector2(810, 40)
+	art_title.custom_minimum_size = Vector2(1350, 67)
 	vbox.add_child(art_title)
 
 	var summary_bg = ColorRect.new()
 	summary_bg.color = Color(col.r * 0.1, col.g * 0.1, col.b * 0.15)
-	summary_bg.custom_minimum_size = Vector2(810, 4)
+	summary_bg.custom_minimum_size = Vector2(1350, 7)
 	vbox.add_child(summary_bg)
 
 	var accent = ColorRect.new()
 	accent.color = col
-	accent.custom_minimum_size = Vector2(810, 2)
+	accent.custom_minimum_size = Vector2(1350, 3)
 	vbox.add_child(accent)
 
 	var summary_lbl = _mk_label(a["summary"], Vector2(0, 0), 12, Color(col.r * 0.9, col.g * 0.9, col.b * 0.9))
 	summary_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-	summary_lbl.custom_minimum_size = Vector2(810, 0)
+	summary_lbl.custom_minimum_size = Vector2(1350, 0)
 	vbox.add_child(summary_lbl)
 
 	var spacer_top = Control.new()
-	spacer_top.custom_minimum_size = Vector2(0, 8)
+	spacer_top.custom_minimum_size = Vector2(0, 13)
 	vbox.add_child(spacer_top)
 
 	# Render body blocks
@@ -397,28 +397,28 @@ func show_article(a: Dictionary):
 		match block["type"]:
 			"h2":
 				var h_spacer = Control.new()
-				h_spacer.custom_minimum_size = Vector2(0, 6)
+				h_spacer.custom_minimum_size = Vector2(0, 10)
 				vbox.add_child(h_spacer)
 				var h2 = _mk_label(block["text"], Vector2(0, 0), 16, Color(col.r, col.g, col.b))
-				h2.custom_minimum_size = Vector2(810, 24)
+				h2.custom_minimum_size = Vector2(1350, 40)
 				vbox.add_child(h2)
 				var h2_line = ColorRect.new()
 				h2_line.color = Color(col.r, col.g, col.b, 0.3)
-				h2_line.custom_minimum_size = Vector2(810, 1)
+				h2_line.custom_minimum_size = Vector2(1350, 2)
 				vbox.add_child(h2_line)
 			"p":
 				var p = _mk_label(block["text"], Vector2(0, 0), 11, Color(0.72, 0.78, 0.74))
 				p.autowrap_mode = TextServer.AUTOWRAP_WORD
-				p.custom_minimum_size = Vector2(810, 0)
+				p.custom_minimum_size = Vector2(1350, 0)
 				vbox.add_child(p)
 			"tag":
 				var tag_row = HBoxContainer.new()
 				var tag_accent = ColorRect.new()
 				tag_accent.color = col
-				tag_accent.custom_minimum_size = Vector2(3, 20)
+				tag_accent.custom_minimum_size = Vector2(5, 33)
 				tag_row.add_child(tag_accent)
 				var tag_sp = Control.new()
-				tag_sp.custom_minimum_size = Vector2(6, 0)
+				tag_sp.custom_minimum_size = Vector2(10, 0)
 				tag_row.add_child(tag_sp)
 				var tag_lbl = _mk_label(block["text"], Vector2(0, 0), 10, Color(col.r, col.g, col.b, 0.9))
 				tag_row.add_child(tag_lbl)
@@ -426,7 +426,7 @@ func show_article(a: Dictionary):
 
 	# Spacer bawah
 	var end_spacer = Control.new()
-	end_spacer.custom_minimum_size = Vector2(0, 40)
+	end_spacer.custom_minimum_size = Vector2(0, 67)
 	vbox.add_child(end_spacer)
 
 	if content_scroll:
@@ -435,26 +435,24 @@ func show_article(a: Dictionary):
 func _make_back_btn() -> Button:
 	var back_btn = Button.new()
 	back_btn.text = "← ARCHIVE"
-	back_btn.position = Vector2(1022, 10)
-	back_btn.size = Vector2(110, 30)
+	back_btn.position = Vector2(1703, 17)
+	back_btn.size = Vector2(183, 50)
 	var bs = StyleBoxFlat.new()
 	bs.bg_color = Color(0.08, 0.12, 0.09)
 	bs.border_color = Color(0.3, 0.6, 0.35, 0.5)
-	bs.border_width_left = 1; bs.border_width_right = 1
-	bs.border_width_top = 1; bs.border_width_bottom = 1
-	bs.corner_radius_top_left = 4; bs.corner_radius_top_right = 4
-	bs.corner_radius_bottom_left = 4; bs.corner_radius_bottom_right = 4
+	bs.border_width_left = 2; bs.border_width_right = 2
+	bs.border_width_top = 2; bs.border_width_bottom = 2
+	bs.corner_radius_top_left = 7; bs.corner_radius_top_right = 7
+	bs.corner_radius_bottom_left = 7; bs.corner_radius_bottom_right = 7
 	back_btn.add_theme_stylebox_override("normal", bs)
-	back_btn.add_theme_font_size_override("font_size", 12)
+	back_btn.add_theme_font_size_override("font_size", 20)
 	back_btn.add_theme_color_override("font_color", Color(0.5, 0.9, 0.55))
 	back_btn.pressed.connect(go_back)
 	return back_btn
 
 func go_back():
 	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	get_tree().root.add_child(scene)
-	get_tree().current_scene = scene
-	queue_free()
+	SceneManager.goto_scene("res://menus/main_menu/MainMenu.tscn")
 
 func _mk_label(text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var l = Label.new()

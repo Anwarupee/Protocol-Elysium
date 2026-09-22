@@ -1,0 +1,124 @@
+{
+  "zones": {
+	"root_citadel": {
+	  "display_name": "Root Citadel",
+	  "description": "Benteng terakhir sistem pertahanan Aether-Net. Sentinel penjaga masih aktif di sini, tapi ada yang mulai berperilaku aneh.",
+	  "dominant_types": ["Defensive", "Crypto"],
+	  "encounter_type": "mixed",
+	  "difficulty": 3,
+	  "enemy_pool": [
+		{ "id": "patchwork",      "weight": 25, "type": "Defensive" },
+		{ "id": "bastion",        "weight": 20, "type": "Defensive" },
+		{ "id": "brick_bear",     "weight": 15, "type": "Defensive" },
+		{ "id": "encryp_pup",     "weight": 15, "type": "Crypto" },
+		{ "id": "key_lynx",       "weight": 10, "type": "Crypto" },
+		{ "id": "signal_snail",   "weight": 8,  "type": "Connection" },
+		{ "id": "hash_hound",     "weight": 7,  "type": "Data" }
+	  ],
+	  "boss": {
+		"id": "gate_gorilla",
+		"display_name": "Gate-Gorilla",
+		"description": "Penjaga gerbang utama Root Citadel yang protokolnya telah dikunci ulang oleh entitas tak dikenal.",
+		"is_boss": true
+	  }
+	},
+	"null_ruins": {
+	  "display_name": "Null Ruins",
+	  "description": "Reruntuhan sektor lama Aether-Net yang telah dikuasai oleh ancaman siber. Sinyal di sini tidak stabil dan penuh gangguan.",
+	  "dominant_types": ["Malware", "Social Engineering"],
+	  "encounter_type": "mixed",
+	  "difficulty": 2,
+	  "enemy_pool": [
+		{ "id": "ransom_rex",     "weight": 22, "type": "Malware" },
+		{ "id": "worm_ling",      "weight": 20, "type": "Malware" },
+		{ "id": "biti",           "weight": 18, "type": "Malware" },
+		{ "id": "scam_serpent",   "weight": 12, "type": "Social Engineering" },
+		{ "id": "phish_falcon",   "weight": 10, "type": "Social Engineering" },
+		{ "id": "bait_eel",       "weight": 10, "type": "Malware" },
+		{ "id": "warp_wolf",      "weight": 8,  "type": "Connection" }
+	  ],
+	  "boss": {
+		"id": "daemon_x",
+		"display_name": "Daemon-X",
+		"description": "Entitas yang lahir dari protokol eksperimen yang ditinggalkan. Ia bukan malware biasa — ia bertanya.",
+		"is_boss": true
+	  }
+	},
+	"static_fields": {
+	  "display_name": "Static Fields",
+	  "description": "Ladang data yang dipenuhi gangguan sinyal dan manipulasi informasi. Tidak ada yang bisa dipercaya di sini — bahkan data sensormu sendiri.",
+	  "dominant_types": ["Social Engineering", "Malware"],
+	  "encounter_type": "mixed",
+	  "difficulty": 1,
+	  "enemy_pool": [
+		{ "id": "chamele_auth",   "weight": 25, "type": "Social Engineering" },
+		{ "id": "vish_ara",       "weight": 20, "type": "Social Engineering" },
+		{ "id": "scam_serpent",   "weight": 15, "type": "Social Engineering" },
+		{ "id": "ping_go",        "weight": 15, "type": "Connection" },
+		{ "id": "bait_eel",       "weight": 12, "type": "Malware" },
+		{ "id": "signal_snail",   "weight": 8,  "type": "Connection" },
+		{ "id": "senti_shell",    "weight": 5,  "type": "Defensive" }
+	  ],
+	  "boss": {
+		"id": "latencia",
+		"display_name": "Latencia",
+		"description": "Penguasa gangguan sinyal di Static Fields. Ia tidak menyerang — ia hanya membuat semua seranganmu terasa sia-sia.",
+		"is_boss": true
+	  }
+	},
+	"data_haven": {
+	  "display_name": "Data Haven",
+	  "description": "Persimpangan utama Aether-Net. Semua tipe Sentinel pernah melintas di sini — termasuk yang tidak seharusnya ada.",
+	  "dominant_types": ["Connection", "Data"],
+	  "encounter_type": "mixed",
+	  "difficulty": 1,
+	  "enemy_pool": [
+		{ "id": "encryp_pup",     "weight": 18, "type": "Crypto" },
+		{ "id": "ping_go",        "weight": 16, "type": "Connection" },
+		{ "id": "signal_snail",   "weight": 14, "type": "Connection" },
+		{ "id": "hash_hound",     "weight": 14, "type": "Data" },
+		{ "id": "senti_shell",    "weight": 12, "type": "Defensive" },
+		{ "id": "worm_ling",      "weight": 10, "type": "Malware" },
+		{ "id": "chamele_auth",   "weight": 8,  "type": "Social Engineering" },
+		{ "id": "biti",           "weight": 8,  "type": "Malware" }
+	  ],
+	  "boss": null
+	},
+	"echo_valley": {
+	  "display_name": "Echo Valley",
+	  "description": "Lembah di mana data lama Aether-Net bergema tanpa henti. Sistem dan Crypto Sentinel berkeliaran di sini, mencari fragmen memori yang hilang.",
+	  "dominant_types": ["Data", "Crypto"],
+	  "encounter_type": "mixed",
+	  "difficulty": 2,
+	  "enemy_pool": [
+		{ "id": "hash_hound",     "weight": 22, "type": "Data" },
+		{ "id": "key_lynx",       "weight": 18, "type": "Crypto" },
+		{ "id": "octo_core",      "weight": 15, "type": "System" },
+		{ "id": "bios_wraith",    "weight": 13, "type": "System" },
+		{ "id": "cipher_ray",     "weight": 12, "type": "Crypto" },
+		{ "id": "sentry_stinger", "weight": 10, "type": "Defensive" },
+		{ "id": "radar_rhino",    "weight": 10, "type": "Defensive" }
+	  ],
+	  "boss": {
+		"id": "vaultex",
+		"display_name": "Vaultex",
+		"description": "Penjaga arsip data Echo Valley. Ia menyimpan semua yang pernah terjadi di Aether-Net — dan tidak mengizinkan siapapun menyentuhnya.",
+		"is_boss": true
+	  }
+	}
+  },
+
+  "wildcard_pool": [
+	{ "id": "signal_snail", "type": "Connection" },
+	{ "id": "ping_go",      "type": "Connection" },
+	{ "id": "hash_hound",   "type": "Data" },
+	{ "id": "senti_shell",  "type": "Defensive" }
+  ],
+
+  "encounter_settings": {
+	"wildcard_chance": 0.20,
+	"steps_per_encounter_min": 8,
+	"steps_per_encounter_max": 15,
+	"boss_respawn": false
+  }
+}

@@ -259,42 +259,42 @@ func build_ui():
 	# ── BACKGROUND — warm dark, aged paper feel ──
 	var bg = ColorRect.new()
 	bg.color = Color(0.07, 0.05, 0.04)
-	bg.size = Vector2(1152, 648)
+	bg.size = Vector2(3200, 1800)
 	add_child(bg)
 
 	# Subtle texture lines
-	for i in range(0, 648, 6):
+	for i in range(0, 1080, 6):
 		var hl = ColorRect.new()
 		hl.color = Color(1.0, 0.85, 0.6, 0.008)
-		hl.size = Vector2(1152, 1)
+		hl.size = Vector2(1920, 2)
 		hl.position = Vector2(0, i)
 		add_child(hl)
 
 	# Vignette corners
 	var vig_l = ColorRect.new()
 	vig_l.color = Color(0, 0, 0, 0.3)
-	vig_l.size = Vector2(80, 648)
+	vig_l.size = Vector2(133, 1080)
 	add_child(vig_l)
 	var vig_r = ColorRect.new()
 	vig_r.color = Color(0, 0, 0, 0.3)
-	vig_r.size = Vector2(80, 648)
-	vig_r.position = Vector2(1072, 0)
+	vig_r.size = Vector2(133, 1080)
+	vig_r.position = Vector2(1787, 0)
 	add_child(vig_r)
 
 	# ── HEADER ──
 	var hdr = ColorRect.new()
 	hdr.color = Color(0.1, 0.07, 0.05, 0.98)
-	hdr.size = Vector2(1152, 50)
+	hdr.size = Vector2(1920, 83)
 	add_child(hdr)
 	var hdr_line = ColorRect.new()
 	hdr_line.color = Color(0.8, 0.6, 0.3, 0.5)
-	hdr_line.size = Vector2(1152, 1)
-	hdr_line.position = Vector2(0, 50)
+	hdr_line.size = Vector2(1920, 2)
+	hdr_line.position = Vector2(0, 83)
 	add_child(hdr_line)
 
-	var title = _mk_label("◧  FIELD REPORTS", Vector2(20, 12), 22, Color(1.0, 0.8, 0.4))
+	var title = _mk_label("◧  FIELD REPORTS", Vector2(33, 20), 22, Color(1.0, 0.8, 0.4))
 	add_child(title)
-	var sub = _mk_label("CLASSIFIED TRANSMISSIONS  //  RECOVERED DOCUMENTS  //  AETHER-NET", Vector2(240, 18), 10, Color(0.6, 0.45, 0.25))
+	var sub = _mk_label("CLASSIFIED TRANSMISSIONS  //  RECOVERED DOCUMENTS  //  AETHER-NET", Vector2(400, 30), 10, Color(0.6, 0.45, 0.25))
 	add_child(sub)
 
 	# Back
@@ -303,31 +303,31 @@ func build_ui():
 	# ── LEFT: Report List ──
 	var list_bg = ColorRect.new()
 	list_bg.color = Color(0.08, 0.055, 0.04, 0.98)
-	list_bg.size = Vector2(290, 598)
-	list_bg.position = Vector2(0, 50)
+	list_bg.size = Vector2(483, 997)
+	list_bg.position = Vector2(0, 83)
 	add_child(list_bg)
 	var list_border = ColorRect.new()
 	list_border.color = Color(0.5, 0.35, 0.15, 0.4)
-	list_border.size = Vector2(1, 598)
-	list_border.position = Vector2(290, 50)
+	list_border.size = Vector2(2, 997)
+	list_border.position = Vector2(483, 83)
 	add_child(list_border)
 
 	var list_hdr = ColorRect.new()
 	list_hdr.color = Color(0.12, 0.08, 0.05)
-	list_hdr.size = Vector2(290, 32)
-	list_hdr.position = Vector2(0, 50)
+	list_hdr.size = Vector2(483, 53)
+	list_hdr.position = Vector2(0, 83)
 	add_child(list_hdr)
-	add_child(_mk_label("  DOKUMEN  (" + str(reports.size()) + ")", Vector2(8, 58), 10, Color(0.8, 0.6, 0.3)))
+	add_child(_mk_label("  DOKUMEN  (" + str(reports.size()) + ")", Vector2(13, 97), 10, Color(0.8, 0.6, 0.3)))
 
 	var list_scroll = ScrollContainer.new()
-	list_scroll.position = Vector2(0, 82)
-	list_scroll.size = Vector2(290, 566)
+	list_scroll.position = Vector2(0, 137)
+	list_scroll.size = Vector2(483, 943)
 	list_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(list_scroll)
 
 	var list_vbox = VBoxContainer.new()
-	list_vbox.custom_minimum_size = Vector2(280, 0)
-	list_vbox.add_theme_constant_override("separation", 2)
+	list_vbox.custom_minimum_size = Vector2(467, 0)
+	list_vbox.add_theme_constant_override("separation", 3)
 	list_scroll.add_child(list_vbox)
 
 	for i in reports.size():
@@ -339,19 +339,19 @@ func build_ui():
 	# ── RIGHT: Document Viewer ──
 	var doc_bg = ColorRect.new()
 	doc_bg.color = Color(0.085, 0.06, 0.045, 0.97)
-	doc_bg.size = Vector2(858, 598)
-	doc_bg.position = Vector2(294, 50)
+	doc_bg.size = Vector2(1430, 997)
+	doc_bg.position = Vector2(490, 83)
 	add_child(doc_bg)
 
 	content_scroll = ScrollContainer.new()
-	content_scroll.position = Vector2(310, 58)
-	content_scroll.size = Vector2(828, 582)
+	content_scroll.position = Vector2(517, 97)
+	content_scroll.size = Vector2(1380, 970)
 	content_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	add_child(content_scroll)
 
 	var content_vbox = VBoxContainer.new()
-	content_vbox.custom_minimum_size = Vector2(800, 0)
-	content_vbox.add_theme_constant_override("separation", 6)
+	content_vbox.custom_minimum_size = Vector2(1333, 0)
+	content_vbox.add_theme_constant_override("separation", 10)
 	content_scroll.add_child(content_vbox)
 	content_labels["vbox"] = content_vbox
 
@@ -360,14 +360,14 @@ func _build_report_entry(r: Dictionary) -> PanelContainer:
 	var style = StyleBoxFlat.new()
 	style.bg_color = Color(0.1, 0.07, 0.05)
 	style.border_color = Color(type_col.r, type_col.g, type_col.b, 0.0)
-	style.border_width_left = 3
+	style.border_width_left = 5
 	var panel = PanelContainer.new()
 	panel.add_theme_stylebox_override("panel", style)
-	panel.custom_minimum_size = Vector2(280, 68)
+	panel.custom_minimum_size = Vector2(467, 113)
 	panel.name = "entry_" + r["id"]
 
 	var inner = VBoxContainer.new()
-	inner.add_theme_constant_override("separation", 2)
+	inner.add_theme_constant_override("separation", 3)
 
 	# Type badge + status
 	var top_row = HBoxContainer.new()
@@ -377,7 +377,7 @@ func _build_report_entry(r: Dictionary) -> PanelContainer:
 
 	var title_lbl = _mk_label("  " + r["title"], Vector2(0,0), 11, Color(0.85, 0.78, 0.65))
 	title_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-	title_lbl.custom_minimum_size = Vector2(270, 0)
+	title_lbl.custom_minimum_size = Vector2(450, 0)
 	inner.add_child(title_lbl)
 
 	var date_lbl = _mk_label("  " + r["date"], Vector2(0,0), 9, Color(0.45, 0.38, 0.28))
@@ -388,7 +388,7 @@ func _build_report_entry(r: Dictionary) -> PanelContainer:
 	var btn = Button.new()
 	btn.flat = true
 	btn.modulate = Color(1,1,1,0)
-	btn.custom_minimum_size = Vector2(280, 68)
+	btn.custom_minimum_size = Vector2(467, 113)
 	var r_ref = r
 	var style_ref = style
 	var col_ref = type_col
@@ -418,23 +418,23 @@ func show_report(r: Dictionary):
 	# Document header area
 	var doc_top = ColorRect.new()
 	doc_top.color = Color(type_col.r * 0.06, type_col.g * 0.06, type_col.b * 0.04)
-	doc_top.custom_minimum_size = Vector2(800, 10)
+	doc_top.custom_minimum_size = Vector2(1333, 17)
 	vbox.add_child(doc_top)
 
 	var type_badge_row = HBoxContainer.new()
 	var tb_accent = ColorRect.new()
 	tb_accent.color = type_col
-	tb_accent.custom_minimum_size = Vector2(3, 18)
+	tb_accent.custom_minimum_size = Vector2(5, 30)
 	type_badge_row.add_child(tb_accent)
 	var tb_sp = Control.new()
-	tb_sp.custom_minimum_size = Vector2(6, 0)
+	tb_sp.custom_minimum_size = Vector2(10, 0)
 	type_badge_row.add_child(tb_sp)
 	var tb_lbl = _mk_label(r["type"] + "  //  STATUS: " + r["status"], Vector2(0,0), 10, Color(type_col.r, type_col.g, type_col.b, 0.8))
 	type_badge_row.add_child(tb_lbl)
 	vbox.add_child(type_badge_row)
 
 	var title_lbl = _mk_label(r["title"], Vector2(0,0), 20, Color(0.92, 0.86, 0.72))
-	title_lbl.custom_minimum_size = Vector2(800, 30)
+	title_lbl.custom_minimum_size = Vector2(1333, 50)
 	vbox.add_child(title_lbl)
 
 	var date_lbl = _mk_label(r["date"], Vector2(0,0), 10, Color(0.45, 0.38, 0.28))
@@ -442,11 +442,11 @@ func show_report(r: Dictionary):
 
 	var top_divider = ColorRect.new()
 	top_divider.color = Color(type_col.r, type_col.g, type_col.b, 0.25)
-	top_divider.custom_minimum_size = Vector2(800, 1)
+	top_divider.custom_minimum_size = Vector2(1333, 2)
 	vbox.add_child(top_divider)
 
 	var gap = Control.new()
-	gap.custom_minimum_size = Vector2(0, 10)
+	gap.custom_minimum_size = Vector2(0, 17)
 	vbox.add_child(gap)
 
 	# Render lines
@@ -454,52 +454,52 @@ func show_report(r: Dictionary):
 		match line["style"]:
 			"header":
 				var l = _mk_label(line["text"], Vector2(0,0), 10, Color(0.55, 0.5, 0.42))
-				l.custom_minimum_size = Vector2(800, 18)
+				l.custom_minimum_size = Vector2(1333, 30)
 				vbox.add_child(l)
 			"divider":
 				var d = ColorRect.new()
 				d.color = Color(0.4, 0.32, 0.2, 0.3)
-				d.custom_minimum_size = Vector2(800, 1)
+				d.custom_minimum_size = Vector2(1333, 2)
 				vbox.add_child(d)
 				var dsp = Control.new()
-				dsp.custom_minimum_size = Vector2(0, 4)
+				dsp.custom_minimum_size = Vector2(0, 7)
 				vbox.add_child(dsp)
 			"body":
 				var l = _mk_label(line["text"], Vector2(0,0), 12, Color(0.78, 0.72, 0.62))
 				l.autowrap_mode = TextServer.AUTOWRAP_WORD
-				l.custom_minimum_size = Vector2(800, 0)
+				l.custom_minimum_size = Vector2(1333, 0)
 				vbox.add_child(l)
 			"emphasis":
 				var row = HBoxContainer.new()
 				var acc = ColorRect.new()
 				acc.color = type_col
-				acc.custom_minimum_size = Vector2(2, 20)
+				acc.custom_minimum_size = Vector2(3, 33)
 				row.add_child(acc)
 				var sp = Control.new()
-				sp.custom_minimum_size = Vector2(8, 0)
+				sp.custom_minimum_size = Vector2(13, 0)
 				row.add_child(sp)
 				var l = _mk_label(line["text"], Vector2(0,0), 12, Color(0.92, 0.85, 0.65))
 				l.autowrap_mode = TextServer.AUTOWRAP_WORD
-				l.custom_minimum_size = Vector2(780, 0)
+				l.custom_minimum_size = Vector2(1300, 0)
 				row.add_child(l)
 				vbox.add_child(row)
 			"handwriting":
 				var l = _mk_label(line["text"], Vector2(0,0), 13, Color(0.88, 0.80, 0.60))
 				l.autowrap_mode = TextServer.AUTOWRAP_WORD
-				l.custom_minimum_size = Vector2(800, 0)
+				l.custom_minimum_size = Vector2(1333, 0)
 				vbox.add_child(l)
 			"log":
 				var l = _mk_label(line["text"], Vector2(0,0), 11, Color(0.45, 0.75, 0.45))
-				l.custom_minimum_size = Vector2(800, 16)
+				l.custom_minimum_size = Vector2(1333, 27)
 				vbox.add_child(l)
 			"corrupt":
 				var l = _mk_label(line["text"], Vector2(0,0), 10, Color(0.45, 0.42, 0.38))
 				l.autowrap_mode = TextServer.AUTOWRAP_WORD
-				l.custom_minimum_size = Vector2(800, 0)
+				l.custom_minimum_size = Vector2(1333, 0)
 				vbox.add_child(l)
 
 	var end_sp = Control.new()
-	end_sp.custom_minimum_size = Vector2(0, 40)
+	end_sp.custom_minimum_size = Vector2(0, 67)
 	vbox.add_child(end_sp)
 
 	if content_scroll:
@@ -508,26 +508,24 @@ func show_report(r: Dictionary):
 func _make_back_btn() -> Button:
 	var back_btn = Button.new()
 	back_btn.text = "← ARCHIVE"
-	back_btn.position = Vector2(1022, 10)
-	back_btn.size = Vector2(110, 30)
+	back_btn.position = Vector2(1703, 17)
+	back_btn.size = Vector2(183, 50)
 	var bs = StyleBoxFlat.new()
 	bs.bg_color = Color(0.12, 0.09, 0.06)
 	bs.border_color = Color(0.6, 0.45, 0.2, 0.5)
-	bs.border_width_left = 1; bs.border_width_right = 1
-	bs.border_width_top = 1; bs.border_width_bottom = 1
-	bs.corner_radius_top_left = 4; bs.corner_radius_top_right = 4
-	bs.corner_radius_bottom_left = 4; bs.corner_radius_bottom_right = 4
+	bs.border_width_left = 2; bs.border_width_right = 2
+	bs.border_width_top = 2; bs.border_width_bottom = 2
+	bs.corner_radius_top_left = 7; bs.corner_radius_top_right = 7
+	bs.corner_radius_bottom_left = 7; bs.corner_radius_bottom_right = 7
 	back_btn.add_theme_stylebox_override("normal", bs)
-	back_btn.add_theme_font_size_override("font_size", 12)
+	back_btn.add_theme_font_size_override("font_size", 20)
 	back_btn.add_theme_color_override("font_color", Color(0.9, 0.7, 0.35))
 	back_btn.pressed.connect(go_back)
 	return back_btn
 
 func go_back():
 	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	get_tree().root.add_child(scene)
-	get_tree().current_scene = scene
-	queue_free()
+	SceneManager.goto_scene("res://menus/main_menu/MainMenu.tscn")
 
 func _mk_label(text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var l = Label.new()

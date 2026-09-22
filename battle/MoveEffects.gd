@@ -3,7 +3,7 @@ extends RefCounted
 
 const BASE_DEFENSE = 12
 
-static func execute(move: Dictionary, attacker: Monster, defender: Monster, battle_manager: Node) -> void:
+static func execute(move: Dictionary, attacker: Monster, defender: Monster, battle_manager: Node, is_copy: bool = false) -> void:
 	var multiplier = 1.0
 	if move.get("power", 0) > 0:
 		multiplier = battle_manager.get_type_multiplier(attacker.type, defender.type)
@@ -102,7 +102,8 @@ static func execute(move: Dictionary, attacker: Monster, defender: Monster, batt
 				battle_manager.emit_signal("battle_log", attacker.monster_name + " copied " + battle_manager.last_enemy_move["name"] + "!")
 				var copied = battle_manager.last_enemy_move.duplicate()
 				copied["cooldown"] = 0
-				battle_manager.execute_move(attacker, defender, copied, attacker == battle_manager.player_monster)
+				if not is_copy:
+					battle_manager.execute_move(attacker, defender, copied, attacker == battle_manager.player_monster, true)
 			else:
 				battle_manager.emit_signal("battle_log", "No move to copy!")
 

@@ -1,184 +1,134 @@
-extends CanvasLayer
+extends Node2D
 
-# ─────────────────────────────────────────
-#  EduPopup.gd — FULLY PROGRAMMATIC
-#  Tidak perlu atur node di Inspector sama sekali.
-#  Cukup:
-#  1. Buka EduPopup.tscn
-#  2. Hapus semua child node (Root, Dimmer, Panel, dll)
-#  3. Pastikan root node adalah CanvasLayer
-#  4. Set Process Mode = Always di Inspector
-#  5. Attach script ini
-#  Semua UI dibuat otomatis dari kode.
-# ─────────────────────────────────────────
+# =============================================================
+# EduPopup — popup edukasi yang muncul saat move digunakan
+# =============================================================
+# Dipanggil oleh Battle.gd via: edu_popup.show_popup(name, text, domain)
+# Emit signal popup_closed saat player klik UNDERSTOOD
+# =============================================================
 
 signal popup_closed
 
-const SCREEN_W = 1152.0
-const SCREEN_H = 648.0
-const POPUP_W  = 680.0
-const POPUP_H  = 200.0
+const SCREEN_W = 1920.0
+const SCREEN_H = 1080.0
+const POPUP_W  = 860.0
+const POPUP_H  = 300.0
 
-const DOMAIN_COLORS = {
-	"Data":               Color(0.4, 0.8, 1.0),
-	"Connection":         Color(1.0, 0.9, 0.3),
-	"Malware":            Color(1.0, 0.4, 0.4),
-	"Defensive":          Color(0.2, 0.9, 0.6),
-	"System":             Color(0.6, 0.3, 1.0),
-	"Social Engineering": Color(1.0, 0.7, 0.2)
+const DOMAIN_COLORS: Dictionary = {
+	"Crypto":             Color(0.4,  0.8,  1.0),
+	"Firewall":           Color(0.4,  0.7,  0.4),
+	"Network":            Color(0.6,  0.6,  1.0),
+	"Malware":            Color(1.0,  0.35, 0.35),
+	"Monitor":            Color(1.0,  0.8,  0.3),
+	"Social Engineering": Color(0.9,  0.5,  0.9),
 }
 
-# Node references — dibuat di _ready()
-var dimmer:       ColorRect
-var panel:        ColorRect
-var accent_top:   ColorRect
-var accent_left:  ColorRect
-var badge_label:  Label
-var move_label:   Label
-var edu_label:    Label
-var continue_btn: Button
+var _built:        bool         = false
+var _dimmer:       ColorRect    = null
+var _panel:        ColorRect    = null
+var _accent_top:   ColorRect    = null
+var _accent_left:  ColorRect    = null
+var _badge_label:  Label        = null
+var _move_label:   Label        = null
+var _edu_label:    Label        = null
+var _continue_btn: Button       = null
 
 func _ready():
-	process_mode = PROCESS_MODE_ALWAYS
 	visible = false
-	_build_ui()
+	_build()
 
-func _build_ui():
-	# ── Dimmer (full screen overlay) ──
-	dimmer = ColorRect.new()
-	dimmer.color = Color(0, 0, 0, 0.6)
-	dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	dimmer.size = Vector2(SCREEN_W, SCREEN_H)
-	add_child(dimmer)
+func _build():
+	if _built:
+		return
+	_built = true
 
-	# ── Panel container ──
 	var px = (SCREEN_W - POPUP_W) / 2.0
 	var py = (SCREEN_H - POPUP_H) / 2.0
 
-	panel = ColorRect.new()
-	panel.color = Color(0.04, 0.04, 0.16, 0.97)
-	panel.size = Vector2(POPUP_W, POPUP_H)
-	panel.position = Vector2(px, py)
-	add_child(panel)
+	# Dimmer
+	_dimmer = ColorRect.new()
+	_dimmer.color = Color(0, 0, 0, 0.55)
+	_dimmer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_dimmer.size = Vector2(SCREEN_W, SCREEN_H)
+	add_child(_dimmer)
 
-	# ── Accent border top ──
-	accent_top = ColorRect.new()
-	accent_top.size = Vector2(POPUP_W, 3)
-	accent_top.position = Vector2(px, py)
-	add_child(accent_top)
+	# Panel background
+	_panel = ColorRect.new()
+	_panel.color = Color(0.04, 0.04, 0.16, 0.97)
+	_panel.size = Vector2(POPUP_W, POPUP_H)
+	_panel.position = Vector2(px, py)
+	add_child(_panel)
 
-	# ── Accent border left ──
-	accent_left = ColorRect.new()
-	accent_left.size = Vector2(3, POPUP_H)
-	accent_left.position = Vector2(px, py)
-	add_child(accent_left)
+	# Top accent bar
+	_accent_top = ColorRect.new()
+	_accent_top.size = Vector2(POPUP_W, 4)
+	_accent_top.position = Vector2(px, py)
+	add_child(_accent_top)
 
-	# ── Domain badge ──
-	badge_label = Label.new()
-	badge_label.position = Vector2(px + 16, py + 14)
-	badge_label.add_theme_font_size_override("font_size", 11)
-	add_child(badge_label)
+	# Left accent bar
+	_accent_left = ColorRect.new()
+	_accent_left.size = Vector2(4, POPUP_H)
+	_accent_left.position = Vector2(px, py)
+	add_child(_accent_left)
 
-	# ── Move name ──
-	move_label = Label.new()
-	move_label.position = Vector2(px + 16, py + 30)
-	move_label.add_theme_font_size_override("font_size", 20)
-	move_label.add_theme_color_override("font_color", Color.WHITE)
-	add_child(move_label)
+	# Domain badge
+	_badge_label = Label.new()
+	_badge_label.position = Vector2(px + 24, py + 18)
+	_badge_label.add_theme_font_size_override("font_size", 16)
+	add_child(_badge_label)
 
-	# ── Separator line ──
+	# Move name
+	_move_label = Label.new()
+	_move_label.position = Vector2(px + 24, py + 42)
+	_move_label.add_theme_font_size_override("font_size", 30)
+	_move_label.add_theme_color_override("font_color", Color.WHITE)
+	add_child(_move_label)
+
+	# Separator
 	var sep = ColorRect.new()
 	sep.color = Color(1, 1, 1, 0.1)
-	sep.size = Vector2(POPUP_W - 32, 1)
-	sep.position = Vector2(px + 16, py + 62)
+	sep.size = Vector2(POPUP_W - 48, 1)
+	sep.position = Vector2(px + 24, py + 96)
 	add_child(sep)
 
-	# ── Edu text ──
-	edu_label = Label.new()
-	edu_label.position = Vector2(px + 16, py + 70)
-	edu_label.size = Vector2(POPUP_W - 32, 60)
-	edu_label.add_theme_font_size_override("font_size", 13)
-	edu_label.add_theme_color_override("font_color", Color(0.85, 0.95, 1.0))
-	edu_label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	add_child(edu_label)
+	# Edu text
+	_edu_label = Label.new()
+	_edu_label.position = Vector2(px + 24, py + 108)
+	_edu_label.size = Vector2(POPUP_W - 48, 120)
+	_edu_label.add_theme_font_size_override("font_size", 19)
+	_edu_label.add_theme_color_override("font_color", Color(0.85, 0.95, 1.0))
+	_edu_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	add_child(_edu_label)
 
-	# ── Continue button ──
-	continue_btn = Button.new()
-	continue_btn.text = "[ UNDERSTOOD ]"
-	continue_btn.size = Vector2(POPUP_W - 32, 32)
-	continue_btn.position = Vector2(px + 16, py + POPUP_H - 46)
-	continue_btn.add_theme_font_size_override("font_size", 13)
-	add_child(continue_btn)
-	continue_btn.pressed.connect(_on_continue_pressed)
+	# Continue button
+	_continue_btn = Button.new()
+	_continue_btn.text = "[ UNDERSTOOD ]"
+	_continue_btn.size = Vector2(POPUP_W - 48, 48)
+	_continue_btn.position = Vector2(px + 24, py + POPUP_H - 62)
+	_continue_btn.add_theme_font_size_override("font_size", 19)
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.08, 0.25, 0.45)
+	style.corner_radius_top_left    = 4
+	style.corner_radius_top_right   = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right= 4
+	_continue_btn.add_theme_stylebox_override("normal", style)
+	_continue_btn.add_theme_color_override("font_color", Color.WHITE)
+	_continue_btn.pressed.connect(_on_continue_pressed)
+	add_child(_continue_btn)
 
-func show_popup(p_move_name: String, p_edu_text: String, p_domain: String):
-	var col = DOMAIN_COLORS.get(p_domain, Color(0.4, 0.8, 1.0))
-
-	badge_label.text = "[ " + p_domain.to_upper() + " ]"
-	badge_label.add_theme_color_override("font_color", col)
-
-	move_label.text = p_move_name.to_upper()
-
-	edu_label.text = p_edu_text
-
-	# Accent warna domain
-	accent_top.color  = col
-	accent_left.color = col
-
-	# Tombol warna domain
-	var btn_style = StyleBoxFlat.new()
-	btn_style.bg_color = Color(col.r * 0.15, col.g * 0.15, col.b * 0.15)
-	btn_style.border_color = col
-	btn_style.set_border_width_all(1)
-	btn_style.set_corner_radius_all(4)
-	continue_btn.add_theme_stylebox_override("normal", btn_style)
-	var btn_hover = btn_style.duplicate()
-	btn_hover.bg_color = Color(col.r * 0.35, col.g * 0.35, col.b * 0.35)
-	continue_btn.add_theme_stylebox_override("hover", btn_hover)
-	continue_btn.add_theme_color_override("font_color", col)
-
-	# Reset posisi panel untuk animasi
-	var target_y = panel.position.y
-	panel.position.y = target_y + 20
-	panel.modulate.a = 0.0
-	dimmer.modulate.a = 0.0
-	accent_top.modulate.a = 0.0
-	accent_left.modulate.a = 0.0
-	badge_label.modulate.a = 0.0
-	move_label.modulate.a = 0.0
-	edu_label.modulate.a = 0.0
-	continue_btn.modulate.a = 0.0
-
+func show_popup(move_name: String, edu_text: String, domain: String):
+	print("EduPopup.show_popup called: ", move_name, " | visible before: ", visible)
+	_build()
+	var col = DOMAIN_COLORS.get(domain, Color(0.4, 0.8, 1.0))
+	_badge_label.text = "[ " + domain.to_upper() + " ]"
+	_badge_label.add_theme_color_override("font_color", col)
+	_move_label.text  = move_name.to_upper()
+	_edu_label.text   = edu_text
+	_accent_top.color  = col
+	_accent_left.color = col
 	visible = true
-	get_tree().paused = true
-	_animate_in(target_y)
-
-func _animate_in(target_y: float):
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(dimmer, "modulate:a", 1.0, 0.2)
-	tween.tween_property(panel, "modulate:a", 1.0, 0.22)
-	tween.tween_property(panel, "position:y", target_y, 0.25)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(accent_top, "modulate:a", 1.0, 0.3)
-	tween.tween_property(accent_left, "modulate:a", 1.0, 0.3)
-	tween.tween_property(badge_label, "modulate:a", 1.0, 0.35)
-	tween.tween_property(move_label, "modulate:a", 1.0, 0.35)
-	tween.tween_property(edu_label, "modulate:a", 1.0, 0.4)
-	tween.tween_property(continue_btn, "modulate:a", 1.0, 0.45)
 
 func _on_continue_pressed():
-	var tween = create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(dimmer, "modulate:a", 0.0, 0.15)
-	tween.tween_property(panel, "modulate:a", 0.0, 0.15)
-	tween.tween_property(accent_top, "modulate:a", 0.0, 0.15)
-	tween.tween_property(accent_left, "modulate:a", 0.0, 0.15)
-	tween.tween_property(badge_label, "modulate:a", 0.0, 0.15)
-	tween.tween_property(move_label, "modulate:a", 0.0, 0.15)
-	tween.tween_property(edu_label, "modulate:a", 0.0, 0.15)
-	tween.tween_property(continue_btn, "modulate:a", 0.0, 0.15)
-	await tween.finished
 	visible = false
-	get_tree().paused = false
 	emit_signal("popup_closed")
