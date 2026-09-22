@@ -400,20 +400,6 @@ var monsters_data = [
 			{"name": "Perimeter Crush", "edu_log": "Defense in depth menggunakan lapisan pertahanan berlapis sehingga jika satu lapisan gagal, lapisan berikutnya tetap melindungi sistem."},
 			{"name": "Gate Slam", "edu_log": "Network Access Control (NAC) memastikan hanya perangkat yang memenuhi kebijakan keamanan yang diizinkan masuk ke jaringan."}
 		]
-	},
-	{
-		"id": "gate_gorilla", "name": "Gate-Gorilla", "number": "029",
-		"type": "Defensive", "color": Color(0.1, 0.35, 0.85),
-		"hp": 170, "speed": 30, "role": "Pure Tank",
-		"desc": "Gorilla raksasa penjaga gerbang utama Elysium — benteng terakhir sebelum core sistem bisa disentuh. Ia adalah embodiment dari Zero Trust Architecture yang tidak mempercayai siapapun tanpa verifikasi.",
-		"passive": "Port Blocker — 15% chance membatalkan serangan berikutnya lawan setelah setiap benturan.",
-		"advantage": "Kuat vs Social Engineering\nLemah vs System",
-		"moves": [
-			{"name": "WAF Strike", "edu_log": "Web Application Firewall (WAF) memfilter dan memantau trafik HTTP untuk melindungi aplikasi web dari serangan seperti SQL injection dan XSS."},
-			{"name": "Zero Trust Lock", "edu_log": "Zero Trust Security tidak mempercayai siapapun secara default, bahkan pengguna internal — setiap akses harus diverifikasi secara eksplisit."},
-			{"name": "Perimeter Crush", "edu_log": "Defense in depth menggunakan lapisan pertahanan berlapis sehingga jika satu lapisan gagal, lapisan berikutnya tetap melindungi sistem."},
-			{"name": "Gate Slam", "edu_log": "Network Access Control (NAC) memastikan hanya perangkat yang memenuhi kebijakan keamanan yang diizinkan masuk ke jaringan."}
-		]
 	}
 ]
 
@@ -468,8 +454,6 @@ func build_ui():
 	sprite_area.position = Vector2(0, 83)
 	sprite_area.name = "sprite_area"
 	add_child(sprite_area)
-
-	# sprite_area tetap ada sebagai background, sprite-nya diisi oleh show_monster() via SentinelSprites
 
 	# ── LEFT PANEL — scrollable detail ──
 	var detail_scroll_container = ScrollContainer.new()
@@ -560,22 +544,22 @@ func build_ui():
 	right_border.position = Vector2(820, 83)
 	add_child(right_border)
 
-	add_child(create_label("All Sentinels", Vector2(850, 147), 13, Color(0.5, 0.6, 0.8)))
+	add_child(create_label("All Sentinels", Vector2(850, 95), 13, Color(0.5, 0.6, 0.8)))
 
 	# Grid scroll container
 	var grid_scroll = ScrollContainer.new()
-	grid_scroll.position = Vector2(823, 183)
-	grid_scroll.size = Vector2(1080, 320)
+	grid_scroll.position = Vector2(823, 125)
+	grid_scroll.size = Vector2(1080, 380)
 	grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
 	add_child(grid_scroll)
 
-	# Control wrapper — tinggi dihitung dinamis dari jumlah sentinel
+	# Control wrapper — tinggi dihitung dari tinggi sel asli (147 + 8)
 	var cols_count = 6
 	var rows_count = ceili(float(monsters_data.size()) / cols_count)
-	var grid_h = rows_count * (88 + 8) + 16
+	var grid_h = rows_count * (147 + 8) + 16
 	var grid_wrapper = Control.new()
-	grid_wrapper.custom_minimum_size = Vector2(620, grid_h)
+	grid_wrapper.custom_minimum_size = Vector2(1050, grid_h)
 	grid_scroll.add_child(grid_wrapper)
 
 	var grid_container = Node2D.new()
@@ -583,42 +567,44 @@ func build_ui():
 
 	build_monster_grid(grid_container)
 
-	# Move section header — dengan background jelas
+	# Move section header
 	var move_header_bg = ColorRect.new()
 	move_header_bg.color = Color(0.12, 0.15, 0.3, 0.95)
-	move_header_bg.size = Vector2(1083, 47)
-	move_header_bg.position = Vector2(823, 513)
+	move_header_bg.size = Vector2(1070, 40)
+	move_header_bg.position = Vector2(828, 515)
 	add_child(move_header_bg)
 
 	var move_header_border = ColorRect.new()
 	move_header_border.color = Color(0.4, 0.6, 1, 0.8)
-	move_header_border.size = Vector2(1083, 3)
-	move_header_border.position = Vector2(823, 488)
+	move_header_border.size = Vector2(1070, 3)
+	move_header_border.position = Vector2(828, 515)
 	add_child(move_header_border)
 
-	add_child(create_label("MOVE SET & EDU-LOG", Vector2(850, 523), 12, Color(0.6, 0.8, 1)))
+	add_child(create_label("MOVE SET & EDU-LOG", Vector2(845, 525), 12, Color(0.6, 0.8, 1)))
 
-	# 4 Move slots
+	# 4 Move slots (Posisi X disesuaikan ke panel kanan & Y tidak bertumpukan)
 	for i in 4:
+		var slot_y = 570 + i * 105
+
 		var move_bg = ColorRect.new()
 		move_bg.color = Color(0.1, 0.12, 0.28, 0.95)
-		move_bg.size = Vector2(1080, 127)
-		move_bg.position = Vector2(494, 338 + i * 80)
+		move_bg.size = Vector2(1070, 95)
+		move_bg.position = Vector2(828, slot_y)
 		add_child(move_bg)
 
 		var move_accent = ColorRect.new()
 		move_accent.color = Color(0.4, 0.6, 1, 0.5)
-		move_accent.size = Vector2(5, 127)
-		move_accent.position = Vector2(494, 323 + i * 80)
+		move_accent.size = Vector2(5, 95)
+		move_accent.position = Vector2(828, slot_y)
 		add_child(move_accent)
 
-		var move_name_lbl = create_label("Move " + str(i+1), Vector2(503, 329 + i * 80), 13, Color(0.85, 0.92, 1))
+		var move_name_lbl = create_label("Move " + str(i+1), Vector2(843, slot_y + 8), 13, Color(0.85, 0.92, 1))
 		move_name_lbl.name = "move_name_" + str(i)
 		add_child(move_name_lbl)
 
-		var move_edu_lbl = create_label("", Vector2(503, 347 + i * 80), 11, Color(0.55, 0.8, 0.6))
+		var move_edu_lbl = create_label("", Vector2(843, slot_y + 32), 11, Color(0.55, 0.8, 0.6))
 		move_edu_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-		move_edu_lbl.custom_minimum_size = Vector2(1050, 70)
+		move_edu_lbl.custom_minimum_size = Vector2(1040, 55)
 		move_edu_lbl.name = "move_edu_" + str(i)
 		add_child(move_edu_lbl)
 
@@ -629,11 +615,11 @@ func build_ui():
 			"accent": move_accent
 		})
 
-	# Back button — terakhir agar di atas semua
+	# Back button
 	var back_btn = Button.new()
 	back_btn.text = "← BACK"
-	back_btn.position = Vector2(1703, 1013)
-	back_btn.size = Vector2(183, 50)
+	back_btn.position = Vector2(1715, 1010)
+	back_btn.size = Vector2(180, 50)
 
 	var back_style = StyleBoxFlat.new()
 	back_style.bg_color = Color(0.25, 0.15, 0.45)
@@ -651,7 +637,7 @@ func build_ui():
 	back_hover.bg_color = Color(0.35, 0.2, 0.6)
 	back_btn.add_theme_stylebox_override("normal", back_style)
 	back_btn.add_theme_stylebox_override("hover", back_hover)
-	back_btn.add_theme_font_size_override("font_size", 20)
+	back_btn.add_theme_font_size_override("font_size", 18)
 	back_btn.add_theme_color_override("font_color", Color(0.8, 0.7, 1))
 	back_btn.pressed.connect(go_back)
 	add_child(back_btn)
@@ -727,7 +713,7 @@ func show_monster(m: Dictionary):
 	var area = find_child("sprite_area", true, false)
 	if area: area.color = Color(col.r * 0.25, col.g * 0.25, col.b * 0.25, 1.0)
 
-	# Hapus sprite lama via referensi langsung (aman dan tidak rusak scroll)
+	# Hapus sprite lama via referensi langsung (aman dan tidak merusak layout)
 	if current_sprite_node != null and is_instance_valid(current_sprite_node):
 		current_sprite_node.queue_free()
 		current_sprite_node = null
@@ -776,8 +762,7 @@ func show_monster(m: Dictionary):
 		g["panel"].add_theme_stylebox_override("panel", g["style"])
 
 func go_back():
-	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	get_tree().change_scene_to_file("res://menus/main_menu/MainMenu.tscn")
+	SceneManager.goto_menu("res://menus/archive/TheArchive.tscn")
 
 func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var label = Label.new()

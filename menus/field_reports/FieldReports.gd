@@ -524,8 +524,7 @@ func _make_back_btn() -> Button:
 	return back_btn
 
 func go_back():
-	var scene = load("res://menus/archive/TheArchive.tscn").instantiate()
-	SceneManager.goto_scene("res://menus/main_menu/MainMenu.tscn")
+	SceneManager.goto_menu("res://menus/archive/TheArchive.tscn")
 
 func _mk_label(text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var l = Label.new()

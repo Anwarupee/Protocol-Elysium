@@ -256,7 +256,7 @@ func create_label(text: String, pos: Vector2, font_size: int, color: Color) -> L
 func go_to_selection():
 	# PLAY selalu ke SlotSelectScreen
 	# SlotSelectScreen yang handle load/new game dan routing setelahnya
-	SceneManager.goto_menu("res://menus/slot_select/SlotSelectScreen.tscn")
+	SceneManager.goto_menu("res://menus/selection/SelectionScreen.tscn")
 
 func go_to_thearchive():
 	SceneManager.goto_menu("res://menus/archive/TheArchive.tscn")

@@ -107,6 +107,7 @@ func _update_player_position():
 # ─────────────────────────────────────────
 
 func goto_menu(path: String):
+	print("SceneManager.goto_menu: ", path)
 	# Clear semua overlay dulu
 	_clear_all_overlays()
 	# Unload map kalau ada
