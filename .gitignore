@@ -1,3 +1,64 @@
-# Godot 4+ specific ignores
+# ==========================================
+# GODOT 4 SPECIFIC
+# ==========================================
+# Cache import, shader, dan data runtime Godot 4 (Wajib di-ignore)
 .godot/
-/android/
+
+# Cache import versi Godot 3 (sebagai antisipasi)
+.import/
+
+# Export presets (mengandung konfigurasi build, keystore, & password sensitif)
+export_presets.cfg
+
+# Executable / Hasil Export Game
+/builds/
+*.exe
+*.apk
+*.aab
+*.zip
+*.tar.gz
+*.html
+*.pck
+
+# ==========================================
+# SYSTEM / OPERATING SYSTEM
+# ==========================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSSharedFileList
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ==========================================
+# IDE & TEXT EDITORS
+# ==========================================
+# VS Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains / Rider / CLion
+.idea/
+
+# Vim / Neovim
+*.swp
+*.swo
+
+# ==========================================
+# MONO / C# (Jika menggunakan C# di masa depan)
+# ==========================================
+.mono/
+mono_crash.*.json
+*.csproj
+*.sln
+bin/
+obj/
