@@ -26,8 +26,13 @@ func _ready():
 	original_position = position
 	edu_popup = get_node_or_null("EduPopup")
 
+	# BACA PILIHAN PEMAIN DARI GLOBALDATA
 	var player_choice = "encryp_pup"
-	if has_meta("player_monster"):
+	if GlobalData.pending_sentinel != "":
+		player_choice = GlobalData.pending_sentinel
+	elif GlobalData.active_team.size() > 0:
+		player_choice = GlobalData.active_team[0]
+	elif has_meta("player_monster"):
 		player_choice = get_meta("player_monster")
 
 	var enemy_choice = "biti"
@@ -84,14 +89,14 @@ func _confirm_exit():
 
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.8)
-	overlay.size = Vector2(1152, 648)
+	overlay.size = Vector2(1920, 1080)
 	overlay.z_index = 20
 	add_child(overlay)
 
 	var panel = ColorRect.new()
 	panel.color = Color(0.1, 0.05, 0.05)
 	panel.size = Vector2(420, 160)
-	panel.position = Vector2(366, 244)
+	panel.position = Vector2(750, 460)
 	overlay.add_child(panel)
 
 	var border = ColorRect.new()
@@ -124,9 +129,7 @@ func _confirm_exit():
 	dialog_open = false
 
 	if choice == "exit":
-		var scene = load("res://menus/main_menu/MainMenu.tscn").instantiate()
-		get_tree().root.add_child(scene)
-		get_tree().current_scene = scene
+		SceneManager.goto_menu("res://menus/main_menu/MainMenu.tscn")
 		queue_free()
 
 func _wait_for_either(btn_a: Button, btn_b: Button) -> String:
@@ -474,13 +477,13 @@ func show_type_advantage_tutorial(player_type: String) -> void:
 
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.88)
-	overlay.size = Vector2(1152, 648)
+	overlay.size = Vector2(1920, 1080)
 	add_child(overlay)
 
 	var panel = ColorRect.new()
 	panel.color = Color(0.06, 0.07, 0.22)
 	panel.size = Vector2(780, 430)
-	panel.position = Vector2(186, 109)
+	panel.position = Vector2(570, 325)
 	overlay.add_child(panel)
 
 	var border_top = ColorRect.new()
@@ -574,13 +577,13 @@ func show_dialog(title: String, body: String, tip: String, icon: String) -> void
 
 	var overlay = ColorRect.new()
 	overlay.color = Color(0, 0, 0, 0.75)
-	overlay.size = Vector2(1152, 648)
+	overlay.size = Vector2(1920, 1090)
 	add_child(overlay)
 
 	var panel = ColorRect.new()
 	panel.color = Color(0.07, 0.08, 0.26)
 	panel.size = Vector2(720, 270)
-	panel.position = Vector2(216, 189)
+	panel.position = Vector2(600, 405)
 	overlay.add_child(panel)
 
 	var bt = ColorRect.new(); bt.color = Color(0.4, 0.9, 1); bt.size = Vector2(720, 3); panel.add_child(bt)
@@ -626,7 +629,7 @@ func show_dialog(title: String, body: String, tip: String, icon: String) -> void
 func show_tutorial_hint(msg: String) -> void:
 	var hint = ColorRect.new()
 	hint.color = Color(0.3, 0.1, 0.05, 0.92)
-	hint.size = Vector2(500, 44); hint.position = Vector2(326, 580)
+	hint.size = Vector2(500, 44); hint.position = Vector2(710, 580)
 	add_child(hint)
 	var border = ColorRect.new(); border.color = Color(1, 0.5, 0.2); border.size = Vector2(500, 2); hint.add_child(border)
 	_add_label(hint, "⚠  " + msg, Vector2(12, 12), 13, Color(1, 0.7, 0.3))
@@ -691,6 +694,12 @@ func on_battle_ended(player_won: bool):
 		trigger_screen_shake(10.0)
 	await get_tree().create_timer(0.8).timeout
 	if player_won:
+		GlobalData.is_first_time = false
+		if GlobalData.has_method("save_current_slot"):
+			GlobalData.save_current_slot()
+		elif GlobalData.has_method("save_game"):
+			GlobalData.save_game()
+
 		await show_dialog("Sistem berhasil diamankan!",
 			"Kamu berhasil melindungi sistem dari serangan " + battle_manager.enemy_monster.monster_name + ".\nItulah inti cybersecurity — deteksi, blokir, dan pulihkan.",
 			"Kamu siap untuk pertarungan sesungguhnya!", "🛡")
@@ -699,10 +708,9 @@ func on_battle_ended(player_won: bool):
 			"Di dunia nyata, serangan bisa terjadi kapan saja. Kesiapan adalah segalanya — backup rutin, enkripsi, dan firewall aktif.",
 			"Coba lagi! Gunakan move buff lebih awal.", "⚠")
 	await get_tree().create_timer(0.5).timeout
-	var selection = load("res://menus/selection/SelectionScreen.tscn").instantiate()
-	get_tree().root.add_child(selection)
-	get_tree().current_scene = selection
-	queue_free()
+	
+	# Pindah scene dengan standar Godot
+	SceneManager.goto_menu("res://menus/selection/SelectionScreen.tscn")
 
 func _add_label(parent: Node, text: String, pos: Vector2, font_size: int, color: Color) -> Label:
 	var l = Label.new()

@@ -786,6 +786,7 @@ func enter_map():
 func spawn_particles():
 	for i in 50:
 		var p = ColorRect.new()
+		p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var sz = randf_range(2.0, 5.0)
 		p.size = Vector2(sz, sz)
 		p.position = Vector2(randf_range(0, 1920), randf_range(0, 1080))
