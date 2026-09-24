@@ -202,7 +202,7 @@ func go_to_selection():
 	SceneManager.goto_menu("res://menus/selection/SelectionScreen.tscn")
 
 func go_to_thearchive():
-	SceneManager.goto_menu("res://menus/the_archive/TheArchive.tscn")
+	SceneManager.goto_menu("res://menus/archive/TheArchive.tscn")
 
 func go_to_inventory():
 	GlobalData.inventory_return_path = "res://menus/main_menu/MainMenu.tscn"
